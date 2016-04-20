@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+    <head>
+        <title>grouping analysis session</title>
+        <style></style>
+    </head>
+    <body>    
+        <script src='/socket.io/socket.io.js'></script>
+        <script>    
+            var socket = io();  
+
+            var sessionId = window.location.href.split('/').pop();            
+            socket.emit('login', sessionId);
+            
+            socket.on('directmessage', function(msg){
+                document.write('session msg: ' + msg);
+            });
+        </script> 
+    </body>
+</html>
