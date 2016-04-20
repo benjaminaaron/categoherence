@@ -7,6 +7,7 @@
   	"dependencies": {
   		"http": "*",
   		"express": "*",
+      "jquery": "*",
   		"socket.io": "*"
   	},
   	"scripts": {

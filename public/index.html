@@ -2,12 +2,41 @@
 <html>
     <head>
         <title>grouping analysis</title>
-        <style></style>
+        <script src="/jquery/jquery.js"></script>
+        <style>
+            html * {
+                font-family: Georgia, serif
+            }
+        </style>
     </head>
     <body>    
+        
+        <p><strong>create a new session</strong></p>
+        session name:
+        <input type="text" id="session-id" value="testsession">
+        <p>set:</p>
+        <textarea id="set-textarea" rows="6" cols="60">
+apple, orange, banana, lemon, cherry, strawberry
+        </textarea>
+        <br><br>
+        <input id="create-session-btn" type="submit" value="create"> 
+        
         <script src='/socket.io/socket.io.js'></script>
-        <script>    
+        <script>   
+ 
             var socket = io();  
+            
+            $('#create-session-btn').click(function() {
+                var set = [];
+                var setArr = $('#set-textarea').val().split(',');
+                for(var i = 0; i < setArr.length; i ++)
+                    set.push(setArr[i].trim())
+                socket.emit('create-session', {
+                    'id': $('#session-id').val(),
+                    'set': set
+                });
+            });
+            
         </script> 
     </body>
 </html>
