@@ -5,18 +5,21 @@ var io = require('socket.io')(http);
 var Session = require('./modules/Session.js');
 var activeSessions = {};
 
+var libs = {
+    'jquery.js' : '/node_modules/jquery/dist/jquery.min.js'
+};
 
 app.get('/', function(req, res){   
    res.sendFile(__dirname + '/public/index.html');
 });
 
-app.get('/:sessionId', function(req, res){   
+app.get('/session/:sessionId', function(req, res){   
    console.log("sessionId requested: " + req.params.sessionId);
    res.sendFile(__dirname + '/public/session.html');
 });
 
-app.get('/jquery/jquery.js', function(req, res) {
-    res.sendfile(__dirname + '/node_modules/jquery/dist/jquery.min.js');
+app.get('/lib/:lib', function(req, res) {
+    res.sendfile(__dirname + libs[req.params.lib]);
 });
 
 io.on('connection', function(socket){
