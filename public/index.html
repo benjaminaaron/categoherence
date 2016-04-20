@@ -2,15 +2,16 @@
 <html>
     <head>
         <title>grouping analysis</title>
+        <script src='/socket.io/socket.io.js'></script>
         <script src="lib/jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="lib/notie.css">
         <style>
             html * {
                 font-family: Georgia, serif
             }
         </style>
     </head>
-    <body>    
-        
+    <body>
         <p><strong>create a new session</strong></p>
         session name:
         <input type="text" id="session-id" value="testsession">
@@ -21,9 +22,7 @@ apple, orange, banana, lemon, cherry, strawberry
         <br><br>
         <input id="create-session-btn" type="submit" value="create"> 
         
-        <script src='/socket.io/socket.io.js'></script>
-        <script>   
- 
+        <script>
             var socket = io();  
             
             $('#create-session-btn').click(function() {
@@ -37,6 +36,13 @@ apple, orange, banana, lemon, cherry, strawberry
                 });
             });
             
-        </script> 
+            socket.on('info', function(msg){
+                notie.alert(4, msg, 3);
+            });     
+            socket.on('err', function(msg){
+                notie.alert(3, msg, 3);
+            });                 
+        </script>
+        <script src="lib/notie.js"></script>
     </body>
 </html>

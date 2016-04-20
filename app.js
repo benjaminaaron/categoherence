@@ -6,7 +6,9 @@ var Session = require('./modules/Session.js');
 var activeSessions = {};
 
 var libs = {
-    'jquery.js' : '/node_modules/jquery/dist/jquery.min.js'
+    'jquery.js': '/node_modules/jquery/dist/jquery.min.js',
+    'notie.js': '/node_modules/notie/dist/notie.min.js',
+    'notie.css': '/node_modules/notie/dist/notie.css'
 };
 
 app.get('/', function(req, res){   
@@ -18,24 +20,32 @@ app.get('/session/:sessionId', function(req, res){
    res.sendFile(__dirname + '/public/session.html');
 });
 
-app.get('/lib/:lib', function(req, res) {
-    res.sendfile(__dirname + libs[req.params.lib]);
+app.get('*/lib/:lib', function(req, res) {
+    res.sendFile(__dirname + libs[req.params.lib]);
 });
 
 io.on('connection', function(socket){
+    console.log('user connected: ' + socket.id);
+
+    socket.on('create-session', function(sessionData) {
+        if(activeSessions[sessionData.id])
+            socket.emit('err', 'a session with that name already exists');    
+        else {
+            activeSessions[sessionData.id] = new Session(sessionData);
+            socket.emit('info', 'the session ' + '"' + sessionData.id + '" has been created');  
+        }
+    });
    
-   socket.on('create-session', function(sessionData) {
-      console.log(sessionData);
-   });
+    socket.on('login', function(sessionId){
+        if(activeSessions[sessionId])
+            socket.emit('info', 'welcome to session ' + sessionId + ', your id is ' + socket.id);
+        else
+            socket.emit('err', 'no session exists with the name ' + sessionId);
+    });
    
-   socket.on('login', function(sessionId){ // emitted by session.html 
-      socket.emit('directmessage', 'welcome to session ' + sessionId + ', your id is ' + socket.id);
-   });
-   
-   console.log('user connected: ' + socket.id);
-   socket.on('disconnect', function(){
-      console.log('user disconnected: ' + socket.id);
-   });
+    socket.on('disconnect', function(){
+        console.log('user disconnected: ' + socket.id);
+    });
 });
 
 http.listen(3000, function(){

@@ -2,19 +2,24 @@
 <html>
     <head>
         <title>grouping analysis session</title>
+        <script src='/socket.io/socket.io.js'></script>
+        <link rel="stylesheet" type="text/css" href="lib/notie.css">
         <style></style>
     </head>
     <body>    
-        <script src='/socket.io/socket.io.js'></script>
         <script>    
             var socket = io();  
 
             var sessionId = window.location.href.split('/').pop();            
             socket.emit('login', sessionId);
             
-            socket.on('directmessage', function(msg){
-                document.write('session msg: ' + msg);
-            });
-        </script> 
+            socket.on('info', function(msg){
+                notie.alert(4, msg, 3);
+            });     
+            socket.on('err', function(msg){
+                notie.alert(3, msg, 3);
+            });  
+        </script>
+        <script src="lib/notie.js"></script> 
     </body>
 </html>
