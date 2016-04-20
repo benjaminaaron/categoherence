@@ -1,0 +1,23 @@
+{
+	"name": "grouping-analysis",
+  	"version": "1.0.0",
+  	"description": "",
+  	"author": "benjaminaaron",
+    "license": "MIT",
+  	"dependencies": {
+  		"http": "*",
+  		"express": "*",
+  		"socket.io": "*"
+  	},
+  	"scripts": {
+  		"start": "node app.js"
+  	},
+  	"repository": {
+  		"type": "git",
+  		"url": "https://github.com/benjaminaaron/grouping-analysis.git"
+	},
+   "bugs": {
+    "url": "https://github.com/benjaminaaron/grouping-analysis/issues"
+  },
+  "homepage": "https://github.com/benjaminaaron/grouping-analysis"
+}
