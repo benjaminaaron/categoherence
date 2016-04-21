@@ -2,16 +2,16 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-var utils = require('./js/utils.js');
-var Session = require('./js/Session.js');
+var utils = require('./modules/utils.js');
+var Session = require('./modules/Session.js');
 var activeSessions = {};
 
 var libs = {
     'jquery.js': '/node_modules/jquery/dist/jquery.min.js',
     'notie.js': '/node_modules/notie/dist/notie.min.js',
     'notie.css': '/node_modules/notie/dist/notie.css',
-    'main.css': '/css/main.css',
-    'main.js': '/js/main.js'
+    'main.css': '/public/css/main.css',
+    'main.js': '/public/js/main.js'
 };
 
 app.get('/', function(req, res) {   
