@@ -2,22 +2,31 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-var Session = require('./modules/Session.js');
+var Session = require('./js/Session.js');
 var activeSessions = {};
 
 var libs = {
     'jquery.js': '/node_modules/jquery/dist/jquery.min.js',
     'notie.js': '/node_modules/notie/dist/notie.min.js',
-    'notie.css': '/node_modules/notie/dist/notie.css'
+    'notie.css': '/node_modules/notie/dist/notie.css',
+    'main.css': '/css/main.css'
 };
 
 app.get('/', function(req, res){   
    res.sendFile(__dirname + '/public/index.html');
 });
 
-app.get('/session/:sessionId', function(req, res){   
-   console.log("sessionId requested: " + req.params.sessionId);
-   res.sendFile(__dirname + '/public/session.html');
+app.get('/:var', function(req, res){
+   switch(req.params.var){
+      case 'create':
+         res.sendFile(__dirname + '/public/create.html');
+         break;
+      default:
+         if(activeSessions[req.params.var])
+            res.sendFile(__dirname + '/public/session.html');
+         else
+            res.sendFile(__dirname + '/public/no-session.html');
+   }
 });
 
 app.get('*/lib/:lib', function(req, res) {
