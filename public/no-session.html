@@ -9,7 +9,7 @@
         <div id="info"></div><a id="link" href="#">#</a>    
         <script>
             var sessionId = window.location.href.split('/').pop();
-            document.getElementById('info').innerHTML = 'There is no active session named <b>' + sessionId + '</b>, click here to create one:';
+            document.getElementById('info').innerHTML = 'There is no active session with the id <b>' + sessionId + '</b>, click here to create one:';
             document.getElementById('link').href = '/create?' + sessionId;
             document.getElementById('link').innerHTML = 'create <b>' + sessionId + '</b>-session';
         </script>

@@ -10,18 +10,24 @@
     </head>
     <body>
         <p><strong>create a new session</strong></p>
-        session name:
-        <input type="text" id="session-id" value="testsession">
+        <br>
+        name:
+        <input type="text" id="session-name" value="testsession" size="30">
         <p>set:</p>
         <textarea id="set-textarea" rows="6" cols="60">
 apple, orange, banana, lemon, cherry, strawberry
         </textarea>
+        <br>
+        <p>description <small>(optional)</small>:</p>
+        <textarea id="description-textarea" rows="4" cols="60"></textarea>
         <br><br>
         <input type="checkbox" id="anonymousCheckbox" checked>anonymous
         <br>
         <input type="checkbox" id="allowNewEntitiesCheckbox">allow adding new entities during session
         <br>
-        default layout: 
+        <input type="checkbox" id="allowMulInstOfEntitiesCheckbox">allow multiple instances of an entity
+        <br>
+        default layout:
         <select id="defaultLayoutSelector">
             <option value="columns">columns</option>
             <option value="desktop">desktop</option> <!-- TODO find better name -->
@@ -31,9 +37,9 @@ apple, orange, banana, lemon, cherry, strawberry
         
         <script>
             if(location.search.length > 0) 
-                $('#session-id').val(location.search.substring(1));
-        
-            var socket = io();  
+                $('#session-name').val(location.search.substring(1));
+            
+            var socket = io();
             
             $('#create-session-btn').click(function() {
                 var set = [];
@@ -41,20 +47,25 @@ apple, orange, banana, lemon, cherry, strawberry
                 for(var i = 0; i < setArr.length; i ++)
                     set.push(setArr[i].trim())
                 socket.emit('create-session', {
-                    'id': $('#session-id').val(),
+                    'name': $('#session-name').val(),
                     'set': set,
+                    'description': $('#description-textarea').val(),
                     'anonymous': document.getElementById('anonymousCheckbox').checked,
-                    'allowNewEntities': document.getElementById('allowNewEntitiesCheckbox').checked, 
+                    'allowNewEntities': document.getElementById('allowNewEntitiesCheckbox').checked,
+                    'allowMulInstEntities': document.getElementById('allowMulInstOfEntitiesCheckbox').checked,
                     'defaultLayout': $('#defaultLayoutSelector').val()
                 });
             });
             
+            socket.on('success', function(msg){
+                notie.alert(1, msg);
+            });
             socket.on('info', function(msg){
                 notie.alert(4, msg, 3);
-            });     
+            });
             socket.on('err', function(msg){
                 notie.alert(3, msg, 3);
-            });                 
+            });
         </script>
         <script src="lib/notie.js"></script>
     </body>
