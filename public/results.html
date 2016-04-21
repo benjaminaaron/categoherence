@@ -12,10 +12,10 @@
         <script>
             var socket = io();
 
-            var urlArr = window.location.href.split('/');
-            urlArr.pop();
-            var sessionId = urlArr.pop();         
-            socket.emit('results', sessionId);
+            var arr = window.location.href.split('/');
+            arr.pop();
+            var sessionId = arr.pop();         
+            socket.emit('login-results', sessionId);
 
             setupNotie(notie, socket);
         </script>

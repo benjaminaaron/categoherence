@@ -4,3 +4,7 @@
 html * {
     font-family: Georgia, serif
 }
+
+#notie-alert-text a {
+    color: #fff;
+}

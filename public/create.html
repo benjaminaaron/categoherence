@@ -43,11 +43,12 @@ apple, orange, banana, lemon, cherry, strawberry
             var socket = io();
             
             $('#create-session-btn').click(function() {
+                var setRaw = $('#set-textarea').val().split(',');
                 var set = [];
-                var setArr = $('#set-textarea').val().split(',');
-                for(var i = 0; i < setArr.length; i ++)
-                    set.push(setArr[i].trim())
-                socket.emit('create-session', {
+                for(var i = 0; i < setRaw.length; i ++)
+                    set.push(setRaw[i].trim()) // TODO more cleanups?
+                
+                var sessionData = {
                     'name': $('#session-name').val(),
                     'set': set,
                     'description': $('#description-textarea').val(),
@@ -55,7 +56,9 @@ apple, orange, banana, lemon, cherry, strawberry
                     'allowNewEntities': document.getElementById('allowNewEntitiesCheckbox').checked,
                     'allowMulInstEntities': document.getElementById('allowMulInstOfEntitiesCheckbox').checked,
                     'defaultLayout': $('#defaultLayoutSelector').val()
-                });
+                };
+                
+                socket.emit('create-session', sessionData);
             });
             
             setupNotie(notie, socket);

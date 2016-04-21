@@ -23,6 +23,8 @@ app.get('/:var', function(req, res) {
         case 'create':
             res.sendFile(__dirname + '/public/create.html');
             break;
+        case 'favicon.ico':
+            break;
         default:
             if(activeSessions[req.params.var])
                 res.sendFile(__dirname + '/public/session.html');
@@ -52,18 +54,18 @@ io.on('connection', function(socket) {
         else {
             sessionData.id = sessionId;
             activeSessions[sessionId] = new Session(sessionData);
-            socket.emit('success', 'the session ' + '"' + sessionId + '" has been created');  
+            socket.emit('success', 'new session has been created: <b><a href="/' + sessionId + '">' + sessionId + '</a></b>');  
         }
     });
    
-    socket.on('login', function(sessionId) {
+    socket.on('login-session', function(sessionId) {
         if(activeSessions[sessionId])
             socket.emit('info', 'welcome to session <b>' + sessionId + '</b>, your id is ' + socket.id);
         else
             socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');
     });
     
-    socket.on('results', function(sessionId) {
+    socket.on('login-results', function(sessionId) {
         if(activeSessions[sessionId])
             socket.emit('info', 'this is the results page of session <b>' + sessionId + '</b>, your id is ' + socket.id);
         else

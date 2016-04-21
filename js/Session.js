@@ -1,15 +1,15 @@
 
 var Session = function(data) {
     this.data = data;
-    this.showSet();
-}
+    this.showData();
+};
 
 Session.prototype = {
-    showSet: function() {
+    showData: function() {
         console.log('---------- start: ' + this.data.id);
         console.log(this.data);
         console.log('---------- end: ' + this.data.id);
     }
-}
+};
 
 module.exports = Session;
