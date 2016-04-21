@@ -23,18 +23,25 @@ app.get('/:var', function(req, res) {
             res.sendFile(__dirname + '/public/create.html');
             break;
         default:
-            if(activeSessions[utils.formatNameAsId(req.params.var)])
+            if(activeSessions[req.params.var])
                 res.sendFile(__dirname + '/public/session.html');
             else
                 res.sendFile(__dirname + '/public/no-session.html');
     }
 });
 
+app.get('/:var/results', function(req, res) {
+    if(activeSessions[req.params.var])
+        res.sendFile(__dirname + '/public/results.html');
+    else
+        res.sendFile(__dirname + '/public/no-session.html');
+});
+
 app.get('*/lib/:lib', function(req, res) {
     res.sendFile(__dirname + libs[req.params.lib]);
 });
 
-io.on('connection', function(socket){
+io.on('connection', function(socket) {
     console.log('user connected: ' + socket.id);
 
     socket.on('create-session', function(sessionData) {
@@ -48,14 +55,21 @@ io.on('connection', function(socket){
         }
     });
    
-    socket.on('login', function(sessionId){
+    socket.on('login', function(sessionId) {
         if(activeSessions[sessionId])
-            socket.emit('info', 'welcome to session ' + sessionId + ', your id is ' + socket.id);
+            socket.emit('info', 'welcome to session <b>' + sessionId + '</b>, your id is ' + socket.id);
         else
-            socket.emit('err', 'no session exists with the id ' + sessionId);
+            socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');
+    });
+    
+    socket.on('results', function(sessionId) {
+        if(activeSessions[sessionId])
+            socket.emit('info', 'this is the results page of session <b>' + sessionId + '</b>, your id is ' + socket.id);
+        else
+            socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');
     });
    
-    socket.on('disconnect', function(){
+    socket.on('disconnect', function() {
         console.log('user disconnected: ' + socket.id);
     });
 });
