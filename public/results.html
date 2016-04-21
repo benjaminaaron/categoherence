@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>grouping analysis - session</title>
+        <title>grouping analysis - results</title>
         <script src='/socket.io/socket.io.js'></script>
         <script src="lib/main.js"></script>
         <link rel="stylesheet" type="text/css" href="lib/main.css">
@@ -12,10 +12,7 @@
         <script>
             var socket = io();
 
-            var arr = window.location.href.split('/');
-            arr.pop();
-            var sessionId = arr.pop();         
-            socket.emit('login-results', sessionId);
+            socket.emit('login-results', getSessionIdFromURL());
 
             setupNotie(notie, socket);
         </script>
