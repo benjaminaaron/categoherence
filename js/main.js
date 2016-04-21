@@ -19,3 +19,9 @@ function getSessionIdFromURL() {
         arr.pop();
     return arr.pop();
 };
+
+function getFormattedTimestamp(unixTimestamp) {
+    var d = new Date(unixTimestamp * 1000);
+    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+};
+

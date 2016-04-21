@@ -50,6 +50,7 @@ apple, orange, banana, lemon, cherry, strawberry
                 
                 var sessionData = {
                     'name': $('#session-name').val(),
+                    'timestamp': Math.floor(Date.now() / 1000),
                     'set': set,
                     'description': $('#description-textarea').val(),
                     'anonymous': document.getElementById('anonymousCheckbox').checked,

@@ -24,7 +24,7 @@
                 var ul = document.getElementById('sessions-list');
                 $.each(sessionsJSON, function(i, session) {
                     var li = document.createElement('li');
-                    li.appendChild(document.createTextNode(session.data.id + ': ' + session.submissions.length));
+                    li.appendChild(document.createTextNode(session.data.id + ': ' + session.submissions.length + ' [' + getFormattedTimestamp(session.data.timestamp) + ']'));
                     ul.appendChild(li);
                 });
             });
