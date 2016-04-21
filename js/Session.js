@@ -1,6 +1,8 @@
 
 var Session = function(data) {
     this.data = data;
+    this.submissions = [];
+    
     this.showData();
 };
 

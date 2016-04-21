@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+    <head>
+        <title>grouping analysis - dashboard</title>
+        <script src='/socket.io/socket.io.js'></script>
+        <script src="lib/jquery.js"></script>
+        <script src="lib/main.js"></script>
+        <link rel="stylesheet" type="text/css" href="lib/main.css">
+        <style></style>
+    </head>
+    <body>
+        
+        <div id="info"><i>no active sessions</i></div>
+        <ul id="sessions-list"></ul>
+        
+        <script src="lib/notie.js"></script>
+        <script>
+            var socket = io();
+            
+            socket.emit('get-dashboard', null);
+            
+            socket.on('dashboard', function(sessionsJSON) {
+                document.getElementById('info').innerHTML = '<i>active sessions:</i>';
+                var ul = document.getElementById('sessions-list');
+                $.each(sessionsJSON, function(i, session) {
+                    var li = document.createElement('li');
+                    li.appendChild(document.createTextNode(session.data.id + ': ' + session.submissions.length));
+                    ul.appendChild(li);
+                });
+            });
+        </script>
+    </body>
+</html>

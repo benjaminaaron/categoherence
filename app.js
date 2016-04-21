@@ -23,6 +23,9 @@ app.get('/:var', function(req, res) {
         case 'create':
             res.sendFile(__dirname + '/public/create.html');
             break;
+        case 'dashboard':
+            res.sendFile(__dirname + '/public/dashboard.html');
+            break;
         case 'favicon.ico':
             break;
         default:
@@ -45,7 +48,7 @@ app.get('*/lib/:lib', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-    console.log('user connected: ' + socket.id);
+    //console.log('user connected: ' + socket.id);
 
     socket.on('create-session', function(sessionData) {
         var sessionId = utils.formatNameAsId(sessionData.name);
@@ -71,9 +74,14 @@ io.on('connection', function(socket) {
         else
             socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');
     });
+    
+    socket.on('get-dashboard', function() {
+        if(Object.keys(activeSessions).length > 0)
+            socket.emit('dashboard', activeSessions);
+    });
    
     socket.on('disconnect', function() {
-        console.log('user disconnected: ' + socket.id);
+        //console.log('user disconnected: ' + socket.id);
     });
 });
 

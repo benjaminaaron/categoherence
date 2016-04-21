@@ -11,9 +11,9 @@
         <script src="lib/notie.js"></script>
         <script>
             var socket = io();
-
+            
             socket.emit('login-results', getSessionIdFromURL());
-
+            
             setupNotie(notie, socket);
         </script>
     </body>
