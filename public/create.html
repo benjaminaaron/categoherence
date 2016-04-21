@@ -17,6 +17,16 @@
 apple, orange, banana, lemon, cherry, strawberry
         </textarea>
         <br><br>
+        <input type="checkbox" id="anonymousCheckbox" checked>anonymous
+        <br>
+        <input type="checkbox" id="allowNewEntitiesCheckbox">allow adding new entities during session
+        <br>
+        default layout: 
+        <select id="defaultLayoutSelector">
+            <option value="columns">columns</option>
+            <option value="desktop">desktop</option> <!-- TODO find better name -->
+        </select>
+        <br><br>
         <input id="create-session-btn" type="submit" value="create"> 
         
         <script>
@@ -32,7 +42,10 @@ apple, orange, banana, lemon, cherry, strawberry
                     set.push(setArr[i].trim())
                 socket.emit('create-session', {
                     'id': $('#session-id').val(),
-                    'set': set
+                    'set': set,
+                    'anonymous': document.getElementById('anonymousCheckbox').checked,
+                    'allowNewEntities': document.getElementById('allowNewEntitiesCheckbox').checked, 
+                    'defaultLayout': $('#defaultLayoutSelector').val()
                 });
             });
             

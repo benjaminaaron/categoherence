@@ -2,6 +2,9 @@
 var Session = function(sessionData){
 	this.id = sessionData.id;
 	this.set = sessionData.set;
+	this.anonymous = sessionData.anonymous;
+	this.allowNewEntities = sessionData.allowNewEntities;
+	this.defaultLayout = sessionData.defaultLayout;
 	this.showSet();
 }
 
