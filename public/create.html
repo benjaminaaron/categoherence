@@ -9,30 +9,22 @@
         <style></style>
     </head>
     <body>
-        <p><strong>create a new session</strong></p>
-        <br>
-        name:
-        <input type="text" id="session-name" value="testsession" size="30">
+        <p><strong>create a new session</strong></p><br>
+        name: <input type="text" id="session-name" value="testsession" size="30">
         <p>set:</p>
         <textarea id="set-textarea" rows="6" cols="60">
 apple, orange, banana, lemon, cherry, strawberry
-        </textarea>
-        <br>
+        </textarea><br>
         <p>description <small>(optional)</small>:</p>
-        <textarea id="description-textarea" rows="4" cols="60"></textarea>
-        <br><br>
-        <input type="checkbox" id="anonymousCheckbox" checked>anonymous
-        <br>
-        <input type="checkbox" id="allowNewEntitiesCheckbox">allow adding new entities during session
-        <br>
-        <input type="checkbox" id="allowMulInstOfEntitiesCheckbox">allow multiple instances of an entity
-        <br>
+        <textarea id="description-textarea" rows="4" cols="60"></textarea><br><br>
+        <input type="checkbox" id="anonymousCheckbox" checked>anonymous<br>
+        <input type="checkbox" id="allowNewEntitiesCheckbox">allow adding new entities during session<br>
+        <input type="checkbox" id="allowMulInstOfEntitiesCheckbox">allow multiple instances of an entity<br>
         default layout:
         <select id="defaultLayoutSelector">
             <option value="columns">columns</option>
             <option value="desktop">desktop</option> <!-- TODO find better name -->
-        </select>
-        <br><br>
+        </select><br><br>
         <input id="create-session-btn" type="submit" value="create"> 
         
         <script src="lib/notie.js"></script>
@@ -45,8 +37,11 @@ apple, orange, banana, lemon, cherry, strawberry
             $('#create-session-btn').click(function() {
                 var setRaw = $('#set-textarea').val().split(',');
                 var set = [];
-                for(var i = 0; i < setRaw.length; i ++)
-                    set.push(setRaw[i].trim()) // TODO more cleanups?
+                for(var i = 0; i < setRaw.length; i ++) {
+                    var entity = setRaw[i].trim(); // TODO more cleanups?
+                    if(entity.length > 0)
+                        set.push()
+                }
                 
                 var sessionData = {
                     'name': $('#session-name').val(),

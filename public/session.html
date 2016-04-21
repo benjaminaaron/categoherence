@@ -3,16 +3,46 @@
     <head>
         <title>grouping analysis - session</title>
         <script src='/socket.io/socket.io.js'></script>
+        <script src="lib/jquery.js"></script>
         <script src="lib/main.js"></script>
+        <script src="lib/Entity.js"></script>
+        <script src="lib/Grouping.js"></script>
         <link rel="stylesheet" type="text/css" href="lib/main.css">
         <style></style>
     </head>
     <body>
+        
+        <div id="session-info"></div>
+        <input id="submit-btn" type="submit" value="submit">
+        
         <script src="lib/notie.js"></script>
         <script>
             var socket = io();
             
             socket.emit('login-session', getSessionIdFromURL());
+            
+            var entities = [];
+            var groupings = [];
+            
+            socket.on('session-data', function(sessionData) {
+                var infoHTML = '<b>' + sessionData.name + '</b> <small>(' + getFormattedTimestamp(sessionData.timestamp) + ')</small><br>';
+                if(sessionData.description.length > 0)
+                    infoHTML += '<i>' + sessionData.description + '</i><br>';
+                document.getElementById('session-info').innerHTML = infoHTML;
+                for(var i = 0; i < sessionData.set.length; i ++)
+                    instantiateEntity(sessionData.set[i]);
+            });
+            
+            function instantiateEntity(name) {
+                var entity = new Entity(name);
+                entities.push(entity);
+                //TODO gui/canvas element...
+            };
+            
+            $('#submit-btn').click(function() {
+                groupings.push(new Grouping());
+                socket.emit('submit', groupings);
+            });
             
             setupNotie(notie, socket);
         </script>

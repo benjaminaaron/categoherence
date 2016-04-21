@@ -11,7 +11,9 @@ var libs = {
     'notie.js': '/node_modules/notie/dist/notie.min.js',
     'notie.css': '/node_modules/notie/dist/notie.css',
     'main.css': '/public/css/main.css',
-    'main.js': '/public/js/main.js'
+    'main.js': '/public/js/main.js',
+    'Entity.js': '/public/js/Entity.js',
+    'Grouping.js': '/public/js/Grouping.js'
 };
 
 app.get('/', function(req, res) {   
@@ -62,10 +64,16 @@ io.on('connection', function(socket) {
     });
    
     socket.on('login-session', function(sessionId) {
-        if(activeSessions[sessionId])
+        if(activeSessions[sessionId]) {
             socket.emit('info', 'welcome to session <b>' + sessionId + '</b>, your id is ' + socket.id);
+            socket.emit('session-data', activeSessions[sessionId].data);
+        }
         else
             socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');
+    });
+    
+    socket.on('submit', function(groupings) {
+        console.log(groupings);
     });
     
     socket.on('login-results', function(sessionId) {

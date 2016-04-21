@@ -1,7 +1,8 @@
 
 var Session = function(data) {
-    this.data = data;
+    this.data = data; // TODO better "info" or "meta"... ?
     this.submissions = [];
+    //this.result
     
     this.showData();
 };
