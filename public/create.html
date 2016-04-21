@@ -4,7 +4,7 @@
         <title>grouping analysis - create</title>
         <script src='/socket.io/socket.io.js'></script>
         <script src="lib/jquery.js"></script>
-        <link rel="stylesheet" type="text/css" href="lib/notie.css">
+        <script src="lib/main.js"></script>
         <link rel="stylesheet" type="text/css" href="lib/main.css">
         <style></style>
     </head>
@@ -35,8 +35,9 @@ apple, orange, banana, lemon, cherry, strawberry
         <br><br>
         <input id="create-session-btn" type="submit" value="create"> 
         
+        <script src="lib/notie.js"></script>
         <script>
-            if(location.search.length > 0) 
+            if(location.search.length > 0)
                 $('#session-name').val(location.search.substring(1));
             
             var socket = io();
@@ -57,16 +58,7 @@ apple, orange, banana, lemon, cherry, strawberry
                 });
             });
             
-            socket.on('success', function(msg){
-                notie.alert(1, msg);
-            });
-            socket.on('info', function(msg){
-                notie.alert(4, msg, 3);
-            });
-            socket.on('err', function(msg){
-                notie.alert(3, msg, 3);
-            });
+            setupNotie(notie, socket);
         </script>
-        <script src="lib/notie.js"></script>
     </body>
 </html>

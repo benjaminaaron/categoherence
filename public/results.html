@@ -3,23 +3,21 @@
     <head>
         <title>grouping analysis - session</title>
         <script src='/socket.io/socket.io.js'></script>
-        <link rel="stylesheet" type="text/css" href="lib/notie.css">
+        <script src="lib/main.js"></script>
         <link rel="stylesheet" type="text/css" href="lib/main.css">
         <style></style>
     </head>
-    <body>    
-        <script>    
-            var socket = io();  
+    <body>
+        <script src="lib/notie.js"></script>
+        <script>
+            var socket = io();
 
             var urlArr = window.location.href.split('/');
             urlArr.pop();
             var sessionId = urlArr.pop();         
             socket.emit('results', sessionId);
-            
-            socket.on('info', function(msg){
-                notie.alert(4, msg, 3);
-            });
+
+            setupNotie(notie, socket);
         </script>
-        <script src="lib/notie.js"></script> 
     </body>
 </html>

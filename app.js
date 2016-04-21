@@ -10,7 +10,8 @@ var libs = {
     'jquery.js': '/node_modules/jquery/dist/jquery.min.js',
     'notie.js': '/node_modules/notie/dist/notie.min.js',
     'notie.css': '/node_modules/notie/dist/notie.css',
-    'main.css': '/css/main.css'
+    'main.css': '/css/main.css',
+    'main.js': '/js/main.js'
 };
 
 app.get('/', function(req, res) {   
