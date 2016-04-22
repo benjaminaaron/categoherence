@@ -26,8 +26,8 @@
             
             socket.on('session-data', function(sessionData) {
                 var infoHTML = '<b>' + sessionData.name + '</b> <small>(' + getFormattedTimestamp(sessionData.timestamp) + ')</small><br>';
-                if(sessionData.description.length > 0)
-                    infoHTML += '<i>' + sessionData.description + '</i><br>';
+                if(sessionData.options.description.length > 0)
+                    infoHTML += '<i>' + sessionData.options.description + '</i><br>';
                 document.getElementById('session-info').innerHTML = infoHTML;
                 for(var i = 0; i < sessionData.set.length; i ++)
                     instantiateEntity(sessionData.set[i]);

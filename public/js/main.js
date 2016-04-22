@@ -25,3 +25,9 @@ function getFormattedTimestamp(unixTimestamp) {
     return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
 };
 
+function generateHexString(length) { // from http://stackoverflow.com/a/5399414
+    var str = '';
+    while(str.length < length)
+        str += Math.random().toString(16).substring(2);
+    return str.substring(0, length);
+};
