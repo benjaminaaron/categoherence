@@ -21,15 +21,16 @@ apple, orange, banana, lemon, cherry, strawberry
         <div id="options" style="display:none">
             <p>description <small>(optional)</small>:</p>
             <textarea id="description-textarea" rows="4" cols="60"></textarea><br><br>
-            <input type="checkbox" id="anonymousCheckbox" checked>anonymous<br>
-            <input type="checkbox" id="allowNewEntitiesCheckbox">allow adding new entities during session<br>
-            <input type="checkbox" id="allowMulInstOfEntitiesCheckbox">allow multiple instances of an entity<br>
+            <input type="checkbox" id="anonymous" checked>anonymous<br>
+            <input type="checkbox" id="allowNewEntities">allow adding new entities during session<br>
+            <input type="checkbox" id="allowMulInstEntities">allow multiple instances of an entity<br>
             generate <input type="text" id="numbOfAccessKeys" value="10" size="3"> access keys <input id="accessKeysBtn" type="submit" value="go"><br> 
             <div id="keys-list"></div>
             <input type="checkbox" id="allowMulSubmPerKey">allow multiple submissions per key<br>
             <input type="checkbox" id="allowPostEditing">allow post-editing of submission(s)<br> <!-- TODO allow for anonymous too by generating temp key -->   
+            <input type="checkbox" id="mustPlaceAllEntities">all entities must be in groupings <small>(= start list empty)</small><br>
             default layout:
-            <select id="defaultLayoutSelector">
+            <select id="defaultLayout">
                 <option value="columns">columns</option>
                 <option value="desktop">desktop</option> <!-- TODO find better name -->
             </select>
@@ -79,13 +80,14 @@ apple, orange, banana, lemon, cherry, strawberry
                     'set': set,
                     'options': {
                         'description': $('#description-textarea').val(),
-                        'anonymous': document.getElementById('anonymousCheckbox').checked,
-                        'allowNewEntities': document.getElementById('allowNewEntitiesCheckbox').checked,
-                        'allowMulInstEntities': document.getElementById('allowMulInstOfEntitiesCheckbox').checked,
+                        'anonymous': document.getElementById('anonymous').checked,
+                        'allowNewEntities': document.getElementById('allowNewEntities').checked,
+                        'allowMulInstEntities': document.getElementById('allowMulInstEntities').checked,
                         'accessKeys': keys,
                         'allowMulSubmPerKey': document.getElementById('allowMulSubmPerKey').checked,
                         'allowPostEditing': document.getElementById('allowPostEditing').checked,
-                        'defaultLayout': $('#defaultLayoutSelector').val()
+                        'mustPlaceAllEntities': document.getElementById('mustPlaceAllEntities').checked,
+                        'defaultLayout': $('#defaultLayout').val()
                     }
                 };
                 
