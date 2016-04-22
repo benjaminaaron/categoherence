@@ -74,7 +74,7 @@ apple, orange, banana, lemon, cherry, strawberry
                         set.push(entity);
                 }
                 
-                var sessionData = {
+                var sessionInfo = {
                     'name': $('#session-name').val(),
                     'timestamp': getTimestamp(),
                     'set': set,
@@ -91,7 +91,7 @@ apple, orange, banana, lemon, cherry, strawberry
                     }
                 };
                 
-                socket.emit('create-session', sessionData);
+                socket.emit('create-session', sessionInfo);
             });
             
             setupNotie(notie, socket);

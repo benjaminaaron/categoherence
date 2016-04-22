@@ -1,17 +1,27 @@
 
-var Session = function(data) {
-    this.data = data; // TODO better "info" or "meta"... ?
+var Session = function(info) {
+    this.info = info;
     this.submissions = [];
-    //this.result
     
-    this.showData();
+    this.showInfo();
 };
 
 Session.prototype = {
-    showData: function() {
-        console.log('---------- start: ' + this.data.id);
-        console.log(this.data);
-        console.log('---------- end: ' + this.data.id);
+    showInfo: function() {
+        console.log('---------- start: ' + this.info.id);
+        console.log(this.info);
+        console.log('---------- end: ' + this.info.id);
+    },
+    handleSubmission: function(submissionData) {
+        this.submissions.push(submissionData);
+        //TODO
+    },
+    getResult: function() {
+        var resultData = {
+            'info': this.info,
+            'submissions': this.submissions.length,
+            'stats' : null
+        };
     }
 };
 

@@ -69,7 +69,9 @@
         <script>
             var socket = io();
             
-            socket.emit('login-session', getSessionIdFromURL());
+            var sessionId = getSessionIdFromURL();
+            
+            socket.emit('login-session', sessionId);
             
             $('#arrival-list').sortable({
                 connectWith: '.connectedSortable',
@@ -103,14 +105,14 @@
             
             var entities = [];
             
-            socket.on('session-data', function(sessionData) {
-                var infoHTML = '<b>' + sessionData.name + '</b> <small>(' + getFormattedTimestamp(sessionData.timestamp) + ')</small><br>';
-                if(sessionData.options.description.length > 0)
-                    infoHTML += '<i>' + sessionData.options.description + '</i><br>';
+            socket.on('session-info', function(sessionInfo) {
+                var infoHTML = '<b>' + sessionInfo.name + '</b> <small>(' + getFormattedTimestamp(sessionInfo.timestamp) + ')</small><br>';
+                if(sessionInfo.options.description.length > 0)
+                    infoHTML += '<i>' + sessionInfo.options.description + '</i><br>';
                 document.getElementById('session-info').innerHTML = infoHTML;
-                for(var i = 0; i < sessionData.set.length; i ++) {
+                for(var i = 0; i < sessionInfo.set.length; i ++) {
                     var li = document.createElement('li');
-                    var entity = sessionData.set[i];
+                    var entity = sessionInfo.set[i];
                     li.appendChild(document.createTextNode(entity));
                     li.className = 'ui-state-default';
                     li.id = i;
@@ -120,12 +122,15 @@
             });
             
             $('#submit-btn').click(function() {
-                var submissionData = {
-                    'groupings': collectGroupings(),
-                    'timestamp': getTimestamp(),
-                    'submitter': 'anonymous'
-                }                
-                socket.emit('submission', submissionData);
+                var submission = {
+                    'sessionId': sessionId,
+                    'data': {
+                        'groupings': collectGroupings(),
+                        'timestamp': getTimestamp(),
+                        'submitter': 'anonymous'
+                    }
+                };
+                socket.emit('submission', submission);
             });
             
             function newList() {               

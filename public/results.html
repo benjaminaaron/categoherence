@@ -8,11 +8,20 @@
         <style></style>
     </head>
     <body>
+        <div id="session-info"></div>
+        
         <script src="lib/notie.js"></script>
         <script>
             var socket = io();
             
             socket.emit('login-results', getSessionIdFromURL());
+            
+            socket.on('session-results', function(sessionResults) {
+                var infoHTML = '<b>' + sessionData.name + '</b> <small>(' + getFormattedTimestamp(sessionData.timestamp) + ')</small><br>';
+                if(sessionData.options.description.length > 0)
+                    infoHTML += '<i>' + sessionData.options.description + '</i><br>';
+                document.getElementById('session-info').innerHTML = infoHTML;
+            });
             
             setupNotie(notie, socket);
         </script>

@@ -55,13 +55,13 @@ app.get('*/lib/:lib', function(req, res) {
 io.on('connection', function(socket) {
     //console.log('user connected: ' + socket.id);
 
-    socket.on('create-session', function(sessionData) {
-        var sessionId = utils.formatNameAsId(sessionData.name);
+    socket.on('create-session', function(sessionInfo) {
+        var sessionId = utils.formatNameAsId(sessionInfo.name);
         if(activeSessions[sessionId])
             socket.emit('err', 'a session with the id ' + sessionId + ' already exists');    
         else {
-            sessionData.id = sessionId;
-            activeSessions[sessionId] = new Session(sessionData);
+            sessionInfo.id = sessionId;
+            activeSessions[sessionId] = new Session(sessionInfo);
             socket.emit('success', 'new session has been created: <b><a href="/' + sessionId + '">' + sessionId + '</a></b>');  
         }
     });
@@ -70,20 +70,23 @@ io.on('connection', function(socket) {
         sessionId = utils.formatNameAsId(sessionId);
         if(activeSessions[sessionId]) {
             socket.emit('info', 'welcome to session <b>' + sessionId + '</b>, your id is ' + socket.id);
-            socket.emit('session-data', activeSessions[sessionId].data);
+            socket.emit('session-info', activeSessions[sessionId].info);
         }
         else
             socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');
     });
     
-    socket.on('submission', function(submissionData) {
-        console.log(submissionData);
+    socket.on('submission', function(submission) {
+        activeSessions[submission.sessionId].handleSubmission(submission.data);
+        socket.emit('success', 'your submission was received');
     });
     
     socket.on('login-results', function(sessionId) {
         sessionId = utils.formatNameAsId(sessionId);
-        if(activeSessions[sessionId])
+        if(activeSessions[sessionId]) {
             socket.emit('info', 'this is the results page of session <b>' + sessionId + '</b>, your id is ' + socket.id);
+            socket.emit('session-results', activeSessions[sessionId])
+        }
         else
             socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');
     });
