@@ -7,14 +7,17 @@ var Session = require('./modules/Session.js');
 var activeSessions = {};
 
 var libs = {
+    //JS
     'jquery.js': '/node_modules/jquery/dist/jquery.min.js',
     'notie.js': '/node_modules/notie/dist/notie.min.js',
-    'notie.css': '/node_modules/notie/dist/notie.css',
-    'sortable.js': '/node_modules/sortablejs/Sortable.min.js',
-    'main.css': '/public/css/main.css',
+    'jquery-ui_sortable.min.js': '/public/js/jquery-ui_sortable.min.js',
     'main.js': '/public/js/main.js',
     'Entity.js': '/public/js/Entity.js',
-    'Grouping.js': '/public/js/Grouping.js'
+    'Grouping.js': '/public/js/Grouping.js',
+    //CSS
+    'notie.css': '/node_modules/notie/dist/notie.css',
+    'jquery-ui_sortable.min.css': '/public/css/jquery-ui_sortable.min.css',
+    'main.css': '/public/css/main.css'
 };
 
 app.get('/', function(req, res) {   

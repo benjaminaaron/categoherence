@@ -10,8 +10,7 @@
     "jquery": "*",
     "latinize": "*",
     "notie": "*",
-    "socket.io": "*",
-    "sortablejs": "*"
+    "socket.io": "*"
   },
   "scripts": {
     "start": "node app.js"

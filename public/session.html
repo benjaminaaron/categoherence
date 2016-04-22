@@ -4,45 +4,59 @@
         <title>grouping analysis - session</title>
         <script src='/socket.io/socket.io.js'></script>
         <script src="lib/jquery.js"></script>
-        <script src="lib/sortable.js"></script>
+        <script src="lib/jquery-ui_sortable.min.js"></script>
         <script src="lib/main.js"></script>
         <script src="lib/Entity.js"></script>
         <script src="lib/Grouping.js"></script>
         <link rel="stylesheet" type="text/css" href="lib/main.css">
-        <style></style>
+        <link rel="stylesheet" type="text/css" href="lib/jquery-ui_sortable.min.css">
+        <style>
+            ul { 
+                list-style-type: none; 
+                margin: 0; 
+                background: #eee; 
+                padding: 20px 5px;
+                width: 200px;
+            }
+            li { 
+                margin: 5px; 
+                padding: 5px; 
+            }
+            .ui-sortable-helper { /* during dragging, copied from ui-state-highlight */
+                border: 1px solid #dad55e;
+                background: #fffa90;
+                color: #777620;
+            }
+            td {
+                vertical-align: top;
+            }
+        </style>
     </head>
     <body>
-        
         <div id="session-info"></div>
         <input id="submit-btn" type="submit" value="submit">
-        
-        <ul id="items">
-            <li>item 1</li>
-            <li>item 2</li>
-            <li>item 3</li>
-        </ul>
-        
-        <ul id="items2">
-            <li>item A</li>
-            <li>item B</li>
-            <li>item C</li>
-        </ul>
-        
+        <br><br>
+        <table id="lists" border="1">
+            <tr>
+                <td>
+                    <ul id="arrival-list" class="connectedSortable"></ul>
+                </td>
+                <td id="new-list-td">
+                    <a href="#" id="new-list">new list</a>
+                </td>
+            </tr>
+        </table>
         <script src="lib/notie.js"></script>
         <script>
             var socket = io();
             
             socket.emit('login-session', getSessionIdFromURL());
             
-            var el = document.getElementById('items');
-            Sortable.create(el, {
-                group: 'foo'
+            $('#arrival-list').sortable({
+                connectWith: '.connectedSortable'
             });
             
-            var el2 = document.getElementById('items2');
-            Sortable.create(el2, {
-                group: 'foo'
-            });
+            var lists = [];
             
             var entities = [];
             var groupings = [];
@@ -59,11 +73,27 @@
             function instantiateEntity(name) {
                 var entity = new Entity(name);
                 entities.push(entity);
-                //TODO gui/canvas element...
+                var li = document.createElement('li');
+                li.appendChild(document.createTextNode(name));
+                li.className = 'ui-state-default';
+                document.getElementById('arrival-list').appendChild(li);
             };
             
             $('#submit-btn').click(function() {
                 socket.emit('submit', groupings);
+            });
+            
+            $('#new-list').click(function() {                
+                var newListCol = document.getElementById('new-list-td');
+                var newCol = document.createElement('td');
+                var newList = document.createElement('ul');
+                newList.className = 'connectedSortable';                
+                $(newList).sortable({
+                    connectWith: '.connectedSortable'
+                });
+                lists.push(newList);
+                newCol.appendChild(newList);
+                newListCol.parentNode.insertBefore(newCol, newListCol);
             });
             
             setupNotie(notie, socket);
