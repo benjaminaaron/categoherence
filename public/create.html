@@ -39,8 +39,9 @@ apple, orange, banana, lemon, cherry, strawberry
         
         <script src="lib/notie.js"></script>
         <script>
-            if(location.search.length > 0)
-                $('#session-name').val(location.search.substring(1));
+            var urlParams = getURLparams(location.search);
+            if(urlParams['name'])
+                $('#session-name').val(urlParams['name']);
             
             $('#showOptionsLink').click(function() {
                 $('#showOptionsLink').hide();

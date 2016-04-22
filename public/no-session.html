@@ -11,7 +11,7 @@
         <script>
             var sessionId = getSessionIdFromURL();
             document.getElementById('info').innerHTML = 'there is no active session with the id <b>' + sessionId + '</b>';
-            document.getElementById('link').href = '/create?' + sessionId;
+            document.getElementById('link').href = '/create?name=' + sessionId;
             document.getElementById('link').innerHTML = 'create <b>' + sessionId + '</b>-session';
         </script>
     </body>

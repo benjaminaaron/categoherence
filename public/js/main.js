@@ -31,3 +31,14 @@ function generateHexString(length) { // from http://stackoverflow.com/a/5399414
         str += Math.random().toString(16).substring(2);
     return str.substring(0, length);
 };
+
+function getURLparams(url) {
+    var params = {};
+    if(url.length > 0) {
+        var arr = url.substring(1).split('&');
+        for(var i = 0; i < arr.length; i ++)
+            if(arr[i].split('=').length > 1)
+                params[arr[i].split('=')[0]] = arr[i].split('=')[1];
+    }
+    return params;
+};
