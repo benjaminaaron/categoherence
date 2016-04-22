@@ -13,11 +13,11 @@
                 list-style-type: none; 
                 margin: 0; 
                 background: #eee; 
-                padding: 20px 5px;
+                padding: 16px 8px;
                 width: 200px;
             }
             #arrival-list {
-                background: #fff; 
+                background: #ddd; 
             }
             li { 
                 margin: 5px; 
@@ -31,19 +31,37 @@
             td {
                 vertical-align: top;
             }
+            /*#new-list-td {
+                vertical-align: middle;
+            }*/
+            table {
+                border-spacing: 10px;
+            }
+            .circle {
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                background: orange;
+                /*border: 2px solid red;*/
+                text-align: center;
+                vertical-align: middle;
+                line-height: 60px;
+                color: white;
+                font-size: 160%;
+            }
         </style>
     </head>
     <body>
         <div id="session-info"></div>
         <input id="submit-btn" type="submit" value="submit">
         <br><br>
-        <table border="1">
+        <table border="0">
             <tr id="lists-row">
                 <td>
                     <ul id="arrival-list" class="connectedSortable"></ul>
                 </td>
                 <td id="new-list-td">
-                    <a href="#" id="new-list">new list</a>
+                    <div id="new-list-circle" class="circle">+</div>
                 </td>
             </tr>
         </table>
@@ -54,11 +72,34 @@
             socket.emit('login-session', getSessionIdFromURL());
             
             $('#arrival-list').sortable({
-                connectWith: '.connectedSortable'/*,
+                connectWith: '.connectedSortable',
+                start: function(event, ui) {
+                    sortableStart(this);
+                }, 
                 stop: function(event, ui) {
-                    update();
-                }*/
+                    sortableStop();
+                }
             });
+            
+            function sortableStart(el) {
+                $('body').bind('mousemove', function(e) {
+                    var target = $('#new-list-circle').offset();
+                    var dist = Math.sqrt(Math.pow(e.pageX - (target.left + 30), 2) + Math.pow(e.pageY - (target.top + 30), 2));
+                    if(dist < 30) {
+                        newList();
+                        $(el).sortable('refresh');
+                    }
+                });
+            };
+            
+            function sortableStop() {
+                $('body').unbind('mousemove');
+            };
+            
+            $('#new-list-circle').click(function() {
+                newList();
+            });
+            
             
             var entities = [];
             
@@ -87,16 +128,22 @@
                 socket.emit('submission', submissionData);
             });
             
-            $('#new-list').click(function() {                
+            function newList() {               
                 var newList = document.createElement('ul');
                 newList.className = 'connectedSortable';                
                 $(newList).sortable({
-                    connectWith: '.connectedSortable'
+                    connectWith: '.connectedSortable',
+                    start: function(event, ui) {
+                        sortableStart(this);
+                    }, 
+                    stop: function(event, ui) {
+                        sortableStop();
+                    }
                 });
                 var newCol = document.createElement('td');
                 newCol.appendChild(newList);
                 document.getElementById('lists-row').insertBefore(newCol, document.getElementById('new-list-td'));
-            });
+            };
             
             function collectGroupings() {
                 var groupings = [];
