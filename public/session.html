@@ -4,6 +4,7 @@
         <title>grouping analysis - session</title>
         <script src='/socket.io/socket.io.js'></script>
         <script src="lib/jquery.js"></script>
+        <script src="lib/sortable.js"></script>
         <script src="lib/main.js"></script>
         <script src="lib/Entity.js"></script>
         <script src="lib/Grouping.js"></script>
@@ -15,11 +16,33 @@
         <div id="session-info"></div>
         <input id="submit-btn" type="submit" value="submit">
         
+        <ul id="items">
+            <li>item 1</li>
+            <li>item 2</li>
+            <li>item 3</li>
+        </ul>
+        
+        <ul id="items2">
+            <li>item A</li>
+            <li>item B</li>
+            <li>item C</li>
+        </ul>
+        
         <script src="lib/notie.js"></script>
         <script>
             var socket = io();
             
             socket.emit('login-session', getSessionIdFromURL());
+            
+            var el = document.getElementById('items');
+            Sortable.create(el, {
+                group: 'foo'
+            });
+            
+            var el2 = document.getElementById('items2');
+            Sortable.create(el2, {
+                group: 'foo'
+            });
             
             var entities = [];
             var groupings = [];
@@ -40,7 +63,6 @@
             };
             
             $('#submit-btn').click(function() {
-                groupings.push(new Grouping());
                 socket.emit('submit', groupings);
             });
             

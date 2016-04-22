@@ -10,6 +10,7 @@ var libs = {
     'jquery.js': '/node_modules/jquery/dist/jquery.min.js',
     'notie.js': '/node_modules/notie/dist/notie.min.js',
     'notie.css': '/node_modules/notie/dist/notie.css',
+    'sortable.js': '/node_modules/sortablejs/Sortable.min.js',
     'main.css': '/public/css/main.css',
     'main.js': '/public/js/main.js',
     'Entity.js': '/public/js/Entity.js',
@@ -29,6 +30,7 @@ app.get('/:var', function(req, res) {
             res.sendFile(__dirname + '/public/dashboard.html');
             break;
         case 'favicon.ico':
+            //TODO
             break;
         default:
             if(activeSessions[req.params.var])
