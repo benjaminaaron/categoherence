@@ -33,7 +33,7 @@ app.get('/:var', function(req, res) {
             //TODO
             break;
         default:
-            if(activeSessions[req.params.var])
+            if(activeSessions[utils.formatNameAsId(req.params.var)])
                 res.sendFile(__dirname + '/public/session.html');
             else
                 res.sendFile(__dirname + '/public/no-session.html');
@@ -41,7 +41,7 @@ app.get('/:var', function(req, res) {
 });
 
 app.get('/:var/results', function(req, res) {
-    if(activeSessions[req.params.var])
+    if(activeSessions[utils.formatNameAsId(req.params.var)])
         res.sendFile(__dirname + '/public/results.html');
     else
         res.sendFile(__dirname + '/public/no-session.html');
@@ -66,6 +66,7 @@ io.on('connection', function(socket) {
     });
    
     socket.on('login-session', function(sessionId) {
+        sessionId = utils.formatNameAsId(sessionId);
         if(activeSessions[sessionId]) {
             socket.emit('info', 'welcome to session <b>' + sessionId + '</b>, your id is ' + socket.id);
             socket.emit('session-data', activeSessions[sessionId].data);
@@ -79,6 +80,7 @@ io.on('connection', function(socket) {
     });
     
     socket.on('login-results', function(sessionId) {
+        sessionId = utils.formatNameAsId(sessionId);
         if(activeSessions[sessionId])
             socket.emit('info', 'this is the results page of session <b>' + sessionId + '</b>, your id is ' + socket.id);
         else
