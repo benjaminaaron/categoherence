@@ -76,7 +76,7 @@ apple, orange, banana, lemon, cherry, strawberry
                 
                 var sessionData = {
                     'name': $('#session-name').val(),
-                    'timestamp': Math.floor(Date.now() / 1000),
+                    'timestamp': getTimestamp(),
                     'set': set,
                     'options': {
                         'description': $('#description-textarea').val(),

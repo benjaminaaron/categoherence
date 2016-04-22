@@ -12,8 +12,6 @@ var libs = {
     'notie.js': '/node_modules/notie/dist/notie.min.js',
     'jquery-ui_sortable.min.js': '/public/js/jquery-ui_sortable.min.js',
     'main.js': '/public/js/main.js',
-    'Entity.js': '/public/js/Entity.js',
-    'Grouping.js': '/public/js/Grouping.js',
     //CSS
     'notie.css': '/node_modules/notie/dist/notie.css',
     'jquery-ui_sortable.min.css': '/public/css/jquery-ui_sortable.min.css',
@@ -78,8 +76,8 @@ io.on('connection', function(socket) {
             socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');
     });
     
-    socket.on('submit', function(groupings) {
-        console.log(groupings);
+    socket.on('submission', function(submissionData) {
+        console.log(submissionData);
     });
     
     socket.on('login-results', function(sessionId) {

@@ -6,8 +6,6 @@
         <script src="lib/jquery.js"></script>
         <script src="lib/jquery-ui_sortable.min.js"></script>
         <script src="lib/main.js"></script>
-        <script src="lib/Entity.js"></script>
-        <script src="lib/Grouping.js"></script>
         <link rel="stylesheet" type="text/css" href="lib/main.css">
         <link rel="stylesheet" type="text/css" href="lib/jquery-ui_sortable.min.css">
         <style>
@@ -17,6 +15,9 @@
                 background: #eee; 
                 padding: 20px 5px;
                 width: 200px;
+            }
+            #arrival-list {
+                background: #fff; 
             }
             li { 
                 margin: 5px; 
@@ -36,8 +37,8 @@
         <div id="session-info"></div>
         <input id="submit-btn" type="submit" value="submit">
         <br><br>
-        <table id="lists" border="1">
-            <tr>
+        <table border="1">
+            <tr id="lists-row">
                 <td>
                     <ul id="arrival-list" class="connectedSortable"></ul>
                 </td>
@@ -53,48 +54,65 @@
             socket.emit('login-session', getSessionIdFromURL());
             
             $('#arrival-list').sortable({
-                connectWith: '.connectedSortable'
+                connectWith: '.connectedSortable'/*,
+                stop: function(event, ui) {
+                    update();
+                }*/
             });
             
-            var lists = [];
-            
             var entities = [];
-            var groupings = [];
             
             socket.on('session-data', function(sessionData) {
                 var infoHTML = '<b>' + sessionData.name + '</b> <small>(' + getFormattedTimestamp(sessionData.timestamp) + ')</small><br>';
                 if(sessionData.options.description.length > 0)
                     infoHTML += '<i>' + sessionData.options.description + '</i><br>';
                 document.getElementById('session-info').innerHTML = infoHTML;
-                for(var i = 0; i < sessionData.set.length; i ++)
-                    instantiateEntity(sessionData.set[i]);
+                for(var i = 0; i < sessionData.set.length; i ++) {
+                    var li = document.createElement('li');
+                    var entity = sessionData.set[i];
+                    li.appendChild(document.createTextNode(entity));
+                    li.className = 'ui-state-default';
+                    li.id = i;
+                    entities.push(entity);
+                    document.getElementById('arrival-list').appendChild(li);
+                }
             });
             
-            function instantiateEntity(name) {
-                var entity = new Entity(name);
-                entities.push(entity);
-                var li = document.createElement('li');
-                li.appendChild(document.createTextNode(name));
-                li.className = 'ui-state-default';
-                document.getElementById('arrival-list').appendChild(li);
-            };
-            
             $('#submit-btn').click(function() {
-                socket.emit('submit', groupings);
+                var submissionData = {
+                    'groupings': collectGroupings(),
+                    'timestamp': getTimestamp(),
+                    'submitter': 'anonymous'
+                }                
+                socket.emit('submission', submissionData);
             });
             
             $('#new-list').click(function() {                
-                var newListCol = document.getElementById('new-list-td');
-                var newCol = document.createElement('td');
                 var newList = document.createElement('ul');
                 newList.className = 'connectedSortable';                
                 $(newList).sortable({
                     connectWith: '.connectedSortable'
                 });
-                lists.push(newList);
+                var newCol = document.createElement('td');
                 newCol.appendChild(newList);
-                newListCol.parentNode.insertBefore(newCol, newListCol);
+                document.getElementById('lists-row').insertBefore(newCol, document.getElementById('new-list-td'));
             });
+            
+            function collectGroupings() {
+                var groupings = [];
+                var tds = document.getElementById('lists-row').getElementsByTagName('td');
+                for(var i = 1; i < tds.length - 1; i ++) {
+                    var list = tds[i].firstElementChild;
+                    var listEntries = list.children;
+                    if(listEntries.length > 0) {
+                        var group = [];
+                        for(var j = 0; j < listEntries.length; j ++)
+                            group.push(entities[listEntries[j].id]);
+                        groupings.push(group);
+                    }
+                }
+                return groupings;
+            };
             
             setupNotie(notie, socket);
         </script>

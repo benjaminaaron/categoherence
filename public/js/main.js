@@ -11,6 +11,10 @@ function setupNotie(notie, socket) {
     });
 };
 
+function getTimestamp() {
+    return Math.floor(Date.now() / 1000);
+};
+
 function getSessionIdFromURL() {
     var arr = window.location.href.split('/');
     if(arr[arr.length - 1].length == 0) // to accommodate case of "/" at end of URL
