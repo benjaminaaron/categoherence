@@ -16,9 +16,9 @@
                 padding: 16px 8px;
                 width: 200px;
             }
-            #arrival-list {
+            /*#arrival-list {
                 background: #ddd; 
-            }
+            }*/
             li { 
                 margin: 5px; 
                 padding: 5px; 
@@ -155,7 +155,7 @@
             function collectGroupings() {
                 var groupings = [];
                 var tds = document.getElementById('lists-row').getElementsByTagName('td');
-                for(var i = 1; i < tds.length - 1; i ++) {
+                for(var i = 0; i < tds.length - 1; i ++) {
                     var list = tds[i].firstElementChild;
                     var listEntries = list.children;
                     if(listEntries.length > 0) {
