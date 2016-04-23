@@ -103,21 +103,23 @@
             });
             
             
-            var entities = [];
+            var entities;
             
             socket.on('session-info', function(sessionInfo) {
                 var infoHTML = '<b>' + sessionInfo.name + '</b> <small>(' + getFormattedTimestamp(sessionInfo.timestamp) + ')</small><br>';
                 if(sessionInfo.options.description.length > 0)
                     infoHTML += '<i>' + sessionInfo.options.description + '</i><br>';
                 document.getElementById('session-info').innerHTML = infoHTML;
-                for(var i = 0; i < sessionInfo.set.length; i ++) {
-                    var li = document.createElement('li');
-                    var entity = sessionInfo.set[i];
-                    li.appendChild(document.createTextNode(entity));
-                    li.className = 'ui-state-default';
-                    li.id = i;
-                    entities.push(entity);
-                    document.getElementById('arrival-list').appendChild(li);
+                
+                entities = sessionInfo.entities;
+                for(var id in entities) {
+                    if(entities.hasOwnProperty(id)) {
+                        var li = document.createElement('li');
+                        li.appendChild(document.createTextNode(entities[id]));
+                        li.className = 'ui-state-default';
+                        li.id = id;
+                        document.getElementById('arrival-list').appendChild(li);
+                    }
                 }
             });
             
@@ -159,7 +161,7 @@
                     if(listEntries.length > 0) {
                         var group = [];
                         for(var j = 0; j < listEntries.length; j ++)
-                            group.push(entities[listEntries[j].id]);
+                            group.push(listEntries[j].id);
                         groupings.push(group);
                     }
                 }

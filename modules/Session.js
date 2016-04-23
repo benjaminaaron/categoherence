@@ -1,6 +1,10 @@
 
-var Session = function(info) {
+var Session = function(info, set) {
     this.info = info;
+    this.info.entities  = {};
+    for(var i = 0; i < set.length; i ++)
+        this.info.entities['id' + i] = set[i];
+    
     this.submissions = [];
     
     this.showInfo();

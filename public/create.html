@@ -74,24 +74,26 @@ apple, orange, banana, lemon, cherry, strawberry
                         set.push(entity);
                 }
                 
-                var sessionInfo = {
-                    'name': $('#session-name').val(),
-                    'timestamp': getTimestamp(),
-                    'set': set,
-                    'options': {
-                        'description': $('#description-textarea').val(),
-                        'anonymous': document.getElementById('anonymous').checked,
-                        'allowNewEntities': document.getElementById('allowNewEntities').checked,
-                        'allowMulInstEntities': document.getElementById('allowMulInstEntities').checked,
-                        'accessKeys': keys,
-                        'allowMulSubmPerKey': document.getElementById('allowMulSubmPerKey').checked,
-                        'allowPostEditing': document.getElementById('allowPostEditing').checked,
-                        'mustPlaceAllEntities': document.getElementById('mustPlaceAllEntities').checked,
-                        'defaultLayout': $('#defaultLayout').val()
-                    }
+                var data = {
+                    'info' : {
+                        'name': $('#session-name').val(),
+                        'timestamp': getTimestamp(),
+                        'options': {
+                            'description': $('#description-textarea').val(),
+                            'anonymous': document.getElementById('anonymous').checked,
+                            'allowNewEntities': document.getElementById('allowNewEntities').checked,
+                            'allowMulInstEntities': document.getElementById('allowMulInstEntities').checked,
+                            'accessKeys': keys,
+                            'allowMulSubmPerKey': document.getElementById('allowMulSubmPerKey').checked,
+                            'allowPostEditing': document.getElementById('allowPostEditing').checked,
+                            'mustPlaceAllEntities': document.getElementById('mustPlaceAllEntities').checked,
+                            'defaultLayout': $('#defaultLayout').val()
+                        }
+                    },
+                    'set': set
                 };
                 
-                socket.emit('create-session', sessionInfo);
+                socket.emit('create-session', data);
             });
             
             setupNotie(notie, socket);

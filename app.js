@@ -55,13 +55,13 @@ app.get('*/lib/:lib', function(req, res) {
 io.on('connection', function(socket) {
     //console.log('user connected: ' + socket.id);
 
-    socket.on('create-session', function(sessionInfo) {
-        var sessionId = utils.formatNameAsId(sessionInfo.name);
+    socket.on('create-session', function(data) {
+        var sessionId = utils.formatNameAsId(data.info.name);
         if(activeSessions[sessionId])
             socket.emit('err', 'a session with the id ' + sessionId + ' already exists');    
         else {
-            sessionInfo.id = sessionId;
-            activeSessions[sessionId] = new Session(sessionInfo);
+            data.info.id = sessionId;
+            activeSessions[sessionId] = new Session(data.info, data.set);
             socket.emit('success', 'new session has been created: <b><a href="/' + sessionId + '">' + sessionId + '</a></b>');  
         }
     });
