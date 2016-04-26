@@ -127,7 +127,7 @@
                 var submission = {
                     'sessionId': sessionId,
                     'data': {
-                        'groupings': collectGroupings(),
+                        'groups': collectGroups(),
                         'timestamp': getTimestamp(),
                         'submitter': 'anonymous'
                     }
@@ -152,8 +152,8 @@
                 document.getElementById('lists-row').insertBefore(newCol, document.getElementById('new-list-td'));
             };
             
-            function collectGroupings() {
-                var groupings = [];
+            function collectGroups() {
+                var groups = [];
                 var tds = document.getElementById('lists-row').getElementsByTagName('td');
                 for(var i = 0; i < tds.length - 1; i ++) {
                     var list = tds[i].firstElementChild;
@@ -162,10 +162,10 @@
                         var group = [];
                         for(var j = 0; j < listEntries.length; j ++)
                             group.push(listEntries[j].id);
-                        groupings.push(group);
+                        groups.push(group);
                     }
                 }
-                return groupings;
+                return groups;
             };
             
             setupNotie(notie, socket);

@@ -61,7 +61,7 @@ io.on('connection', function(socket) {
             socket.emit('err', 'a session with the id ' + sessionId + ' already exists');    
         else {
             data.info.id = sessionId;
-            activeSessions[sessionId] = new Session(data.info, data.set);
+            activeSessions[sessionId] = new Session(data);
             socket.emit('success', 'new session has been created: <b><a href="/' + sessionId + '">' + sessionId + '</a></b>');  
         }
     });
@@ -77,8 +77,8 @@ io.on('connection', function(socket) {
     });
     
     socket.on('submission', function(submission) {
-        activeSessions[submission.sessionId].handleSubmission(submission.data);
-        socket.emit('success', 'your submission was received');
+        activeSessions[submission.sessionId].addSubmission(submission.data);
+        socket.emit('success', 'your submission was received, see the <a href="' + submission.sessionId + '/results">results</a>');
     });
     
     socket.on('login-results', function(sessionId) {

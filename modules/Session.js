@@ -1,14 +1,13 @@
+var Group = require('./Group.js');
 
-var Session = function(info, set) {
-    this.info = info;
+var Session = function(data) {
+    this.info = data.info;
     this.info.entities  = {};
     
-    this.subgroups = {};
+    this.groups = {};
     
-    for(var i = 0; i < set.length; i ++) {
-        this.info.entities[i] = set[i];
-        this.subgroups[i] = 0;
-    }
+    for(var i = 0; i < data.set.length; i ++)
+        this.info.entities['' + i] = data.set[i]; // id = i
     
     this.submissions = [];
     
@@ -32,17 +31,31 @@ Session.prototype = {
             return idStr.substring(1);
         }
     },
-    handleSubmission: function(data) {
+    addSubmission: function(data) {
         this.submissions.push(data);
-        for(var i = 0; i < data.groupings.length; i ++) {
-            var grouping = data.groupings[i];
-            var idStr = this.sortIds(grouping);
-            if(this.subgroups[idStr])
-                this.subgroups[idStr] += 1;
+        for(var i = 0; i < data.groups.length; i ++) {
+            var group = data.groups[i];
+            var idStr = this.sortIds(group);
+            if(this.groups[idStr])
+                this.groups[idStr].asWholeCount += 1;
             else 
-                this.subgroups[idStr] = 1;
+                this.groups[idStr] = new Group(idStr, group.length);
+            
+            //TODO count/create subgroups...
         }
-        console.log(this.subgroups);
+    },
+    groupsToString: function() {
+        var str = '';
+        for(var idStr in this.groups) {
+            if(this.groups.hasOwnProperty(idStr)) {
+                str += this.groups[idStr].getStats() + ' ';
+                var ids = idStr.split('-');
+                for(var i = 0; i < ids.length; i ++)
+                    str += this.info.entities[ids[i]] + (i < ids.length - 1 ? ' ' : '');
+                str += '\n';
+            }
+        }
+        return str;
     },
     getResult: function() {
         var resultData = {
