@@ -1,5 +1,5 @@
 {
-  "name": "grouping-analysis",
+  "name": "categoherence",
   "version": "1.0.0",
   "description": "",
   "author": "benjaminaaron",
@@ -17,10 +17,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/benjaminaaron/grouping-analysis.git"
+    "url": "https://github.com/benjaminaaron/categoherence.git"
   },
   "bugs": {
-    "url": "https://github.com/benjaminaaron/grouping-analysis/issues"
+    "url": "https://github.com/benjaminaaron/categoherence/issues"
   },
-  "homepage": "https://github.com/benjaminaaron/grouping-analysis"
+  "homepage": "https://github.com/benjaminaaron/categoherence"
 }
