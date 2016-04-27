@@ -24,12 +24,32 @@ Session.prototype = {
     addSubmission: function(data) {
         this.submissions.push(data);
         for(var i = 0; i < data.groups.length; i ++) {
-            var group = data.groups[i];
-            var gId = utils.sort(group);
-            if(!this.groups[gId])
-                this.groups[gId] = new Group(gId, group.length);
-            this.groups[gId].asWhole.count += 1;
+            var gId = utils.sort(data.groups[i]);
+            var group = this.groups[gId]
+            if(!group)
+                group = this.groups[gId] = new Group(gId);
+            group.asWhole.count += 1;
+            
+            var binStrings = utils.generateBinStrings(gId.length);
+                        
+            for(j in binStrings) {
+                var binArr = binStrings[j].map(Number);
+                var sum = binArr.reduce(utils.add, 0);
+                
+                if(sum != 0 && sum != binArr.length) {
+                    var subgroupArr = [];
+                    for(k in binArr)
+                        if(binArr[k] == 1)
+                            subgroupArr.push(gId[k]);
+                    var subgroup = this.groups[subgroupArr];
+                    if(!subgroup)
+                        subgroup = this.groups[subgroupArr] = new Group(subgroupArr);
+                    subgroup.asPart.count += 1;
+                }
+            }
         }
+        console.log(this.groups);
+        console.log(this.groupsToString());
     },
     groupsToString: function() {
         var str = '';

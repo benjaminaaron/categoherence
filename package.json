@@ -10,7 +10,8 @@
     "jquery": "*",
     "latinize": "*",
     "notie": "*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "strinc": "*"
   },
   "scripts": {
     "start": "node app.js"
