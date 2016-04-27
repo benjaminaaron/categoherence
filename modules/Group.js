@@ -2,14 +2,21 @@
 var Group = function(gId) {
     this.gId = gId;
     this.size = gId.length;
-    //TODO group creator is part or not
-    this.asWholeCount = 1;
-    this.asSubgroupCount = 0;
+    this.asWhole = {
+        'count': 0,
+        'submitters': [],
+        'labels': []
+    };
+    this.asPart = {
+        'count': 0,
+        'submitters': [],
+        'labels': []
+    };
 };
 
 Group.prototype = {
     getStats: function() {
-        return '[' + this.size + ':' + this.asWholeCount + '|' + this.asSubgroupCount + ']';
+        return '[' + this.size + ':' + this.asWhole.count + '|' + this.asPart.count + ']';
     }
 };
 

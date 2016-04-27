@@ -26,10 +26,9 @@ Session.prototype = {
         for(var i = 0; i < data.groups.length; i ++) {
             var group = data.groups[i];
             var gId = utils.sort(group);
-            if(this.groups[gId])
-                this.groups[gId].asWholeCount += 1;
-            else 
+            if(!this.groups[gId])
                 this.groups[gId] = new Group(gId, group.length);
+            this.groups[gId].asWhole.count += 1;
         }
     },
     groupsToString: function() {
