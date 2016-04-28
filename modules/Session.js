@@ -63,23 +63,30 @@ Session.prototype = {
         return str.substring(0, str.length - 2);
     },
     getResult: function() {
+        var leaderboard = this.getLeaderboard();
         return {
             'info': this.info,
             'submissions': this.submissions.length,
-            'leaderboard' : this.getLeaderboard()
+            'leaderboard' : {
+                'list': leaderboard,
+                'isAll': leaderboard.length == Object.keys(this.groups).length
+            }
         };
     },
     getLeaderboard: function(params) {
         var scoreToGidMap = {};
+        var count = 0;
         for(var gIdStr in this.groups) {
             if(this.groups.hasOwnProperty(gIdStr)) {
                 var group = this.groups[gIdStr];
-                var score = group.size * (group.asWhole.count * 2 + group.asPart.count); // TODO pass it as paramaters from frontend
+                var score = group.size * (group.asWhole.count * 2 + group.asPart.count); // TODO pass it as parameters from frontend
                 var scoreEntry = scoreToGidMap[score];
                 if(!scoreEntry)
                     scoreEntry = scoreToGidMap[score] = [gIdStr];
                 else
                     scoreEntry.push(gIdStr);
+                if(++ count == 50) // TODO make a param somewhere
+                    break;
             }
         }
         var sortedScores = utils.sort(Object.keys(scoreToGidMap)).reverse();

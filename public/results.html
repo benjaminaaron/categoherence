@@ -32,14 +32,16 @@
                 document.getElementById('session-info').innerHTML = infoHTML;
                 
                 var table = document.getElementById('results-table');
-                for(var i = 0; i < data.leaderboard.length; i ++) {
-                    var entry = data.leaderboard[i];
+                for(var i = 0; i < data.leaderboard.list.length; i ++) {
+                    var entry = data.leaderboard.list[i];
                     var row = table.insertRow(table.rows.length);
                     row.insertCell(0).innerHTML = entry.score;
                     row.insertCell(1).innerHTML = entry.labels;
                     row.insertCell(2).innerHTML = entry.size;
                     row.insertCell(3).innerHTML = entry.wholeCount + '|' + entry.partCount;
                 }
+                if(!data.leaderboard.isAll)
+                    table.insertRow(table.rows.length).insertCell(0).innerHTML = '...';
             });
             
             setupNotie(notie, socket);
