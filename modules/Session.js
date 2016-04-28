@@ -43,7 +43,7 @@ Session.prototype = {
                     subgroup.asPart.count += 1;
             }
         }
-        console.log(this.groups);
+        //console.log(this.groups);
         console.log(this.groupsToString());
     },
     groupsToString: function() {
@@ -51,20 +51,55 @@ Session.prototype = {
         for(var gIdStr in this.groups) {
             if(this.groups.hasOwnProperty(gIdStr)) {
                 var group = this.groups[gIdStr];
-                str += group.getStats() + ' ';
-                for(var i = 0; i < group.size; i ++)
-                    str += this.info.entities[group.gId[i]] + (i < group.size - 1 ? ' ' : '');
-                str += '\n';
+                str += group.getStats() + ' ' + this.gIdToNames(group.gId) + '\n';
             }
         }
         return str;
     },
+    gIdToNames: function(gId) {
+        var str = '';
+        for(var i = 0; i < gId.size; i ++)
+            str += this.info.entities[gId[i]];
+        return str.substring(0, str.length - 2);
+    },
     getResult: function() {
-        var resultData = {
+        return {
             'info': this.info,
             'submissions': this.submissions.length,
-            'stats' : null
+            'leaderboard' : this.getLeaderboard()
         };
+    },
+    getLeaderboard: function(params) {
+        var scoreToGidMap = {};
+        for(var gIdStr in this.groups) {
+            if(this.groups.hasOwnProperty(gIdStr)) {
+                var group = this.groups[gIdStr];
+                var score = group.size * (group.asWhole.count * 2 + group.asPart.count);
+                var scoreEntry = scoreToGidMap[score];
+                if(!scoreEntry)
+                    scoreEntry = scoreToGidMap[score] = [gIdStr];
+                else
+                    scoreEntry.push(gIdStr);
+            }
+        }
+        var sortedScores = utils.sort(Object.keys(scoreToGidMap));
+        var leaderboard = [];
+        for(var i = 0; i < sortedScores.length; i ++) {
+            var groupsWithThisScore = scoreToGidMap[sortedScores[i]];
+            for(var j = 0; j < groupsWithThisScore.length; j ++) {
+                var group = this.groups[groupsWithThisScore[j]];
+                
+                var groupEntry = {
+                    'gId': group.gId,
+                    'size': group.size,
+                    'stats': group.getStats(),
+                    'name': null
+                }
+                
+                leaderboard.push(group);
+            }
+        }
+        return leaderboard;
     }
 };
 

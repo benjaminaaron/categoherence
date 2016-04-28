@@ -85,7 +85,7 @@ io.on('connection', function(socket) {
         sessionId = utils.formatNameAsId(sessionId);
         if(activeSessions[sessionId]) {
             socket.emit('info', 'this is the results page of session <b>' + sessionId + '</b>, your id is ' + socket.id);
-            socket.emit('session-results', activeSessions[sessionId])
+            socket.emit('session-results', activeSessions[sessionId].getResult())
         }
         else
             socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');
