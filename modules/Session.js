@@ -21,31 +21,26 @@ Session.prototype = {
         console.log(this.info);
         console.log('---------- end: ' + this.info.id);
     },
-    addSubmission: function(data) {
+    handleSubmission: function(data) {
         this.submissions.push(data);
         for(var i = 0; i < data.groups.length; i ++) {
             var gId = utils.sort(data.groups[i]);
-            var group = this.groups[gId]
-            if(!group)
-                group = this.groups[gId] = new Group(gId);
-            group.asWhole.count += 1;
-            
             var binStrings = utils.generateBinStrings(gId.length);
-                        
-            for(j in binStrings) {
-                var binArr = binStrings[j].map(Number);
-                var sum = binArr.reduce(utils.add, 0);
-                
-                if(sum != 0 && sum != binArr.length) {
-                    var subgroupArr = [];
-                    for(k in binArr)
-                        if(binArr[k] == 1)
-                            subgroupArr.push(gId[k]);
-                    var subgroup = this.groups[subgroupArr];
-                    if(!subgroup)
-                        subgroup = this.groups[subgroupArr] = new Group(subgroupArr);
+            
+            for(j = 0; j < binStrings.length; j ++) {
+                var binStr = binStrings[j];
+                var subgId = [];
+                for(k = 0; k < binStr.length; k ++)
+                    if(binStr[k] == '1')
+                        subgId.push(gId[k]);
+                subgId = utils.sort(subgId);
+                var subgroup = this.groups[subgId];
+                if(!subgroup)
+                    subgroup = this.groups[subgId] = new Group(subgId);
+                if(subgId.length == gId.length)
+                    subgroup.asWhole.count += 1;
+                else
                     subgroup.asPart.count += 1;
-                }
             }
         }
         console.log(this.groups);

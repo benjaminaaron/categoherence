@@ -77,7 +77,7 @@ io.on('connection', function(socket) {
     });
     
     socket.on('submission', function(submission) {
-        activeSessions[submission.sessionId].addSubmission(submission.data);
+        activeSessions[submission.sessionId].handleSubmission(submission.data);
         socket.emit('success', 'your submission was received, see the <a href="' + submission.sessionId + '/results">results</a>');
     });
     
