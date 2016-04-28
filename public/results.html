@@ -8,8 +8,16 @@
         <style></style>
     </head>
     <body>
-        <div id="session-info" />
-        <table id="results-table" />
+        <div id="session-info"></div>
+        <hr>
+        <table id="results-table">
+            <tr>
+                <th>score</th>
+                <th>group</th>
+                <th>size</th>
+                <th>counts</th>
+            </tr>
+        </table>
         
         <script src="lib/notie.js"></script>
         <script>
@@ -23,8 +31,15 @@
                     infoHTML += '<i>' + data.info.options.description + '</i><br>';
                 document.getElementById('session-info').innerHTML = infoHTML;
                 
-                console.log(data.leaderboard);
-                
+                var table = document.getElementById('results-table');
+                for(var i = 0; i < data.leaderboard.length; i ++) {
+                    var entry = data.leaderboard[i];
+                    var row = table.insertRow(table.rows.length);
+                    row.insertCell(0).innerHTML = entry.score;
+                    row.insertCell(1).innerHTML = entry.labels;
+                    row.insertCell(2).innerHTML = entry.size;
+                    row.insertCell(3).innerHTML = entry.wholeCount + '|' + entry.partCount;
+                }
             });
             
             setupNotie(notie, socket);

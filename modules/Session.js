@@ -12,7 +12,7 @@ var Session = function(data) {
     
     this.submissions = [];
     
-    this.showInfo();
+    //this.showInfo();
 };
 
 Session.prototype = {
@@ -58,8 +58,8 @@ Session.prototype = {
     },
     gIdToNames: function(gId) {
         var str = '';
-        for(var i = 0; i < gId.size; i ++)
-            str += this.info.entities[gId[i]];
+        for(var i = 0; i < gId.length; i ++)
+            str += this.info.entities[gId[i]] + ', ';
         return str.substring(0, str.length - 2);
     },
     getResult: function() {
@@ -74,7 +74,7 @@ Session.prototype = {
         for(var gIdStr in this.groups) {
             if(this.groups.hasOwnProperty(gIdStr)) {
                 var group = this.groups[gIdStr];
-                var score = group.size * (group.asWhole.count * 2 + group.asPart.count);
+                var score = group.size * (group.asWhole.count * 2 + group.asPart.count); // TODO pass it as paramaters from frontend
                 var scoreEntry = scoreToGidMap[score];
                 if(!scoreEntry)
                     scoreEntry = scoreToGidMap[score] = [gIdStr];
@@ -82,21 +82,21 @@ Session.prototype = {
                     scoreEntry.push(gIdStr);
             }
         }
-        var sortedScores = utils.sort(Object.keys(scoreToGidMap));
+        var sortedScores = utils.sort(Object.keys(scoreToGidMap)).reverse();
         var leaderboard = [];
         for(var i = 0; i < sortedScores.length; i ++) {
-            var groupsWithThisScore = scoreToGidMap[sortedScores[i]];
+            var score = sortedScores[i];
+            var groupsWithThisScore = scoreToGidMap[score];
             for(var j = 0; j < groupsWithThisScore.length; j ++) {
                 var group = this.groups[groupsWithThisScore[j]];
-                
-                var groupEntry = {
-                    'gId': group.gId,
+                var entry = {
+                    'score': score,
+                    'labels': this.gIdToNames(group.gId),
                     'size': group.size,
-                    'stats': group.getStats(),
-                    'name': null
+                    'wholeCount': group.asWhole.count,
+                    'partCount': group.asPart.count
                 }
-                
-                leaderboard.push(group);
+                leaderboard.push(entry);
             }
         }
         return leaderboard;
