@@ -109,6 +109,11 @@ Session.prototype = {
         };
     },
     getGroupSuggestions: function() {
+        //Object.keys(this.info.entities).length / n ...
+        var allowedSplittings = [];
+        var splitting = [3, 3];
+        
+        var graph = new Graph();        
         
     }
 };
