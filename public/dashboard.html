@@ -17,14 +17,14 @@
         <script>
             var socket = io();
             
-            socket.emit('get-dashboard', null);
+            socket.emit('get-dashboard');
             
-            socket.on('dashboard', function(sessionsJSON) {
+            socket.on('dashboard', function(data) {
                 document.getElementById('info').innerHTML = '<i>active sessions:</i>';
                 var ul = document.getElementById('sessions-list');
-                $.each(sessionsJSON, function(i, session) {
+                $.each(data, function(i, session) {
                     var li = document.createElement('li');
-                    li.appendChild(document.createTextNode(session.data.id + ': ' + session.submissions.length + ' [' + getFormattedTimestamp(session.data.timestamp) + ']'));
+                    li.appendChild(document.createTextNode(session.info.id + ': ' + session.submissions.length + ' [' + getFormattedTimestamp(session.info.timestamp) + ']'));
                     ul.appendChild(li);
                 });
             });
