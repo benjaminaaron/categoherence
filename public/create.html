@@ -24,6 +24,7 @@ apple, orange, banana, lemon, cherry, strawberry
             <input type="checkbox" id="anonymous" checked>anonymous<br>
             <input type="checkbox" id="allowNewEntities">allow adding new entities during session<br>
             <input type="checkbox" id="allowMulInstEntities">allow multiple instances of an entity<br>
+            <input type="checkbox" id="allowAntiGroups">allow anti-groups<br>
             <input type="checkbox" id="groupLabels"><select id="groupLabelsChoice">
                 <option value="allow">allow</option>
                 <option value="enforce">enforce</option>
@@ -87,6 +88,7 @@ apple, orange, banana, lemon, cherry, strawberry
                             'anonymous': document.getElementById('anonymous').checked,
                             'allowNewEntities': document.getElementById('allowNewEntities').checked,
                             'allowMulInstEntities': document.getElementById('allowMulInstEntities').checked,
+                            'allowAntiGroups': document.getElementById('allowAntiGroups').checked,
                             'groupLabels': document.getElementById('groupLabels').checked ? $('#groupLabelsChoice').val() : false,
                             'accessKeys': keys,
                             'allowMulSubmPerKey': document.getElementById('allowMulSubmPerKey').checked,
