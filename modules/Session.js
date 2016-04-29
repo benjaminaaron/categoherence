@@ -62,15 +62,10 @@ Session.prototype = {
             str += this.info.entities[gId[i]] + ', ';
         return str.substring(0, str.length - 2);
     },
-    getResult: function() {
-        var leaderboard = this.getLeaderboard();
+    getInfo: function() {
         return {
             'info': this.info,
-            'submissions': this.submissions.length,
-            'leaderboard' : {
-                'list': leaderboard,
-                'isAll': leaderboard.length == Object.keys(this.groups).length
-            }
+            'submissions': this.submissions.length
         };
     },
     getLeaderboard: function(params) {
@@ -106,7 +101,15 @@ Session.prototype = {
                 leaderboard.push(entry);
             }
         }
-        return leaderboard;
+        return {
+            'leaderboard' : {
+                'list': leaderboard,
+                'isAll': leaderboard.length == Object.keys(this.groups).length
+            }
+        };
+    },
+    getGroupSuggestions: function() {
+        
     }
 };
 

@@ -82,10 +82,12 @@ io.on('connection', function(socket) {
     });
     
     socket.on('login-results', function(sessionId) {
-        sessionId = utils.formatNameAsId(sessionId);
-        if(activeSessions[sessionId]) {
+        var session = activeSessions[utils.formatNameAsId(sessionId)]
+        if(session) {
             socket.emit('info', 'this is the results page of session <b>' + sessionId + '</b>, your id is ' + socket.id);
-            socket.emit('session-results', activeSessions[sessionId].getResult())
+            socket.emit('session-info', session.getInfo());
+            socket.emit('session-leaderboard', session.getLeaderboard());
+            socket.emit('session-group-suggestions', session.getGroupSuggestions());
         }
         else
             socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');

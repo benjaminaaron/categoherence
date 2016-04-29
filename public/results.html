@@ -25,12 +25,14 @@
             
             socket.emit('login-results', getSessionIdFromURL());
             
-            socket.on('session-results', function(data) {
+            socket.on('session-info', function(data) {
                 var infoHTML = 'results for session <b>' + data.info.name + '</b> <small>(' + getFormattedTimestamp(data.info.timestamp) + ')</small><br>';
                 if(data.info.options.description.length > 0)
                     infoHTML += '<i>' + data.info.options.description + '</i><br>';
                 document.getElementById('session-info').innerHTML = infoHTML;
-                
+            });
+            
+            socket.on('session-leaderboard', function(data) {
                 var table = document.getElementById('results-table');
                 for(var i = 0; i < data.leaderboard.list.length; i ++) {
                     var entry = data.leaderboard.list[i];
@@ -42,6 +44,12 @@
                 }
                 if(!data.leaderboard.isAll)
                     table.insertRow(table.rows.length).insertCell(0).innerHTML = '...';
+            });
+            
+            socket.on('group-suggestions', function(data) {
+                
+                
+                
             });
             
             setupNotie(notie, socket);
