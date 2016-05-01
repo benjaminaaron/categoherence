@@ -1,5 +1,6 @@
 var utils = require('./utils.js');
 var Group = require('./Group.js');
+var Graph = require('./Graph.js');
 
 var Session = function(data) {
     this.info = data.info;
@@ -74,7 +75,7 @@ Session.prototype = {
         for(var gIdStr in this.groups) {
             if(this.groups.hasOwnProperty(gIdStr)) {
                 var group = this.groups[gIdStr];
-                var score = group.size * (group.asWhole.count * 2 + group.asPart.count); // TODO pass it as parameters from frontend
+                var score = ScoreRules['default'](group);
                 var scoreEntry = scoreToGidMap[score];
                 if(!scoreEntry)
                     scoreEntry = scoreToGidMap[score] = [gIdStr];
@@ -109,12 +110,21 @@ Session.prototype = {
         };
     },
     getGroupSuggestions: function() {
-        //Object.keys(this.info.entities).length / n ...
+        var scoreToGidMap = {}; // TODO
+        
         var allowedSplittings = [];
-        var splitting = [3, 3];
+        var splitting = [3, 3]; // TODO make neat algo for that, look for Partitionierungsproblem / Partitionsfunktion...
+        allowedSplittings.push(splitting);
         
-        var graph = new Graph();        
-        
+        var graph = new Graph(this.groups, allowedSplittings[0], 'default');
+    }
+};
+
+var ScoreRules = {
+    default: function(group) {
+        var score = group.size * (group.asWhole.count * 2 + group.asPart.count);
+        group.scores['default'] = score;
+        return score;
     }
 };
 

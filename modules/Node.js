@@ -1,6 +1,6 @@
 
 var Node = function(parent) {
-    this.parent = null;
+    this.parent = parent;
     this.children = [];
 };
 

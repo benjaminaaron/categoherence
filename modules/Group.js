@@ -10,8 +10,9 @@ var Group = function(gId) {
     this.asPart = {
         'count': 0,
         'submitters': [],
-        'labels': []
+        'labels': [] // each goes by the format {name: 'name', count: x}
     };
+    this.scores = {};
 };
 
 Group.prototype = {
