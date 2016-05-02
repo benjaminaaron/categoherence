@@ -1,7 +1,7 @@
 
-var Group = function(gId) {
-    this.gId = gId;
-    this.size = gId.length;
+var Group = function(groupId, size) {
+    this.groupId = groupId;
+    this.size = size;
     this.asWhole = {
         'count': 0,
         'submitters': [],
@@ -16,8 +16,14 @@ var Group = function(gId) {
 };
 
 Group.prototype = {
-    getStats: function() {
-        return '[' + this.size + ':' + this.asWhole.count + '|' + this.asPart.count + ']';
+    show: function() {
+        console.log(this.groupId + ': ' + this.size + ', ' + this.asWhole.count + '|' + this.asPart.count);
+    },
+    handleSubmittedGroup: function(groupData) {
+        var type = groupData.isWhole ? this.asWhole : this.asPart;
+        type.count ++;
+        type.submitters.push(groupData.submitter);
+        type.labels.push(groupData.label);
     }
 };
 

@@ -132,6 +132,7 @@
                         'submitter': 'anonymous'
                     }
                 };
+                console.log(submission);
                 socket.emit('submission', submission);
             });
             
@@ -162,7 +163,10 @@
                         var group = [];
                         for(var j = 0; j < listEntries.length; j ++)
                             group.push(listEntries[j].id);
-                        groups.push(group);
+                        groups.push({
+                            'ids': group,
+                            'label': '' // TODO
+                        });
                     }
                 }
                 return groups;

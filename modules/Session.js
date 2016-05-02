@@ -7,6 +7,7 @@ var Session = function(data) {
     this.info.entities  = {};
     
     this.groups = {};
+    this.graph = new Graph();
     
     for(var i = 0; i < data.set.length; i ++)
         this.info.entities['' + i] = data.set[i]; // id = i
@@ -24,6 +25,16 @@ Session.prototype = {
     },
     handleSubmission: function(data) {
         this.submissions.push(data);
+        
+        for(var i = 0; i < data.groups.length; i ++) {
+            var groupData = data.groups[i];
+            groupData.isWhole = true;
+            this.graph.ROOT.handleSubmittedGroup(groupData, 0);
+        }
+        
+        this.graph.show();
+        
+        /*
         for(var i = 0; i < data.groups.length; i ++) {
             var gId = utils.sort(data.groups[i]);
             var binStrings = utils.generateBinStrings(gId.length);
@@ -45,7 +56,7 @@ Session.prototype = {
             }
         }
         //console.log(this.groups);
-        console.log(this.groupsToString());
+        console.log(this.groupsToString());*/
     },
     groupsToString: function() {
         var str = '';
@@ -116,7 +127,7 @@ Session.prototype = {
         var splitting = [3, 3]; // TODO make neat algo for that, look for Partitionierungsproblem / Partitionsfunktion...
         allowedSplittings.push(splitting);
         
-        var graph = new Graph(this.groups, allowedSplittings[0], 'default');
+        //var graph = new Graph(this.groups, allowedSplittings[0], 'default');
     }
 };
 

@@ -1,12 +1,12 @@
+var Node = require('./Node.js');
 
-var Graph = function(groups, splitting, scoreRule) {
-    this.nodes = [];
-    this.ROOT = new Node(null);
-    this.nodes.push(this.ROOT);
+var Graph = function() {
+    this.ROOT = new Node(null, 'ROOT');
 };
 
 Graph.prototype = {
-    init: function() {
+    show: function() {
+        this.ROOT.show();
     }
 };
 
