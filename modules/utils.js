@@ -17,18 +17,16 @@ module.exports = {
             groupId += '-' + sorted[i];
         return groupId.substring(1);
     },
-    add: function(a, b) {
-        return a + b;
-    },
     generateBinStrings: function(memberCount) {
-        var binStrings = [];
         var generate = Strinc(Strinc.BIN);
-        var nextBinStr = generate(); // skip the empty and the full group
-        for (var i = 1; i < Math.pow(2, memberCount) - 1; i ++) {
+        var zeroes = '';
+        for(var i = 0; i < memberCount; i ++)
+            zeroes += '0';
+        var binStrings = [];
+        var nextBinStr = generate(); // skip the empty group
+        for (var i = 1; i < Math.pow(2, memberCount); i ++) {
             nextBinStr = generate();
-            for(var j = 0; j < (memberCount - nextBinStr.length); j ++)
-                nextBinStr = '0' + nextBinStr;
-            binStrings.push(nextBinStr);
+            binStrings.push(zeroes.substring(0, zeroes.length - nextBinStr.length) + nextBinStr);
         }
         return binStrings;
     }

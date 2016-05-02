@@ -1,4 +1,3 @@
-var utils = require('./utils.js');
 var Group = require('./Group.js');
 
 var Node = function(parent, value) {
@@ -13,33 +12,31 @@ Node.prototype = {
         var keys = Object.keys(this.children);
 
         if(this.group == null)
-            console.log(this.value + ': ' + keys.length + ' children');
+            console.log('>> ' + this.value + ' has ' + keys.length + ' children');
         else
             this.group.show();
         
         for(var i = 0; i < keys.length; i ++)
             this.children[keys[i]].show();
     },
-    handleSubmittedGroup: function(groupData, level) {
+    handleSubmittedGroup: function(groupMeta, level) {
         var identifier = null;
         switch(level) {
             case 0:
-                identifier = groupData.ids.length;
-                groupData.size = identifier;
+                identifier = groupMeta.size;
             case 1:
                 if(identifier == null) {
-                    identifier = utils.toGroupId(groupData.ids);
-                    groupData.groupId = identifier;
+                    identifier = groupMeta.groupId;
                 }
                 var node = this.children[identifier];
                 if(!node)
                     node = this.children[identifier] = new Node(this, identifier);
-                node.handleSubmittedGroup(groupData, ++ level);
+                node.handleSubmittedGroup(groupMeta, ++ level);
                 break;
             case 2:
                 if(this.group == null)
-                    this.group = new Group(groupData.groupId, groupData.size);
-                this.group.handleSubmittedGroup(groupData);
+                    this.group = new Group(groupMeta.groupId, groupMeta.size);
+                this.group.handleSubmittedGroup(groupMeta);
                 break;
         }
     }

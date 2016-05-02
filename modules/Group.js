@@ -17,13 +17,13 @@ var Group = function(groupId, size) {
 
 Group.prototype = {
     show: function() {
-        console.log(this.groupId + ': ' + this.size + ', ' + this.asWhole.count + '|' + this.asPart.count);
+        console.log('[' + this.groupId + '] ' + this.size + ', ' + this.asWhole.count + '|' + this.asPart.count);
     },
-    handleSubmittedGroup: function(groupData) {
-        var type = groupData.isWhole ? this.asWhole : this.asPart;
+    handleSubmittedGroup: function(groupMeta) {
+        var type = groupMeta.isWhole ? this.asWhole : this.asPart;
         type.count ++;
-        type.submitters.push(groupData.submitter);
-        type.labels.push(groupData.label);
+        type.submitters.push(groupMeta.submitter);
+        type.labels.push(groupMeta.label); // TODO distinguish labels and count ++
     }
 };
 

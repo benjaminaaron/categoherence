@@ -1,5 +1,4 @@
 var utils = require('./utils.js');
-var Group = require('./Group.js');
 var Graph = require('./Graph.js');
 
 var Session = function(data) {
@@ -27,36 +26,26 @@ Session.prototype = {
         this.submissions.push(data);
         
         for(var i = 0; i < data.groups.length; i ++) {
-            var groupData = data.groups[i];
-            groupData.isWhole = true;
-            this.graph.ROOT.handleSubmittedGroup(groupData, 0);
-        }
-        
-        this.graph.show();
-        
-        /*
-        for(var i = 0; i < data.groups.length; i ++) {
-            var gId = utils.sort(data.groups[i]);
-            var binStrings = utils.generateBinStrings(gId.length);
-            
+            var groupMembers = data.groups[i].members;
+            var size = groupMembers.length;
+            var binStrings = utils.generateBinStrings(size);
             for(j = 0; j < binStrings.length; j ++) {
-                var binStr = binStrings[j];
-                var subgId = [];
-                for(k = 0; k < binStr.length; k ++)
-                    if(binStr[k] == '1')
-                        subgId.push(gId[k]);
-                subgId = utils.sort(subgId);
-                var subgroup = this.groups[subgId];
-                if(!subgroup)
-                    subgroup = this.groups[subgId] = new Group(subgId);
-                if(subgId.length == gId.length)
-                    subgroup.asWhole.count += 1;
-                else
-                    subgroup.asPart.count += 1;
+                var bin = binStrings[j];
+                var subgroupMembers = [];
+                for(k = 0; k < bin.length; k ++)
+                    if(bin[k] == '1')
+                        subgroupMembers.push(groupMembers[k]);
+                var groupMeta = {
+                    'size': subgroupMembers.length,
+                    'groupId': utils.toGroupId(subgroupMembers),
+                    'isWhole': subgroupMembers.length == size,
+                    'label': data.groups[i].label,
+                    'submitter': data.submitter
+                };
+                this.graph.ROOT.handleSubmittedGroup(groupMeta, 0);
             }
         }
-        //console.log(this.groups);
-        console.log(this.groupsToString());*/
+        this.graph.show();
     },
     groupsToString: function() {
         var str = '';
