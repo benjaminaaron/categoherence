@@ -4,6 +4,7 @@ var io = require('socket.io')(http);
 
 var utils = require('./modules/utils.js');
 var Session = require('./modules/Session.js');
+var dev = require('./modules/dev.js');
 var activeSessions = {};
 
 var libs = {
@@ -33,6 +34,9 @@ app.get('/:var', function(req, res) {
         case 'favicon.ico':
             //TODO
             break;
+        case 'dev':
+            res.sendFile(__dirname + '/public/dev.html');
+            break;
         default:
             if(activeSessions[utils.formatNameAsId(req.params.var)])
                 res.sendFile(__dirname + '/public/session.html');
@@ -55,6 +59,11 @@ app.get('*/lib/:lib', function(req, res) {
 io.on('connection', function(socket) {
     //console.log('user connected: ' + socket.id);
 
+    socket.on('dev', function() {
+        var devSession = activeSessions['dev_session'] = new Session(dev.getSessionData());
+        devSession.handleSubmission(dev.getSubmissionData1());
+    });
+    
     socket.on('create-session', function(data) {
         var sessionId = utils.formatNameAsId(data.info.name);
         if(activeSessions[sessionId])

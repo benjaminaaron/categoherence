@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+    <head>
+        <title>grouping analysis - dev</title>
+        <script src='/socket.io/socket.io.js'></script>
+        <style></style>
+    </head>
+    <body>
+        DEV PAGE
+        <br>
+        <a href="/dev_session">make submission</a>
+        <br>
+        <a href="/dev_session/results">see results</a>
+        <script>
+            var socket = io();
+            
+            socket.emit('dev', null);
+            
+        </script>
+    </body>
+</html>
