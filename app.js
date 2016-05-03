@@ -58,7 +58,7 @@ app.get('*/lib/:lib', function(req, res) {
 
 io.on('connection', function(socket) {
     //console.log('user connected: ' + socket.id);
-
+    
     socket.on('dev', function() {
         var devSession = activeSessions['dev_session'] = new Session(dev.getSessionData());
         devSession.handleSubmission(dev.getSubmissionData1());

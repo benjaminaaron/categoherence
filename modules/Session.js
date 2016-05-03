@@ -3,7 +3,7 @@ var Graph = require('./Graph.js');
 
 var Session = function(data) {
     this.info = data.info;
-    this.info.entities  = {};
+    this.info.entities = {};
     
     this.groups = {};
     this.graph = new Graph();
