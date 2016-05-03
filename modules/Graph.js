@@ -1,12 +1,12 @@
 var Node = require('./Node.js');
 
 var Graph = function() {
-    this.ROOT = new Node(null, 'ROOT');
+    this.ROOT = new Node(null, 'ROOT', null);
 };
 
 Graph.prototype = {
-    show: function() {
-        this.ROOT.show();
+    toString: function() {
+        return this.ROOT.toString();
     }
 };
 

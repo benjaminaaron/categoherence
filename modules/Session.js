@@ -45,7 +45,7 @@ Session.prototype = {
                 this.graph.ROOT.handleSubmittedGroup(groupMeta, 0);
             }
         }
-        this.graph.show();
+        console.log(this.graph.toString());
     },
     groupsToString: function() {
         var str = '';

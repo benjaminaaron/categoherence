@@ -1,36 +1,45 @@
 var Group = require('./Group.js');
 
-var Node = function(parent, value) {
+var Node = function(parent, type, value) {
     this.parent = parent;
     this.children = {};
+    this.type = type;
     this.value = value;
     this.group = null;
 };
 
 Node.prototype = {
-    show: function() {
+    toString: function() {
         var keys = Object.keys(this.children);
-
-        if(this.group == null)
-            console.log('>> ' + this.value + ' has ' + keys.length + ' children');
-        else
-            this.group.show();
-        
+        var str;
+        switch(this.type) {
+            case 'ROOT':
+                str = '[ROOT] has ' + keys.length + ' children';
+                break;
+            case 'SIZE':
+                str = '  [' + this.value + '] has ' + keys.length + ' children';
+                break;
+            case 'LEAF':
+                str = '    ' + this.group.toString();
+                break;
+        }
+        str += '\n';
         for(var i = 0; i < keys.length; i ++)
-            this.children[keys[i]].show();
+            str += this.children[keys[i]].toString();
+        return str;
     },
     handleSubmittedGroup: function(groupMeta, level) {
-        var identifier = null;
         switch(level) {
             case 0:
-                identifier = groupMeta.size;
-            case 1:
-                if(identifier == null) {
-                    identifier = groupMeta.groupId;
-                }
-                var node = this.children[identifier];
+                var node = this.children[groupMeta.size];
                 if(!node)
-                    node = this.children[identifier] = new Node(this, identifier);
+                    node = this.children[groupMeta.size] = new Node(this, 'SIZE', groupMeta.size);
+                node.handleSubmittedGroup(groupMeta, ++ level);
+                break;
+            case 1:
+                var node = this.children[groupMeta.groupId];
+                if(!node)
+                    node = this.children[groupMeta.groupId] = new Node(this, 'LEAF', groupMeta.groupId);
                 node.handleSubmittedGroup(groupMeta, ++ level);
                 break;
             case 2:

@@ -16,8 +16,8 @@ var Group = function(groupId, size) {
 };
 
 Group.prototype = {
-    show: function() {
-        console.log('[' + this.groupId + '] ' + this.size + ', ' + this.asWhole.count + '|' + this.asPart.count);
+    toString: function() {
+        return '[' + this.groupId + '] ' + this.size + ', ' + this.asWhole.count + '|' + this.asPart.count;
     },
     handleSubmittedGroup: function(groupMeta) {
         var type = groupMeta.isWhole ? this.asWhole : this.asPart;
