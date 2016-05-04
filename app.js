@@ -103,8 +103,20 @@ io.on('connection', function(socket) {
     });
     
     socket.on('get-dashboard', function() {
-        if(Object.keys(activeSessions).length > 0)
-            socket.emit('dashboard', activeSessions);
+        var keys = Object.keys(activeSessions);
+        if(keys.length > 0) {
+            var list = [];
+            for(var i = 0; i < keys.length; i ++)
+                list.push(activeSessions[keys[i]].getDashboardEntry());
+            socket.emit('dashboard', list);
+        }
+    });
+    
+    socket.on('end-session', function(id) {
+        if(id == 'all')
+            activeSessions = {};
+        else 
+            delete activeSessions[id];
     });
    
     socket.on('disconnect', function() {

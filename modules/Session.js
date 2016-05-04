@@ -22,6 +22,15 @@ Session.prototype = {
         console.log(this.info);
         console.log('---------- end: ' + this.info.id);
     },
+    getDashboardEntry: function() {
+        return {
+            'id': this.info.id,
+            'name': this.info.name,
+            'timestamp': this.info.timestamp,
+            'entitiesCount': Object.keys(this.info.entities).length,
+            'submissionsCount': this.submissions.length
+        };
+    },
     handleSubmission: function(data) {
         this.submissions.push(data);
         

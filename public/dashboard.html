@@ -9,25 +9,45 @@
         <style></style>
     </head>
     <body>
-        
         <div id="info"><i>no active sessions</i><br><a href="/create">create</a> one</div>
         <ul id="sessions-list"></ul>
+        <input id="end-all-btn" type="submit" value="end all sessions" style="display: none;">
         
-        <script src="lib/notie.js"></script>
         <script>
             var socket = io();
             
             socket.emit('get-dashboard');
             
             socket.on('dashboard', function(data) {
+                $('#end-all-btn').show();
                 document.getElementById('info').innerHTML = '<i>active sessions:</i>';
                 var ul = document.getElementById('sessions-list');
-                $.each(data, function(i, session) {
+                
+                for(var i = 0; i < data.length; i ++) {
+                    var entry = data[i];
+                    var html = '<input type="submit" value="end" onclick="endSession(\'' + entry.id + '\');"> ';
+                    if(entry.id == entry.name)
+                        html += '<b>' + entry.name + '</b>';
+                    else 
+                        html += '<b>' + entry.name + '</b> <small>(id: ' + entry.id + ')</small>'
+                    html += ' created at <small>' + getFormattedTimestamp(entry.timestamp) + '</small> with ' + entry.entitiesCount + ' entities has ' + entry.submissionsCount + ' submissions';
                     var li = document.createElement('li');
-                    li.appendChild(document.createTextNode(session.info.id + ': ' + session.submissions.length + ' [' + getFormattedTimestamp(session.info.timestamp) + ']'));
+                    var div = document.createElement('div');
+                    div.innerHTML = html;
+                    li.appendChild(div);
                     ul.appendChild(li);
-                });
+                }
             });
+            
+            $('#end-all-btn').click(function() {
+                endSession('all');
+            });
+            
+            function endSession(id) {
+                socket.emit('end-session', id);
+                location.reload();
+            };
+            
         </script>
     </body>
 </html>
