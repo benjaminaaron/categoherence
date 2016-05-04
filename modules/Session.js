@@ -56,16 +56,6 @@ Session.prototype = {
         }
         console.log(this.graph.toString());
     },
-    groupsToString: function() {
-        var str = '';
-        for(var gIdStr in this.groups) {
-            if(this.groups.hasOwnProperty(gIdStr)) {
-                var group = this.groups[gIdStr];
-                str += group.getStats() + ' ' + this.gIdToNames(group.gId) + '\n';
-            }
-        }
-        return str;
-    },
     gIdToNames: function(gId) {
         var str = '';
         for(var i = 0; i < gId.length; i ++)
@@ -79,6 +69,11 @@ Session.prototype = {
         };
     },
     getLeaderboard: function(params) {
+        
+        this.graph.insertScoreLevel();
+        console.log(this.graph.toString());
+        
+        /*
         var scoreToGidMap = {};
         var count = 0;
         for(var gIdStr in this.groups) {
@@ -116,16 +111,15 @@ Session.prototype = {
                 'list': leaderboard,
                 'isAll': leaderboard.length == Object.keys(this.groups).length
             }
-        };
+        };*/
+        return '';
     },
-    getGroupSuggestions: function() {
-        var scoreToGidMap = {}; // TODO
-        
+    getGroupSuggestions: function() {    
         var allowedSplittings = [];
         var splitting = [3, 3]; // TODO make neat algo for that, look for Partitionierungsproblem / Partitionsfunktion...
         allowedSplittings.push(splitting);
-        
-        //var graph = new Graph(this.groups, allowedSplittings[0], 'default');
+        // TODO
+        return '';
     }
 };
 

@@ -17,10 +17,13 @@ Node.prototype = {
                 str = '[ROOT] has ' + keys.length + ' children';
                 break;
             case 'SIZE':
-                str = '  [' + this.value + '] has ' + keys.length + ' children';
+                str = '  [SIZE ' + this.value + '] has ' + keys.length + ' children';
+                break;
+            case 'SCORE':
+                str = '    [SCORE ' + this.value + '] has ' + keys.length + ' children';
                 break;
             case 'LEAF':
-                str = '    ' + this.group.toString();
+                str = '      ' + this.group.toString();
                 break;
         }
         str += '\n';
@@ -48,6 +51,20 @@ Node.prototype = {
                 this.group.handleSubmittedGroup(groupMeta);
                 break;
         }
+    },
+    insertScoreLevel: function() {
+        var newChildren = {};
+        var keys = Object.keys(this.children);
+        for(var i = 0; i < keys.length; i ++) {
+            var leaf = this.children[keys[i]];
+            var score = leaf.group.getScore();
+            var scoreNode = newChildren[score];
+            if(!scoreNode)
+                scoreNode = newChildren[score] = new Node(this, 'SCORE', score);
+            leaf.parent = scoreNode;
+            scoreNode.children[leaf.group.groupId] = leaf;
+        }
+        this.children = newChildren;
     }
 };
 
