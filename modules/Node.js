@@ -29,17 +29,16 @@ Node.prototype = {
             str += this.children[keys[i]].toString();
         return str;
     },
-    insertScoreLevel: function() {
+    insertScoreLevel: function(getScoreCallback) {
         var newChildren = {};
         var keys = Object.keys(this.children);
         for(var i = 0; i < keys.length; i ++) {
             var leaf = this.children[keys[i]];
-            var score = leaf.group.getScore();
+            var score = getScoreCallback(leaf.value);
             var scoreNode = newChildren[score];
             if(!scoreNode)
                 scoreNode = newChildren[score] = new Node('SCORE', score);
-            leaf.parent = scoreNode;
-            scoreNode.children[leaf.group.groupId] = leaf;
+            scoreNode.children[leaf.value] = leaf;
         }
         this.children = newChildren;
     }

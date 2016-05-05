@@ -51,7 +51,6 @@ Session.prototype = {
                 var group = this.groups[subgroupId];
                 if(!group)
                     group = this.groups[subgroupId] = new Group(subgroupId, subgroupSize);
-                
                 group.handle(subgroupSize == size, data.groups[i].label, data.submitter);
                 this.graph.handle(group);
             }
@@ -71,8 +70,16 @@ Session.prototype = {
         };
     },
     getLeaderboard: function(params) {
+        var scoreFunc = function(group) {
+            return group.size * (group.asWhole.count * 2 + group.asPart.count);
+        };
         
-        this.graph.insertScoreLevel();
+        var getScoreCallback = function(groupId) {
+            return this.groups[groupId].getScore(scoreFunc);
+        }.bind(this); 
+        
+        this.graph.insertScoreLevel(getScoreCallback);
+        
         console.log(this.graph.toString());
         
         /*

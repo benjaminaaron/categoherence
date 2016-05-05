@@ -25,8 +25,8 @@ Group.prototype = {
         type.submitters.push(submitter);
         type.labels.push(label); // TODO distinguish labels and count ++
     },
-    getScore: function() {
-        return this.size * (this.asWhole.count * 2 + this.asPart.count);
+    getScore: function(scoreFunc) {
+        return scoreFunc(this);
     }
 };
 

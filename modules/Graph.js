@@ -15,10 +15,10 @@ Graph.prototype = {
         if(!sizeNode.children[group.groupId])
             sizeNode.children[group.groupId] = new Node('LEAF', group.groupId);
     },
-    insertScoreLevel: function() {
+    insertScoreLevel: function(getScoreCallback) {
         var keys = Object.keys(this.ROOT.children);
         for(var i = 0; i < keys.length; i ++)
-            this.ROOT.children[keys[i]].insertScoreLevel();
+            this.ROOT.children[keys[i]].insertScoreLevel(getScoreCallback);
     }
 };
 
