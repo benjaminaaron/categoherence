@@ -12,7 +12,6 @@ var Group = function(groupId, size) {
         'submitters': [],
         'labels': [] // each goes by the format {name: 'name', count: x}
     };
-    this.scores = {};
 };
 
 Group.prototype = {

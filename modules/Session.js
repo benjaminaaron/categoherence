@@ -55,7 +55,7 @@ Session.prototype = {
                 this.graph.handle(group);
             }
         }
-        console.log(this.graph.toString());
+        //console.log(this.graph.toString());
     },
     gIdToNames: function(gId) {
         var str = '';
@@ -70,12 +70,8 @@ Session.prototype = {
         };
     },
     getLeaderboard: function(params) {
-        var scoreFunc = function(group) {
-            return group.size * (group.asWhole.count * 2 + group.asPart.count);
-        };
-        
         var getScoreCallback = function(groupId) {
-            return this.groups[groupId].getScore(scoreFunc);
+            return this.groups[groupId].getScore(ScoreRules.default);
         }.bind(this); 
         
         var scoreGraph = this.graph.clone();
@@ -138,9 +134,10 @@ Session.prototype = {
 
 var ScoreRules = {
     default: function(group) {
-        var score = group.size * (group.asWhole.count * 2 + group.asPart.count);
-        group.scores['default'] = score;
-        return score;
+        return group.size * (group.asWhole.count * 2 + group.asPart.count);
+    },
+    justCounts: function(group) {
+        return group.asWhole.count + group.asPart.count;
     }
 };
 
