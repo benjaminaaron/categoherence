@@ -75,16 +75,16 @@ Session.prototype = {
         }.bind(this); 
         
         var sizeScoreGraph = this.graph.clone();
-        sizeScoreGraph.insertScoreLevel(getScoreCallback);
+        sizeScoreGraph.insertNewLevel2(getScoreCallback, 'SCORE');
         
         var scoreSizeGraph = sizeScoreGraph.clone();
         scoreSizeGraph.swapLevels1and2();
         
-        console.log("\ndefault graph:\n");
+        console.log('\ndefault graph:\n');
         console.log(this.graph.toString());
-        console.log("\nsize-score graph:\n");
+        console.log('\nsize-score graph:\n');
         console.log(sizeScoreGraph.toString());
-        console.log("\nscore-size graph:\n");
+        console.log('\nscore-size graph:\n');
         console.log(scoreSizeGraph.toString());
         
         /*

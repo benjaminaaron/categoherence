@@ -21,19 +21,6 @@ Node.prototype = {
         for(var i = 0; i < keys.length; i ++)
             str += this.children[keys[i]].toString(level + 1);
         return str;
-    },
-    insertScoreLevel: function(getScoreCallback) {
-        var newChildren = {};
-        var keys = Object.keys(this.children);
-        for(var i = 0; i < keys.length; i ++) {
-            var leaf = this.children[keys[i]];
-            var score = getScoreCallback(leaf.value);
-            var scoreNode = newChildren[score];
-            if(!scoreNode)
-                scoreNode = newChildren[score] = new Node('SCORE', score);
-            scoreNode.children[leaf.value] = leaf;
-        }
-        this.children = newChildren;
     }
 };
 
