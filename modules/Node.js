@@ -21,6 +21,13 @@ Node.prototype = {
         for(var i = 0; i < keys.length; i ++)
             str += this.children[keys[i]].toString(level + 1);
         return str;
+    },
+    collectEntries: function(groupIds) {
+        var keys = Object.keys(this.children);
+        for(var i = 0; i < keys.length; i ++)
+            this.children[keys[i]].collectEntries(groupIds);
+        if(this.type == 'LEAF')
+            groupIds.push(this.value);
     }
 };
 

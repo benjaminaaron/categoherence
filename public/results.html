@@ -34,22 +34,20 @@
             
             socket.on('session-leaderboard', function(data) {
                 var table = document.getElementById('results-table');
-                for(var i = 0; i < data.leaderboard.list.length; i ++) {
-                    var entry = data.leaderboard.list[i];
+                for(var i = 0; i < data.entries.length; i ++) {
+                    var entry = data.entries[i];
                     var row = table.insertRow(table.rows.length);
                     row.insertCell(0).innerHTML = entry.score;
-                    row.insertCell(1).innerHTML = entry.labels;
+                    row.insertCell(1).innerHTML = entry.names;
                     row.insertCell(2).innerHTML = entry.size;
                     row.insertCell(3).innerHTML = entry.wholeCount + '|' + entry.partCount;
                 }
-                if(!data.leaderboard.isAll)
+                if(!data.isAll)
                     table.insertRow(table.rows.length).insertCell(0).innerHTML = '...';
             });
             
-            socket.on('group-suggestions', function(data) {
-                
-                
-                
+            socket.on('group-suggestions', function(data) { 
+            
             });
             
             setupNotie(notie, socket);

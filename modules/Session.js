@@ -57,10 +57,11 @@ Session.prototype = {
         }
         //console.log(this.graph.toString());
     },
-    gIdToNames: function(gId) {
+    groupIdToNames: function(groupId) {
+        var arr = groupId.split('-');
         var str = '';
-        for(var i = 0; i < gId.length; i ++)
-            str += this.info.entities[gId[i]] + ', ';
+        for(var i = 0; i < arr.length; i ++)
+            str += this.info.entities[arr[i]] + ', ';
         return str.substring(0, str.length - 2);
     },
     getInfo: function() {
@@ -69,7 +70,7 @@ Session.prototype = {
             'submissions': this.submissions.length
         };
     },
-    getLeaderboard: function(params) {
+    getLeaderboard: function() {
         var getScoreCallback = function(groupId) {
             return this.groups[groupId].getScore(ScoreRules.default);
         }.bind(this); 
@@ -86,47 +87,33 @@ Session.prototype = {
         console.log(sizeScoreGraph.toString());
         console.log('\nscore-size graph:\n');
         console.log(scoreSizeGraph.toString());
+        console.log('');
         
-        /*
-        var scoreToGidMap = {};
-        var count = 0;
-        for(var gIdStr in this.groups) {
-            if(this.groups.hasOwnProperty(gIdStr)) {
-                var group = this.groups[gIdStr];
-                var score = ScoreRules['default'](group);
-                var scoreEntry = scoreToGidMap[score];
-                if(!scoreEntry)
-                    scoreEntry = scoreToGidMap[score] = [gIdStr];
-                else
-                    scoreEntry.push(gIdStr);
-                if(++ count == 50) // TODO make a param somewhere
-                    break;
-            }
-        }
-        var sortedScores = utils.sort(Object.keys(scoreToGidMap)).reverse();
-        var leaderboard = [];
-        for(var i = 0; i < sortedScores.length; i ++) {
-            var score = sortedScores[i];
-            var groupsWithThisScore = scoreToGidMap[score];
-            for(var j = 0; j < groupsWithThisScore.length; j ++) {
-                var group = this.groups[groupsWithThisScore[j]];
-                var entry = {
+        // leaderboard entries
+        var entries = [];
+        var scores = Object.keys(scoreSizeGraph.ROOT.children); // seem to be ordered already, TODO verify that this is always the case
+        for(var i = 0; i < scores.length; i ++) {
+            var score = scores[i];
+            var groupIds = []; // groupIdsWithThatScore
+            scoreSizeGraph.ROOT.children[score].collectEntries(groupIds);
+            for(var j = 0; j < groupIds.length; j ++) {
+                var groupId = groupIds[j];
+                var group = this.groups[groupId];
+                entries.push({
                     'score': score,
-                    'labels': this.gIdToNames(group.gId),
+                    'names': this.groupIdToNames(groupId),
                     'size': group.size,
                     'wholeCount': group.asWhole.count,
-                    'partCount': group.asPart.count
-                }
-                leaderboard.push(entry);
+                    'partCount': group.asPart.count,
+                    'labels': '',
+                    'submitters': ''
+                });
             }
         }
         return {
-            'leaderboard' : {
-                'list': leaderboard,
-                'isAll': leaderboard.length == Object.keys(this.groups).length
-            }
-        };*/
-        return '';
+            'entries': entries.reverse(),
+            'isAll': entries.length == Object.keys(this.groups).length
+        };
     },
     getGroupSuggestions: function() {    
         var allowedSplittings = [];
