@@ -74,13 +74,18 @@ Session.prototype = {
             return this.groups[groupId].getScore(ScoreRules.default);
         }.bind(this); 
         
-        var scoreGraph = this.graph.clone();
-        scoreGraph.insertScoreLevel(getScoreCallback);
+        var sizeScoreGraph = this.graph.clone();
+        sizeScoreGraph.insertScoreLevel(getScoreCallback);
         
-        console.log("default graph: ");
+        var scoreSizeGraph = sizeScoreGraph.clone();
+        scoreSizeGraph.swapLevels1and2();
+        
+        console.log("\ndefault graph:\n");
         console.log(this.graph.toString());
-        console.log("score graph: ");
-        console.log(scoreGraph.toString());
+        console.log("\nsize-score graph:\n");
+        console.log(sizeScoreGraph.toString());
+        console.log("\nscore-size graph:\n");
+        console.log(scoreSizeGraph.toString());
         
         /*
         var scoreToGidMap = {};
