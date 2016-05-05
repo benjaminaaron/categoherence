@@ -15,26 +15,11 @@ Node.prototype = {
             originalChild.clone(cloneChild);
         }
     },
-    toString: function() {
+    toString: function(level) {
         var keys = Object.keys(this.children);
-        var str;
-        switch(this.type) {
-            case 'ROOT':
-                str = '[ROOT] has ' + keys.length + ' children';
-                break;
-            case 'SIZE':
-                str = '  [SIZE ' + this.value + '] has ' + keys.length + ' children';
-                break;
-            case 'SCORE':
-                str = '    [SCORE ' + this.value + '] has ' + keys.length + ' children';
-                break;
-            case 'LEAF':
-                str = '      ' + this.value;
-                break;
-        }
-        str += '\n';
+        var str = Array((level * 4) + 1).join(' ') + '[' + this.type + '] ' + this.value + (keys.length > 0 ? ': ' + keys.length + ' children' : '') + '\n';
         for(var i = 0; i < keys.length; i ++)
-            str += this.children[keys[i]].toString();
+            str += this.children[keys[i]].toString(level + 1);
         return str;
     },
     insertScoreLevel: function(getScoreCallback) {

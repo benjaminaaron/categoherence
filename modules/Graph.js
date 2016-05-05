@@ -1,12 +1,12 @@
 var Node = require('./Node.js');
 
 var Graph = function() {
-    this.ROOT = new Node('ROOT', null);
+    this.ROOT = new Node('ROOT', '');
 };
 
 Graph.prototype = {
     toString: function() {
-        return this.ROOT.toString();
+        return this.ROOT.toString(0);
     },
     clone: function() {
         var cloneGraph = new Graph();
