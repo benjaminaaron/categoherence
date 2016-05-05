@@ -19,11 +19,11 @@ Group.prototype = {
     toString: function() {
         return '[' + this.groupId + '] ' + this.size + ', ' + this.asWhole.count + '|' + this.asPart.count;
     },
-    handleSubmittedGroup: function(groupMeta) {
-        var type = groupMeta.isWhole ? this.asWhole : this.asPart;
-        type.count ++;
-        type.submitters.push(groupMeta.submitter);
-        type.labels.push(groupMeta.label); // TODO distinguish labels and count ++
+    handle: function(isWhole, label, submitter) {
+        var type = isWhole ? this.asWhole : this.asPart;
+        type.count ++; // TODO allow minus counts for anti-groups
+        type.submitters.push(submitter);
+        type.labels.push(label); // TODO distinguish labels and count ++
     },
     getScore: function() {
         return this.size * (this.asWhole.count * 2 + this.asPart.count);

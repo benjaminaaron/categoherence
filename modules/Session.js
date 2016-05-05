@@ -1,5 +1,6 @@
 var utils = require('./utils.js');
 var Graph = require('./Graph.js');
+var Group = require('./Group.js');
 
 var Session = function(data) {
     this.info = data.info;
@@ -44,14 +45,15 @@ Session.prototype = {
                 for(k = 0; k < bin.length; k ++)
                     if(bin[k] == '1')
                         subgroupMembers.push(groupMembers[k]);
-                var groupMeta = {
-                    'size': subgroupMembers.length,
-                    'groupId': utils.toGroupId(subgroupMembers),
-                    'isWhole': subgroupMembers.length == size,
-                    'label': data.groups[i].label,
-                    'submitter': data.submitter
-                };
-                this.graph.ROOT.handleSubmittedGroup(groupMeta, 0);
+                        
+                var subgroupSize = subgroupMembers.length;
+                var subgroupId = utils.toGroupId(subgroupMembers);
+                var group = this.groups[subgroupId];
+                if(!group)
+                    group = this.groups[subgroupId] = new Group(subgroupId, subgroupSize);
+                
+                group.handle(subgroupSize == size, data.groups[i].label, data.submitter);
+                this.graph.handle(group);
             }
         }
         console.log(this.graph.toString());
