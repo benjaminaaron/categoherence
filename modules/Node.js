@@ -7,6 +7,14 @@ var Node = function(type, value) {
 };
 
 Node.prototype = {
+    clone: function(cloneParent) {
+        var keys = Object.keys(this.children);
+        for(var i = 0; i < keys.length; i ++) {
+            var originalChild = this.children[keys[i]];
+            var cloneChild = cloneParent.children[keys[i]] = new Node(originalChild.type, originalChild.value);
+            originalChild.clone(cloneChild);
+        }
+    },
     toString: function() {
         var keys = Object.keys(this.children);
         var str;

@@ -78,9 +78,13 @@ Session.prototype = {
             return this.groups[groupId].getScore(scoreFunc);
         }.bind(this); 
         
-        this.graph.insertScoreLevel(getScoreCallback);
+        var scoreGraph = this.graph.clone();
+        scoreGraph.insertScoreLevel(getScoreCallback);
         
+        console.log("default graph: ");
         console.log(this.graph.toString());
+        console.log("score graph: ");
+        console.log(scoreGraph.toString());
         
         /*
         var scoreToGidMap = {};

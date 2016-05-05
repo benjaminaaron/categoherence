@@ -8,6 +8,11 @@ Graph.prototype = {
     toString: function() {
         return this.ROOT.toString();
     },
+    clone: function() {
+        var cloneGraph = new Graph();
+        this.ROOT.clone(cloneGraph.ROOT);
+        return cloneGraph;
+    },
     handle: function(group) {
         var sizeNode = this.ROOT.children[group.size];
         if(!sizeNode)
