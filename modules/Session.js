@@ -34,6 +34,7 @@ Session.prototype = {
     },
     handleSubmission: function(data) {
         this.submissions.push(data);
+        console.log('session [' + this.info.id + '] received submission #' + this.submissions.length + ', containing ' + data.groups.length + ' groups');
         
         for(var i = 0; i < data.groups.length; i ++) {
             var groupMembers = data.groups[i].members;
