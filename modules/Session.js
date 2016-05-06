@@ -90,12 +90,16 @@ Session.prototype = {
         console.log('');
         
         // leaderboard entries
+        var cap = 10;
         var entries = [];
-        var scores = Object.keys(scoreSizeGraph.ROOT.children); // seem to be ordered already, TODO verify that this is always the case
+        var scores = Object.keys(scoreSizeGraph.ROOT.children).reverse();
         for(var i = 0; i < scores.length; i ++) {
+            if(entries.length == cap)
+                break;
             var score = scores[i];
             var groupIds = []; // groupIdsWithThatScore
             scoreSizeGraph.ROOT.children[score].collectEntries(groupIds);
+            groupIds.reverse();
             for(var j = 0; j < groupIds.length; j ++) {
                 var groupId = groupIds[j];
                 var group = this.groups[groupId];
@@ -108,10 +112,12 @@ Session.prototype = {
                     'labels': '',
                     'submitters': ''
                 });
+                if(entries.length == cap)
+                    break;
             }
         }
         return {
-            'entries': entries.reverse(),
+            'entries': entries,
             'isAll': entries.length == Object.keys(this.groups).length
         };
     },
