@@ -10,8 +10,14 @@ module.exports = {
                     'description': ''
                 }
             }, 
-            'set': ['0', '1', '2', '3', '4', '5']
+            'set': ['zero', 'one', 'two', 'three', 'four', 'five']
+            //'set': ['0', '1', '2', '3', '4', '5']
         };
+    },
+    makeSubmissions: function(devSession) {
+        devSession.handleSubmission(this.getSubmissionData1());
+        devSession.handleSubmission(this.getSubmissionData2());
+        devSession.handleSubmission(this.getSubmissionData3());
     },
     getSubmissionData1: function() {
         return {
@@ -34,6 +40,35 @@ module.exports = {
         };
     },
     getSubmissionData2: function() {
-        // TODO
+        return {
+            'submitter': 'anonymous',
+            'timestamp': 20000,
+            'groups': [
+                {
+                    'label': '',
+                    'members': ['1', '2', '3']
+                },
+                {
+                    'label': '',
+                    'members': ['4', '5']
+                }
+            ]
+        };
+    },
+    getSubmissionData3: function() {
+        return {
+            'submitter': 'anonymous',
+            'timestamp': 30000,
+            'groups': [
+                {
+                    'label': '',
+                    'members': ['1', '2', '3', '4']
+                },
+                {
+                    'label': '',
+                    'members': ['5']
+                }
+            ]
+        };
     }
 };

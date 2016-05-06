@@ -61,7 +61,7 @@ io.on('connection', function(socket) {
     
     socket.on('dev', function() {
         var devSession = activeSessions['dev_session'] = new Session(dev.getSessionData());
-        devSession.handleSubmission(dev.getSubmissionData1());
+        dev.makeSubmissions(devSession);
     });
     
     socket.on('create-session', function(data) {
