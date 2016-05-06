@@ -96,7 +96,7 @@ io.on('connection', function(socket) {
             socket.emit('info', 'this is the results page of session <b>' + sessionId + '</b>, your id is ' + socket.id);
             socket.emit('session-info', session.getInfo());
             socket.emit('session-leaderboard', session.getLeaderboard());
-            socket.emit('session-group-suggestions', session.getGroupSuggestions());
+            socket.emit('session-grouping-suggestions', session.getGroupingSuggestions());
         }
         else
             socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');

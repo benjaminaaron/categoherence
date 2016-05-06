@@ -122,11 +122,13 @@ Session.prototype = {
             'isAll': entries.length == Object.keys(this.groups).length
         };
     },
-    getGroupSuggestions: function() {    
+    getGroupingSuggestions: function() {    
         var allowedSplittings = [];
-        var splitting = [3, 3]; // TODO make neat algo for that, look for Partitionierungsproblem / Partitionsfunktion...
+        var splitting = [3, 3]; // TODO Partitionierungsproblem / Partitionsfunktion...
         allowedSplittings.push(splitting);
-        // TODO
+        
+        session.
+        
         return '';
     }
 };
