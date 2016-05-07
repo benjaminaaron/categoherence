@@ -60,6 +60,12 @@ Graph.prototype = {
             this.ROOT.children = newLevel1;
         }.bind(this);
         this._loopThroughLevel1and2(innerCallback, function(){}, eoOuterCallback);
+    },
+    initGroupingsGraph: function(groupingPatterns, set) {
+        for(var i = 0; i < groupingPatterns.length; i ++) {
+            var groupingNode = this.ROOT.children[groupingPatterns[i]] = new Node('GROUPING', groupingPatterns[i]);
+            groupingNode.createGroupingSubgraph(set);
+        }
     }
 };
 

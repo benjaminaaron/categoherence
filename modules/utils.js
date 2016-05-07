@@ -17,6 +17,12 @@ module.exports = {
             groupId += '-' + sorted[i];
         return groupId.substring(1);
     },
+    cloneArr: function(arr) {
+        var clone = [];
+        for(var i = 0; i < arr.length; i ++)
+            clone.push(arr[i]);
+        return clone;
+    },
     generateBinStrings: function(memberCount) {
         var generate = Strinc(Strinc.BIN);
         var zeroes = '';

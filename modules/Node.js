@@ -1,4 +1,5 @@
 var Group = require('./Group.js');
+var utils = require('./utils.js');
 
 var Node = function(type, value) {
     this.children = {};
@@ -28,6 +29,15 @@ Node.prototype = {
             this.children[keys[i]].collectEntries(groupIds);
         if(this.type == 'LEAF')
             groupIds.push(this.value);
+    },
+    createGroupingSubgraph: function(set) {
+        var grouping = utils.cloneArr(this.value);
+        var mySize = grouping[0];
+        var rest = grouping.slice(1);
+        
+        if(rest.length > 0) {
+            
+        }
     }
 };
 

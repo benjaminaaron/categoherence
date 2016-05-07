@@ -7,7 +7,7 @@ var Session = function(data) {
     this.info.entities = {};
     
     this.groups = {};
-    this.graph = new Graph();
+    this.graph = new Graph(); // default size-leaf-graph
     
     for(var i = 0; i < data.set.length; i ++)
         this.info.entities['' + i] = data.set[i]; // id = i
@@ -123,11 +123,12 @@ Session.prototype = {
         };
     },
     getGroupingSuggestions: function() {    
-        var allowedSplittings = [];
-        var splitting = [3, 3]; // TODO Partitionierungsproblem / Partitionsfunktion...
-        allowedSplittings.push(splitting);
+        var groupingPatterns = [];
+        // TODO Partitionierungsproblem / Partitionsfunktion...
+        groupingPatterns.push([3, 3]);
         
-        session.
+        var graph = new Graph();
+        graph.initGroupingsGraph(groupingPatterns, Object.keys(this.info.entities));
         
         return '';
     }
