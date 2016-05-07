@@ -23,7 +23,7 @@ module.exports = {
             clone.push(arr[i]);
         return clone;
     },
-    generateBinStrings: function(memberCount) {
+    generateBinStrings: function(memberCount, onlyThisSize) {
         var generate = Strinc(Strinc.BIN);
         var zeroes = '';
         for(var i = 0; i < memberCount; i ++)
@@ -32,8 +32,19 @@ module.exports = {
         var nextBinStr = generate(); // skip the empty group
         for (var i = 1; i < Math.pow(2, memberCount); i ++) {
             nextBinStr = generate();
+            if(onlyThisSize)
+                if(this.sumOfDigits(nextBinStr) != onlyThisSize)
+                    continue;
             binStrings.push(zeroes.substring(0, zeroes.length - nextBinStr.length) + nextBinStr);
         }
         return binStrings;
+    },
+    sumOfDigits: function(numb) {
+        var sum = 0;
+        while(numb > 0) {
+            sum += numb % 10;
+            numb = Math.floor(numb / 10);
+        }
+        return sum;
     }
 };

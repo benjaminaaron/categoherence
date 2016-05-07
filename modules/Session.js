@@ -14,6 +14,8 @@ var Session = function(data) {
     
     this.submissions = [];
     
+    this.binStringsStock = {};
+    
     //this.showInfo();
 };
 
@@ -39,7 +41,11 @@ Session.prototype = {
         for(var i = 0; i < data.groups.length; i ++) {
             var groupMembers = data.groups[i].members;
             var size = groupMembers.length;
-            var binStrings = utils.generateBinStrings(size);
+            
+            var binStrings = this.binStringsStock[size];
+            if(!binStrings)
+                binStrings = this.binStringsStock[size] = utils.generateBinStrings(size);
+
             for(j = 0; j < binStrings.length; j ++) {
                 var bin = binStrings[j];
                 var subgroupMembers = [];
@@ -125,10 +131,17 @@ Session.prototype = {
     getGroupingSuggestions: function() {    
         var groupingPatterns = [];
         // TODO Partitionierungsproblem / Partitionsfunktion...
-        groupingPatterns.push([3, 3]);
+        groupingPatterns.push([4, 3, 2]);
+        
+        var getBinStringsCallback = function(size, onlyThisSize) {
+            var binStrings = this.binStringsStock[size + '_' + onlyThisSize];
+            if(!binStrings)
+                binStrings = this.binStringsStock[size + '_' + onlyThisSize] = utils.generateBinStrings(size, onlyThisSize);
+            return binStrings;
+        }.bind(this);
         
         var graph = new Graph();
-        graph.initGroupingsGraph(groupingPatterns, Object.keys(this.info.entities));
+        graph.initGroupingsGraph(groupingPatterns, Object.keys(this.info.entities), getBinStringsCallback);
         
         return '';
     }

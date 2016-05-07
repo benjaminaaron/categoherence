@@ -61,10 +61,10 @@ Graph.prototype = {
         }.bind(this);
         this._loopThroughLevel1and2(innerCallback, function(){}, eoOuterCallback);
     },
-    initGroupingsGraph: function(groupingPatterns, set) {
+    initGroupingsGraph: function(groupingPatterns, set, getBinStringsCallback) {
         for(var i = 0; i < groupingPatterns.length; i ++) {
             var groupingNode = this.ROOT.children[groupingPatterns[i]] = new Node('GROUPING', groupingPatterns[i]);
-            groupingNode.createGroupingSubgraph(set);
+            groupingNode.createGroupingSubgraph(set, getBinStringsCallback);
         }
     }
 };

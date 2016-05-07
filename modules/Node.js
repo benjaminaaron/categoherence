@@ -30,10 +30,11 @@ Node.prototype = {
         if(this.type == 'LEAF')
             groupIds.push(this.value);
     },
-    createGroupingSubgraph: function(set) {
+    createGroupingSubgraph: function(set, getBinStringsCallback) {
         var grouping = utils.cloneArr(this.value);
         var mySize = grouping[0];
         var rest = grouping.slice(1);
+        var binStrings = getBinStringsCallback(set.length, mySize);
         
         if(rest.length > 0) {
             
