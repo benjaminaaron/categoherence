@@ -5,15 +5,31 @@
         <script src='/socket.io/socket.io.js'></script>
         <script src="lib/main.js"></script>
         <link rel="stylesheet" type="text/css" href="lib/main.css">
-        <style></style>
+        <style>
+            .main-column { 
+                border-left:2px solid silver; 
+                padding: 0 10px 0 10px;
+            }
+            tr:nth-child(even) {
+                background-color: #f4f4f4;
+            }
+            th {
+                background-color: navy;
+                color: white;
+            }
+            .column-title {
+                text-align: center;
+                color: red;
+            }
+        </style>
     </head>
     <body>
         <div id="session-info"></div>
         <br>
-        <table id="main-table" border="1">
+        <table id="main-table" border="0">
             <tr>
-                <td>
-                    <div style="text-align: center"><i>leaderboard</i></div>
+                <td class="main-column">
+                    <div class="column-title"><i>leaderboard</i></div>
                     <table id="leaderboard-table">
                         <tr>
                             <th>score</th>
@@ -23,8 +39,8 @@
                         </tr>
                     </table>
                 </td>
-                <td>
-                    <div style="text-align: center"><i>grouping suggestions</i></div>
+                <td class="main-column">
+                    <div class="column-title"><i>grouping suggestions</i></div>
                     <!-- TODO -->
                 </td>
             </tr>
