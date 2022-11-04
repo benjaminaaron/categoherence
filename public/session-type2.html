@@ -7,33 +7,59 @@
     <script src="lib/main.js"></script>
     <link rel="stylesheet" type="text/css" href="lib/main.css">
     <style>
+      html {
+        padding: 40px;
+      }
+      .chip {
+        display: inline-block;
+        padding: 0 25px;
+        height: 50px;
+        font-size: 16px;
+        line-height: 50px;
+        border-radius: 25px;
+        background-color: #f1f1f1;
+      }
     </style>
   </head>
   <body>
     <div id="session-info"></div>
-
+    <br><br>
+    <div id="entities-chips"></div>
+    <br><br>
+    <div>Kudos</div>
+    <div>Random</div>
+    <div>You'd be amazing at</div>
+    <br><br>
+    <input type="text" id="subgroup-text" value="placeholder" size="100">
+    <br><br>
+    <input id="submit-btn" type="submit" value="submit">
     <script src="lib/notie.js"></script>
     <script>
       let socket = io();
 
       let sessionId = getSessionIdFromURL();
+      let entities;
 
       socket.emit('login-session', sessionId);
 
-      let entities;
-
       socket.on('session-info', function(sessionInfo) {
-        let infoHTML = '<b>' + sessionInfo.name + '</b> <small>(' + getFormattedTimestamp(sessionInfo.timestamp) + ')</small><br>';
-        if (sessionInfo.options.description.length > 0)
-          infoHTML += '<i>' + sessionInfo.options.description + '</i><br>';
-        document.getElementById('session-info').innerHTML = infoHTML;
+        document.getElementById('session-info').innerHTML = '<b>' + sessionInfo.name + '</b><br>';
 
         entities = sessionInfo.entities;
+        let chipsDiv = document.getElementById('entities-chips');
         for (let id in entities) {
           if (entities.hasOwnProperty(id)) {
-            console.log(entities[id]);
+            let entity = entities[id];
+            let div = document.createElement('div');
+            div.className = 'chip';
+            div.textContent = entity;
+            chipsDiv.appendChild(div);
           }
         }
+      });
+
+      $('#submit-btn').click(function() {
+        // TODO
       });
 
       setupNotie(notie, socket);
