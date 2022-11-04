@@ -1,13 +1,13 @@
 
 function setupNotie(notie, socket) {    
     socket.on('success', function(msg) {
-        notie.alert(1, msg);
+        notie.alert({ type: 'success', text: msg })
     });
     socket.on('info', function(msg) {
-        notie.alert(4, msg, 3);
+        notie.alert({ type: 'info', text: msg })
     });
     socket.on('err', function(msg) {
-        notie.alert(3, msg, 3);
+        notie.alert({ type: 'error', text: msg })
     });
 };
 
