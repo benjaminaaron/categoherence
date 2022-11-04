@@ -87,7 +87,7 @@
                 $('body').bind('mousemove', function(e) {
                     let target = $('#new-list-circle').offset();
                     let dist = Math.sqrt(Math.pow(e.pageX - (target.left + 30), 2) + Math.pow(e.pageY - (target.top + 30), 2));
-                    if(dist < 30) {
+                    if (dist < 30) {
                         newList();
                         $(el).sortable('refresh');
                     }
@@ -107,13 +107,13 @@
             
             socket.on('session-info', function(sessionInfo) {
                 let infoHTML = '<b>' + sessionInfo.name + '</b> <small>(' + getFormattedTimestamp(sessionInfo.timestamp) + ')</small><br>';
-                if(sessionInfo.options.description.length > 0)
+                if (sessionInfo.options.description.length > 0)
                     infoHTML += '<i>' + sessionInfo.options.description + '</i><br>';
                 document.getElementById('session-info').innerHTML = infoHTML;
                 
                 entities = sessionInfo.entities;
-                for(let id in entities) {
-                    if(entities.hasOwnProperty(id)) {
+                for (let id in entities) {
+                    if (entities.hasOwnProperty(id)) {
                         let li = document.createElement('li');
                         li.appendChild(document.createTextNode(entities[id]));
                         li.className = 'ui-state-default';
@@ -136,7 +136,7 @@
                 socket.emit('submission', submission);
             });
             
-            function newList() {               
+            function newList() {
                 let newList = document.createElement('ul');
                 newList.className = 'connectedSortable';                
                 $(newList).sortable({
@@ -156,12 +156,12 @@
             function collectGroups() {
                 let groups = [];
                 let tds = document.getElementById('lists-row').getElementsByTagName('td');
-                for(let i = 0; i < tds.length - 1; i ++) {
+                for (let i = 0; i < tds.length - 1; i ++) {
                     let list = tds[i].firstElementChild;
                     let listEntries = list.children;
-                    if(listEntries.length > 0) {
+                    if (listEntries.length > 0) {
                         let group = [];
-                        for(let j = 0; j < listEntries.length; j ++)
+                        for (let j = 0; j < listEntries.length; j ++)
                             group.push(listEntries[j].id);
                         groups.push({
                             'members': group,

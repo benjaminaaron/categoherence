@@ -9,7 +9,7 @@ const Session = function(data) {
     this.groups = {};
     this.graph = new Graph(); // default size-leaf-graph
     
-    for(let i = 0; i < data.set.length; i ++)
+    for (let i = 0; i < data.set.length; i ++)
         this.info.entities['' + i] = data.set[i]; // id = i
     
     this.submissions = [];
@@ -25,7 +25,7 @@ Session.prototype = {
         console.log(this.info);
         console.log('---------- end: ' + this.info.id);
     },
-    getDashboardEntry: function() {
+    getDashboardEntry: function() {
         return {
             'id': this.info.id,
             'name': this.info.name,
@@ -38,25 +38,25 @@ Session.prototype = {
         this.submissions.push(data);
         console.log('session [' + this.info.id + '] received submission #' + this.submissions.length + ', containing ' + data.groups.length + ' groups');
         
-        for(let i = 0; i < data.groups.length; i ++) {
+        for (let i = 0; i < data.groups.length; i ++) {
             let groupMembers = data.groups[i].members;
             let size = groupMembers.length;
             
             let binStrings = this.binStringsStock[size];
-            if(!binStrings)
+            if (!binStrings)
                 binStrings = this.binStringsStock[size] = utils.generateBinStrings(size);
 
-            for(j = 0; j < binStrings.length; j ++) {
+            for (let j = 0; j < binStrings.length; j ++) {
                 let bin = binStrings[j];
                 let subgroupMembers = [];
-                for(k = 0; k < bin.length; k ++)
-                    if(bin[k] == '1')
+                for (let k = 0; k < bin.length; k ++)
+                    if (bin[k] == '1')
                         subgroupMembers.push(groupMembers[k]);
                         
                 let subgroupSize = subgroupMembers.length;
                 let subgroupId = utils.toGroupId(subgroupMembers);
                 let group = this.groups[subgroupId];
-                if(!group)
+                if (!group)
                     group = this.groups[subgroupId] = new Group(subgroupId, subgroupSize);
                 group.handle(subgroupSize == size, data.groups[i].label, data.submitter);
                 this.graph.handle(group);
@@ -67,7 +67,7 @@ Session.prototype = {
     groupIdToNames: function(groupId) {
         let arr = groupId.split('-');
         let str = '';
-        for(let i = 0; i < arr.length; i ++)
+        for (let i = 0; i < arr.length; i ++)
             str += this.info.entities[arr[i]] + ', ';
         return str.substring(0, str.length - 2);
     },
@@ -100,14 +100,14 @@ Session.prototype = {
         let cap = 10;
         let entries = [];
         let scores = Object.keys(scoreSizeGraph.ROOT.children).reverse();
-        for(let i = 0; i < scores.length; i ++) {
-            if(entries.length == cap)
+        for (let i = 0; i < scores.length; i ++) {
+            if (entries.length == cap)
                 break;
             let score = scores[i];
             let groupIds = []; // groupIdsWithThatScore
             scoreSizeGraph.ROOT.children[score].collectEntries(groupIds);
             groupIds.reverse();
-            for(let j = 0; j < groupIds.length; j ++) {
+            for (let j = 0; j < groupIds.length; j ++) {
                 let groupId = groupIds[j];
                 let group = this.groups[groupId];
                 entries.push({
@@ -119,7 +119,7 @@ Session.prototype = {
                     'labels': '',
                     'submitters': ''
                 });
-                if(entries.length == cap)
+                if (entries.length == cap)
                     break;
             }
         }
@@ -135,7 +135,7 @@ Session.prototype = {
         
         let getBinStringsCallback = function(size, onlyThisSize) {
             let binStrings = this.binStringsStock[size + '_' + onlyThisSize];
-            if(!binStrings)
+            if (!binStrings)
                 binStrings = this.binStringsStock[size + '_' + onlyThisSize] = utils.generateBinStrings(size, onlyThisSize);
             return binStrings;
         }.bind(this);

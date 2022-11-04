@@ -54,14 +54,14 @@
             
             socket.on('session-info', function(data) {
                 let infoHTML = 'results for session <b>' + data.info.name + '</b> <small>(' + getFormattedTimestamp(data.info.timestamp) + ')</small><br>';
-                if(data.info.options.description.length > 0)
+                if (data.info.options.description.length > 0)
                     infoHTML += '<i>' + data.info.options.description + '</i><br>';
                 document.getElementById('session-info').innerHTML = infoHTML;
             });
             
             socket.on('session-leaderboard', function(data) {
                 let table = document.getElementById('leaderboard-table');
-                for(let i = 0; i < data.entries.length; i ++) {
+                for (let i = 0; i < data.entries.length; i ++) {
                     let entry = data.entries[i];
                     let row = table.insertRow(table.rows.length);
                     row.insertCell(0).innerHTML = entry.score;
@@ -69,7 +69,7 @@
                     row.insertCell(2).innerHTML = entry.size;
                     row.insertCell(3).innerHTML = entry.wholeCount + '|' + entry.partCount;
                 }
-                if(!data.isAll)
+                if (!data.isAll)
                     table.insertRow(table.rows.length).insertCell(0).innerHTML = '...';
             });
             

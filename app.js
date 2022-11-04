@@ -38,7 +38,7 @@ app.get('/:var', function(req, res) {
             res.sendFile(__dirname + '/public/dev.html');
             break;
         default:
-            if(activeSessions[utils.formatNameAsId(req.params.var)])
+            if (activeSessions[utils.formatNameAsId(req.params.var)])
                 res.sendFile(__dirname + '/public/session.html');
             else
                 res.sendFile(__dirname + '/public/no-session.html');
@@ -46,7 +46,7 @@ app.get('/:var', function(req, res) {
 });
 
 app.get('/:var/results', function(req, res) {
-    if(activeSessions[utils.formatNameAsId(req.params.var)])
+    if (activeSessions[utils.formatNameAsId(req.params.var)])
         res.sendFile(__dirname + '/public/results.html');
     else
         res.sendFile(__dirname + '/public/no-session.html');
@@ -66,7 +66,7 @@ io.on('connection', function(socket) {
     
     socket.on('create-session', function(data) {
         let sessionId = utils.formatNameAsId(data.info.name);
-        if(activeSessions[sessionId])
+        if (activeSessions[sessionId])
             socket.emit('err', 'a session with the id ' + sessionId + ' already exists');    
         else {
             data.info.id = sessionId;
@@ -77,7 +77,7 @@ io.on('connection', function(socket) {
    
     socket.on('login-session', function(sessionId) {
         sessionId = utils.formatNameAsId(sessionId);
-        if(activeSessions[sessionId]) {
+        if (activeSessions[sessionId]) {
             socket.emit('info', 'welcome to session <b>' + sessionId + '</b>, your id is ' + socket.id);
             socket.emit('session-info', activeSessions[sessionId].info);
         }
@@ -92,7 +92,7 @@ io.on('connection', function(socket) {
     
     socket.on('login-results', function(sessionId) {
         let session = activeSessions[utils.formatNameAsId(sessionId)]
-        if(session) {
+        if (session) {
             socket.emit('info', 'this is the results page of session <b>' + sessionId + '</b>, your id is ' + socket.id);
             socket.emit('session-info', session.getInfo());
             socket.emit('session-leaderboard', session.getLeaderboard());
@@ -104,16 +104,16 @@ io.on('connection', function(socket) {
     
     socket.on('get-dashboard', function() {
         let keys = Object.keys(activeSessions);
-        if(keys.length > 0) {
+        if (keys.length > 0) {
             let list = [];
-            for(let i = 0; i < keys.length; i ++)
+            for (let i = 0; i < keys.length; i ++)
                 list.push(activeSessions[keys[i]].getDashboardEntry());
             socket.emit('dashboard', list);
         }
     });
     
     socket.on('end-session', function(id) {
-        if(id == 'all')
+        if (id == 'all')
             activeSessions = {};
         else 
             delete activeSessions[id];

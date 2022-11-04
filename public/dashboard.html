@@ -23,10 +23,10 @@
                 document.getElementById('info').innerHTML = '<i>active sessions:</i>';
                 let ul = document.getElementById('sessions-list');
                 
-                for(let i = 0; i < data.length; i ++) {
+                for (let i = 0; i < data.length; i ++) {
                     let entry = data[i];
                     let html = '<input type="submit" value="end" onclick="endSession(\'' + entry.id + '\');"> ';
-                    if(entry.id == entry.name)
+                    if (entry.id == entry.name)
                         html += '<b>' + entry.name + '</b>';
                     else 
                         html += '<b>' + entry.name + '</b> <small>(id: ' + entry.id + ')</small>'

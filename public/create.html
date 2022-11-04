@@ -46,7 +46,7 @@ apple, orange, banana, lemon, cherry, strawberry
         <script src="lib/notie.js"></script>
         <script>
             let urlParams = getURLparams(location.search);
-            if(urlParams['name'])
+            if (urlParams['name'])
                 $('#session-name').val(urlParams['name']);
             
             $('#showOptionsLink').click(function() {
@@ -60,7 +60,7 @@ apple, orange, banana, lemon, cherry, strawberry
                 let numb = parseInt($('#numbOfAccessKeys').val()); // TODO catch parsing error
                 let keysHTML = '<br><small>';
                 keys = [];
-                for(let i = 0; i < numb; i ++) {
+                for (let i = 0; i < numb; i ++) {
                     let key = generateHexString(10);
                     keysHTML += key + '<br>';
                     keys.push(key);
@@ -73,9 +73,9 @@ apple, orange, banana, lemon, cherry, strawberry
             $('#create-session-btn').click(function() {
                 let setRaw = $('#set-textarea').val().split(',');
                 let set = [];
-                for(let i = 0; i < setRaw.length; i ++) {
+                for (let i = 0; i < setRaw.length; i ++) {
                     let entity = setRaw[i].trim(); // TODO more cleanups?
-                    if(entity.length > 0)
+                    if (entity.length > 0)
                         set.push(entity);
                 }
                 

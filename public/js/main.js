@@ -17,9 +17,9 @@ function getTimestamp() {
 
 function getSessionIdFromURL() {
     let arr = window.location.href.split('/');
-    if(arr[arr.length - 1].length == 0) // to accommodate case of "/" at end of URL
+    if (arr[arr.length - 1].length == 0) // to accommodate case of "/" at end of URL
         arr.pop();
-    if(arr[arr.length - 1] == 'results')
+    if (arr[arr.length - 1] == 'results')
         arr.pop();
     return arr.pop();
 };
@@ -31,17 +31,17 @@ function getFormattedTimestamp(unixTimestamp) {
 
 function generateHexString(length) { // from http://stackoverflow.com/a/5399414
     let str = '';
-    while(str.length < length)
+    while (str.length < length)
         str += Math.random().toString(16).substring(2);
     return str.substring(0, length);
 };
 
 function getURLparams(url) {
     let params = {};
-    if(url.length > 0) {
+    if (url.length > 0) {
         let arr = url.substring(1).split('&');
-        for(let i = 0; i < arr.length; i ++)
-            if(arr[i].split('=').length > 1)
+        for (let i = 0; i < arr.length; i ++)
+            if (arr[i].split('=').length > 1)
                 params[arr[i].split('=')[0]] = arr[i].split('=')[1];
     }
     return params;
