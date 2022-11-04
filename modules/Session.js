@@ -50,7 +50,7 @@ Session.prototype = {
                 let bin = binStrings[j];
                 let subgroupMembers = [];
                 for (let k = 0; k < bin.length; k ++)
-                    if (bin[k] == '1')
+                    if (bin[k] === '1')
                         subgroupMembers.push(groupMembers[k]);
                         
                 let subgroupSize = subgroupMembers.length;
@@ -58,7 +58,7 @@ Session.prototype = {
                 let group = this.groups[subgroupId];
                 if (!group)
                     group = this.groups[subgroupId] = new Group(subgroupId, subgroupSize);
-                group.handle(subgroupSize == size, data.groups[i].label, data.submitter);
+                group.handle(subgroupSize === size, data.groups[i].label, data.submitter);
                 this.graph.handle(group);
             }
         }
@@ -101,7 +101,7 @@ Session.prototype = {
         let entries = [];
         let scores = Object.keys(scoreSizeGraph.ROOT.children).reverse();
         for (let i = 0; i < scores.length; i ++) {
-            if (entries.length == cap)
+            if (entries.length === cap)
                 break;
             let score = scores[i];
             let groupIds = []; // groupIdsWithThatScore
@@ -119,13 +119,13 @@ Session.prototype = {
                     'labels': '',
                     'submitters': ''
                 });
-                if (entries.length == cap)
+                if (entries.length === cap)
                     break;
             }
         }
         return {
             'entries': entries,
-            'isAll': entries.length == Object.keys(this.groups).length
+            'isAll': entries.length === Object.keys(this.groups).length
         };
     },
     getGroupingSuggestions: function() {    

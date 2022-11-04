@@ -33,7 +33,7 @@ module.exports = {
         for (let i = 1; i < Math.pow(2, memberCount); i ++) {
             nextBinStr = generate();
             if (onlyThisSize)
-                if (this.sumOfDigits(nextBinStr) != onlyThisSize)
+                if (this.sumOfDigits(nextBinStr) !== onlyThisSize)
                     continue;
             binStrings.push(zeroes.substring(0, zeroes.length - nextBinStr.length) + nextBinStr);
         }

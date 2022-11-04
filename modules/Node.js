@@ -27,7 +27,7 @@ Node.prototype = {
         let keys = Object.keys(this.children);
         for (let i = 0; i < keys.length; i ++)
             this.children[keys[i]].collectEntries(groupIds);
-        if (this.type == 'LEAF')
+        if (this.type === 'LEAF')
             groupIds.push(this.value);
     },
     createGroupingSubgraph: function(set, getBinStringsCallback) {

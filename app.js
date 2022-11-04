@@ -113,7 +113,7 @@ io.on('connection', function(socket) {
     });
     
     socket.on('end-session', function(id) {
-        if (id == 'all')
+        if (id === 'all')
             activeSessions = {};
         else 
             delete activeSessions[id];
