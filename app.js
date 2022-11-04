@@ -39,7 +39,7 @@ app.get('/:var', function(req, res) {
             break;
         default:
             if (activeSessions[utils.formatNameAsId(req.params.var)])
-                res.sendFile(__dirname + '/public/session-type2.html');
+                res.sendFile(__dirname + '/public/session-retro.html');
             else
                 res.sendFile(__dirname + '/public/no-session.html');
     }
