@@ -48,22 +48,22 @@
         
         <script src="lib/notie.js"></script>
         <script>
-            var socket = io();
+            let socket = io();
             
             socket.emit('login-results', getSessionIdFromURL());
             
             socket.on('session-info', function(data) {
-                var infoHTML = 'results for session <b>' + data.info.name + '</b> <small>(' + getFormattedTimestamp(data.info.timestamp) + ')</small><br>';
+                let infoHTML = 'results for session <b>' + data.info.name + '</b> <small>(' + getFormattedTimestamp(data.info.timestamp) + ')</small><br>';
                 if(data.info.options.description.length > 0)
                     infoHTML += '<i>' + data.info.options.description + '</i><br>';
                 document.getElementById('session-info').innerHTML = infoHTML;
             });
             
             socket.on('session-leaderboard', function(data) {
-                var table = document.getElementById('leaderboard-table');
-                for(var i = 0; i < data.entries.length; i ++) {
-                    var entry = data.entries[i];
-                    var row = table.insertRow(table.rows.length);
+                let table = document.getElementById('leaderboard-table');
+                for(let i = 0; i < data.entries.length; i ++) {
+                    let entry = data.entries[i];
+                    let row = table.insertRow(table.rows.length);
                     row.insertCell(0).innerHTML = entry.score;
                     row.insertCell(1).innerHTML = entry.names;
                     row.insertCell(2).innerHTML = entry.size;

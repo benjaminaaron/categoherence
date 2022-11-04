@@ -1,15 +1,15 @@
-var utils = require('./utils.js');
-var Graph = require('./Graph.js');
-var Group = require('./Group.js');
+const utils = require('./utils.js');
+const Graph = require('./Graph.js');
+const Group = require('./Group.js');
 
-var Session = function(data) {
+const Session = function(data) {
     this.info = data.info;
     this.info.entities = {};
     
     this.groups = {};
     this.graph = new Graph(); // default size-leaf-graph
     
-    for(var i = 0; i < data.set.length; i ++)
+    for(let i = 0; i < data.set.length; i ++)
         this.info.entities['' + i] = data.set[i]; // id = i
     
     this.submissions = [];
@@ -38,24 +38,24 @@ Session.prototype = {
         this.submissions.push(data);
         console.log('session [' + this.info.id + '] received submission #' + this.submissions.length + ', containing ' + data.groups.length + ' groups');
         
-        for(var i = 0; i < data.groups.length; i ++) {
-            var groupMembers = data.groups[i].members;
-            var size = groupMembers.length;
+        for(let i = 0; i < data.groups.length; i ++) {
+            let groupMembers = data.groups[i].members;
+            let size = groupMembers.length;
             
-            var binStrings = this.binStringsStock[size];
+            let binStrings = this.binStringsStock[size];
             if(!binStrings)
                 binStrings = this.binStringsStock[size] = utils.generateBinStrings(size);
 
             for(j = 0; j < binStrings.length; j ++) {
-                var bin = binStrings[j];
-                var subgroupMembers = [];
+                let bin = binStrings[j];
+                let subgroupMembers = [];
                 for(k = 0; k < bin.length; k ++)
                     if(bin[k] == '1')
                         subgroupMembers.push(groupMembers[k]);
                         
-                var subgroupSize = subgroupMembers.length;
-                var subgroupId = utils.toGroupId(subgroupMembers);
-                var group = this.groups[subgroupId];
+                let subgroupSize = subgroupMembers.length;
+                let subgroupId = utils.toGroupId(subgroupMembers);
+                let group = this.groups[subgroupId];
                 if(!group)
                     group = this.groups[subgroupId] = new Group(subgroupId, subgroupSize);
                 group.handle(subgroupSize == size, data.groups[i].label, data.submitter);
@@ -65,9 +65,9 @@ Session.prototype = {
         //console.log(this.graph.toString());
     },
     groupIdToNames: function(groupId) {
-        var arr = groupId.split('-');
-        var str = '';
-        for(var i = 0; i < arr.length; i ++)
+        let arr = groupId.split('-');
+        let str = '';
+        for(let i = 0; i < arr.length; i ++)
             str += this.info.entities[arr[i]] + ', ';
         return str.substring(0, str.length - 2);
     },
@@ -78,14 +78,14 @@ Session.prototype = {
         };
     },
     getLeaderboard: function() {
-        var getScoreCallback = function(groupId) {
+        let getScoreCallback = function(groupId) {
             return this.groups[groupId].getScore(ScoreRules.default);
         }.bind(this); 
         
-        var sizeScoreGraph = this.graph.clone();
+        let sizeScoreGraph = this.graph.clone();
         sizeScoreGraph.insertNewLevel2(getScoreCallback, 'SCORE');
         
-        var scoreSizeGraph = sizeScoreGraph.clone();
+        let scoreSizeGraph = sizeScoreGraph.clone();
         scoreSizeGraph.swapLevels1and2();
         
         console.log('\ndefault graph:\n');
@@ -97,19 +97,19 @@ Session.prototype = {
         console.log('');
         
         // leaderboard entries
-        var cap = 10;
-        var entries = [];
-        var scores = Object.keys(scoreSizeGraph.ROOT.children).reverse();
-        for(var i = 0; i < scores.length; i ++) {
+        let cap = 10;
+        let entries = [];
+        let scores = Object.keys(scoreSizeGraph.ROOT.children).reverse();
+        for(let i = 0; i < scores.length; i ++) {
             if(entries.length == cap)
                 break;
-            var score = scores[i];
-            var groupIds = []; // groupIdsWithThatScore
+            let score = scores[i];
+            let groupIds = []; // groupIdsWithThatScore
             scoreSizeGraph.ROOT.children[score].collectEntries(groupIds);
             groupIds.reverse();
-            for(var j = 0; j < groupIds.length; j ++) {
-                var groupId = groupIds[j];
-                var group = this.groups[groupId];
+            for(let j = 0; j < groupIds.length; j ++) {
+                let groupId = groupIds[j];
+                let group = this.groups[groupId];
                 entries.push({
                     'score': score,
                     'names': this.groupIdToNames(groupId),
@@ -129,25 +129,25 @@ Session.prototype = {
         };
     },
     getGroupingSuggestions: function() {    
-        var groupingPatterns = [];
+        let groupingPatterns = [];
         // TODO Partitionierungsproblem / Partitionsfunktion...
         groupingPatterns.push([4, 3, 2]);
         
-        var getBinStringsCallback = function(size, onlyThisSize) {
-            var binStrings = this.binStringsStock[size + '_' + onlyThisSize];
+        let getBinStringsCallback = function(size, onlyThisSize) {
+            let binStrings = this.binStringsStock[size + '_' + onlyThisSize];
             if(!binStrings)
                 binStrings = this.binStringsStock[size + '_' + onlyThisSize] = utils.generateBinStrings(size, onlyThisSize);
             return binStrings;
         }.bind(this);
         
-        var graph = new Graph();
+        let graph = new Graph();
         graph.initGroupingsGraph(groupingPatterns, Object.keys(this.info.entities), getBinStringsCallback);
         
         return '';
     }
 };
 
-var ScoreRules = {
+let ScoreRules = {
     default: function(group) {
         return group.size * (group.asWhole.count * 2 + group.asPart.count);
     },

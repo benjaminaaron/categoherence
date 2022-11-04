@@ -1,13 +1,13 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
-var utils = require('./modules/utils.js');
-var Session = require('./modules/Session.js');
-var dev = require('./modules/dev.js');
-var activeSessions = {};
+const utils = require('./modules/utils.js');
+const Session = require('./modules/Session.js');
+const dev = require('./modules/dev.js');
+const activeSessions = {};
 
-var libs = {
+const libs = {
     //JS
     'jquery.js': '/node_modules/jquery/dist/jquery.min.js',
     'notie.js': '/node_modules/notie/dist/notie.min.js',
@@ -60,12 +60,12 @@ io.on('connection', function(socket) {
     //console.log('user connected: ' + socket.id);
     
     socket.on('dev', function() {
-        var devSession = activeSessions['dev_session'] = new Session(dev.getSessionData());
+        let devSession = activeSessions['dev_session'] = new Session(dev.getSessionData());
         dev.makeSubmissions(devSession);
     });
     
     socket.on('create-session', function(data) {
-        var sessionId = utils.formatNameAsId(data.info.name);
+        let sessionId = utils.formatNameAsId(data.info.name);
         if(activeSessions[sessionId])
             socket.emit('err', 'a session with the id ' + sessionId + ' already exists');    
         else {
@@ -91,7 +91,7 @@ io.on('connection', function(socket) {
     });
     
     socket.on('login-results', function(sessionId) {
-        var session = activeSessions[utils.formatNameAsId(sessionId)]
+        let session = activeSessions[utils.formatNameAsId(sessionId)]
         if(session) {
             socket.emit('info', 'this is the results page of session <b>' + sessionId + '</b>, your id is ' + socket.id);
             socket.emit('session-info', session.getInfo());
@@ -103,10 +103,10 @@ io.on('connection', function(socket) {
     });
     
     socket.on('get-dashboard', function() {
-        var keys = Object.keys(activeSessions);
+        let keys = Object.keys(activeSessions);
         if(keys.length > 0) {
-            var list = [];
-            for(var i = 0; i < keys.length; i ++)
+            let list = [];
+            for(let i = 0; i < keys.length; i ++)
                 list.push(activeSessions[keys[i]].getDashboardEntry());
             socket.emit('dashboard', list);
         }

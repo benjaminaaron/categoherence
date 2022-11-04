@@ -67,9 +67,9 @@
         </table>
         <script src="lib/notie.js"></script>
         <script>
-            var socket = io();
+            let socket = io();
             
-            var sessionId = getSessionIdFromURL();
+            let sessionId = getSessionIdFromURL();
             
             socket.emit('login-session', sessionId);
             
@@ -85,8 +85,8 @@
             
             function sortableStart(el) {
                 $('body').bind('mousemove', function(e) {
-                    var target = $('#new-list-circle').offset();
-                    var dist = Math.sqrt(Math.pow(e.pageX - (target.left + 30), 2) + Math.pow(e.pageY - (target.top + 30), 2));
+                    let target = $('#new-list-circle').offset();
+                    let dist = Math.sqrt(Math.pow(e.pageX - (target.left + 30), 2) + Math.pow(e.pageY - (target.top + 30), 2));
                     if(dist < 30) {
                         newList();
                         $(el).sortable('refresh');
@@ -103,18 +103,18 @@
             });
             
             
-            var entities;
+            let entities;
             
             socket.on('session-info', function(sessionInfo) {
-                var infoHTML = '<b>' + sessionInfo.name + '</b> <small>(' + getFormattedTimestamp(sessionInfo.timestamp) + ')</small><br>';
+                let infoHTML = '<b>' + sessionInfo.name + '</b> <small>(' + getFormattedTimestamp(sessionInfo.timestamp) + ')</small><br>';
                 if(sessionInfo.options.description.length > 0)
                     infoHTML += '<i>' + sessionInfo.options.description + '</i><br>';
                 document.getElementById('session-info').innerHTML = infoHTML;
                 
                 entities = sessionInfo.entities;
-                for(var id in entities) {
+                for(let id in entities) {
                     if(entities.hasOwnProperty(id)) {
-                        var li = document.createElement('li');
+                        let li = document.createElement('li');
                         li.appendChild(document.createTextNode(entities[id]));
                         li.className = 'ui-state-default';
                         li.id = id;
@@ -124,7 +124,7 @@
             });
             
             $('#submit-btn').click(function() {
-                var submission = {
+                let submission = {
                     'sessionId': sessionId,
                     'data': {
                         'groups': collectGroups(),
@@ -137,7 +137,7 @@
             });
             
             function newList() {               
-                var newList = document.createElement('ul');
+                let newList = document.createElement('ul');
                 newList.className = 'connectedSortable';                
                 $(newList).sortable({
                     connectWith: '.connectedSortable',
@@ -148,20 +148,20 @@
                         sortableStop();
                     }
                 });
-                var newCol = document.createElement('td');
+                let newCol = document.createElement('td');
                 newCol.appendChild(newList);
                 document.getElementById('lists-row').insertBefore(newCol, document.getElementById('new-list-td'));
             };
             
             function collectGroups() {
-                var groups = [];
-                var tds = document.getElementById('lists-row').getElementsByTagName('td');
-                for(var i = 0; i < tds.length - 1; i ++) {
-                    var list = tds[i].firstElementChild;
-                    var listEntries = list.children;
+                let groups = [];
+                let tds = document.getElementById('lists-row').getElementsByTagName('td');
+                for(let i = 0; i < tds.length - 1; i ++) {
+                    let list = tds[i].firstElementChild;
+                    let listEntries = list.children;
                     if(listEntries.length > 0) {
-                        var group = [];
-                        for(var j = 0; j < listEntries.length; j ++)
+                        let group = [];
+                        for(let j = 0; j < listEntries.length; j ++)
                             group.push(listEntries[j].id);
                         groups.push({
                             'members': group,

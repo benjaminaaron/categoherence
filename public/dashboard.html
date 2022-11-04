@@ -14,25 +14,25 @@
         <input id="end-all-btn" type="submit" value="end all sessions" style="display: none;">
         
         <script>
-            var socket = io();
+            let socket = io();
             
             socket.emit('get-dashboard');
             
             socket.on('dashboard', function(data) {
                 $('#end-all-btn').show();
                 document.getElementById('info').innerHTML = '<i>active sessions:</i>';
-                var ul = document.getElementById('sessions-list');
+                let ul = document.getElementById('sessions-list');
                 
-                for(var i = 0; i < data.length; i ++) {
-                    var entry = data[i];
-                    var html = '<input type="submit" value="end" onclick="endSession(\'' + entry.id + '\');"> ';
+                for(let i = 0; i < data.length; i ++) {
+                    let entry = data[i];
+                    let html = '<input type="submit" value="end" onclick="endSession(\'' + entry.id + '\');"> ';
                     if(entry.id == entry.name)
                         html += '<b>' + entry.name + '</b>';
                     else 
                         html += '<b>' + entry.name + '</b> <small>(id: ' + entry.id + ')</small>'
                     html += ' created at <small>' + getFormattedTimestamp(entry.timestamp) + '</small> with ' + entry.entitiesCount + ' entities has ' + entry.submissionsCount + ' submissions';
-                    var li = document.createElement('li');
-                    var div = document.createElement('div');
+                    let li = document.createElement('li');
+                    let div = document.createElement('div');
                     div.innerHTML = html;
                     li.appendChild(div);
                     ul.appendChild(li);

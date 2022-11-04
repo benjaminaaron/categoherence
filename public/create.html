@@ -45,7 +45,7 @@ apple, orange, banana, lemon, cherry, strawberry
         
         <script src="lib/notie.js"></script>
         <script>
-            var urlParams = getURLparams(location.search);
+            let urlParams = getURLparams(location.search);
             if(urlParams['name'])
                 $('#session-name').val(urlParams['name']);
             
@@ -54,32 +54,32 @@ apple, orange, banana, lemon, cherry, strawberry
                 $('#options').show();
             });
             
-            var keys;
+            let keys;
             
             $('#accessKeysBtn').click(function() {
-                var numb = parseInt($('#numbOfAccessKeys').val()); // TODO catch parsing error
-                var keysHTML = '<br><small>';
+                let numb = parseInt($('#numbOfAccessKeys').val()); // TODO catch parsing error
+                let keysHTML = '<br><small>';
                 keys = [];
-                for(var i = 0; i < numb; i ++) {
-                    var key = generateHexString(10);
+                for(let i = 0; i < numb; i ++) {
+                    let key = generateHexString(10);
                     keysHTML += key + '<br>';
                     keys.push(key);
                 }
                 document.getElementById('keys-list').innerHTML = keysHTML + '</small><br>';
             });
             
-            var socket = io();
+            let socket = io();
             
             $('#create-session-btn').click(function() {
-                var setRaw = $('#set-textarea').val().split(',');
-                var set = [];
-                for(var i = 0; i < setRaw.length; i ++) {
-                    var entity = setRaw[i].trim(); // TODO more cleanups?
+                let setRaw = $('#set-textarea').val().split(',');
+                let set = [];
+                for(let i = 0; i < setRaw.length; i ++) {
+                    let entity = setRaw[i].trim(); // TODO more cleanups?
                     if(entity.length > 0)
                         set.push(entity);
                 }
                 
-                var data = {
+                let data = {
                     'info' : {
                         'name': $('#session-name').val(),
                         'timestamp': getTimestamp(),

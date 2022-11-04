@@ -16,7 +16,7 @@ function getTimestamp() {
 };
 
 function getSessionIdFromURL() {
-    var arr = window.location.href.split('/');
+    let arr = window.location.href.split('/');
     if(arr[arr.length - 1].length == 0) // to accommodate case of "/" at end of URL
         arr.pop();
     if(arr[arr.length - 1] == 'results')
@@ -25,22 +25,22 @@ function getSessionIdFromURL() {
 };
 
 function getFormattedTimestamp(unixTimestamp) {
-    var d = new Date(unixTimestamp * 1000);
+    let d = new Date(unixTimestamp * 1000);
     return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
 };
 
 function generateHexString(length) { // from http://stackoverflow.com/a/5399414
-    var str = '';
+    let str = '';
     while(str.length < length)
         str += Math.random().toString(16).substring(2);
     return str.substring(0, length);
 };
 
 function getURLparams(url) {
-    var params = {};
+    let params = {};
     if(url.length > 0) {
-        var arr = url.substring(1).split('&');
-        for(var i = 0; i < arr.length; i ++)
+        let arr = url.substring(1).split('&');
+        for(let i = 0; i < arr.length; i ++)
             if(arr[i].split('=').length > 1)
                 params[arr[i].split('=')[0]] = arr[i].split('=')[1];
     }

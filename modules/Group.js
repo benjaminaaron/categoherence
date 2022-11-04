@@ -1,5 +1,5 @@
 
-var Group = function(groupId, size) {
+const Group = function(groupId, size) {
     this.groupId = groupId;
     this.size = size;
     this.asWhole = {
@@ -19,7 +19,7 @@ Group.prototype = {
         return '[' + this.groupId + '] ' + this.size + ', ' + this.asWhole.count + '|' + this.asPart.count;
     },
     handle: function(isWhole, label, submitter) {
-        var type = isWhole ? this.asWhole : this.asPart;
+        let type = isWhole ? this.asWhole : this.asPart;
         type.count ++; // TODO allow minus counts for anti-groups
         type.submitters.push(submitter);
         type.labels.push(label); // TODO distinguish labels and count ++
