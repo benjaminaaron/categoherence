@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <title>subgroups - session</title>
+    <script src='/socket.io/socket.io.js'></script>
+    <script src="lib/jquery.js"></script>
+    <script src="lib/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/main.css">
+    <style>
+    </style>
+  </head>
+  <body>
+    <div id="session-info"></div>
+
+    <script src="lib/notie.js"></script>
+    <script>
+      let socket = io();
+
+      let sessionId = getSessionIdFromURL();
+
+      socket.emit('login-session', sessionId);
+
+      let entities;
+
+      socket.on('session-info', function(sessionInfo) {
+        let infoHTML = '<b>' + sessionInfo.name + '</b> <small>(' + getFormattedTimestamp(sessionInfo.timestamp) + ')</small><br>';
+        if (sessionInfo.options.description.length > 0)
+          infoHTML += '<i>' + sessionInfo.options.description + '</i><br>';
+        document.getElementById('session-info').innerHTML = infoHTML;
+
+        entities = sessionInfo.entities;
+        for (let id in entities) {
+          if (entities.hasOwnProperty(id)) {
+            console.log(entities[id]);
+          }
+        }
+      });
+
+      setupNotie(notie, socket);
+    </script>
+  </body>
+</html>
