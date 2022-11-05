@@ -46,3 +46,11 @@ function getURLparams(url) {
     }
     return params;
 }
+
+function createDiv(parent, content, className) {
+    let div = document.createElement('div');
+    div.className = className;
+    div.textContent = content;
+    parent.appendChild(div);
+    return div;
+}

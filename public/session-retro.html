@@ -24,7 +24,7 @@
   <body>
     <div id="session-info"></div>
     <br><br>
-    <div id="entities-chips"></div>
+    <div id="people-chips"></div>
     <br><br>
     <div>Kudos</div>
     <div>Random</div>
@@ -38,28 +38,44 @@
       let socket = io();
 
       let sessionId = getSessionIdFromURL();
-      let entities;
+      let people;
+      let selectedPeople = {};
 
       socket.emit('login-session', sessionId);
 
       socket.on('session-info', function(sessionInfo) {
         document.getElementById('session-info').innerHTML = '<b>' + sessionInfo.name + '</b><br>';
 
-        entities = sessionInfo.entities;
-        let chipsDiv = document.getElementById('entities-chips');
-        for (let id in entities) {
-          if (entities.hasOwnProperty(id)) {
-            let entity = entities[id];
-            let div = document.createElement('div');
-            div.className = 'chip';
-            div.textContent = entity;
-            chipsDiv.appendChild(div);
+        people = sessionInfo.entities;
+        for (let id in people) {
+          if (people.hasOwnProperty(id)) {
+            let person = people[id];
+            let div = createDiv(document.getElementById('people-chips'), person, 'chip');
+            div.addEventListener('click', function () {
+              //
+            });
+            div.addEventListener('mouseover', function () {
+              //
+            });
           }
         }
       });
 
       $('#submit-btn').click(function() {
-        // TODO
+        let submission = {
+          'sessionId': sessionId,
+          'data': {
+            'selectedPeople': [],
+            'statementType': '',
+            'statement': '',
+            'timestamp': getTimestamp(),
+          }
+        };
+        socket.emit('retro-submission', submission);
+      });
+
+      socket.on('broadcast-retro-submission', function(submission) {
+        console.log("via broadcast-retro-submission", submission);
       });
 
       setupNotie(notie, socket);

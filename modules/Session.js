@@ -34,6 +34,9 @@ Session.prototype = {
             'submissionsCount': this.submissions.length
         };
     },
+    handleRetroSubmission: function(data) {
+        console.log("data", data);
+    },
     handleSubmission: function(data) {
         this.submissions.push(data);
         console.log('session [' + this.info.id + '] received submission #' + this.submissions.length + ', containing ' + data.groups.length + ' groups');

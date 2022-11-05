@@ -5,7 +5,7 @@ const io = require('socket.io')(http);
 const utils = require('./modules/utils.js');
 const Session = require('./modules/Session.js');
 const dev = require('./modules/dev.js');
-const activeSessions = {};
+let activeSessions = {};
 
 const libs = {
     //JS
@@ -83,6 +83,11 @@ io.on('connection', function(socket) {
         }
         else
             socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');
+    });
+
+    socket.on('retro-submission', function(submission) {
+        activeSessions[submission.sessionId].handleRetroSubmission(submission.data);
+        io.emit('broadcast-retro-submission', submission);
     });
     
     socket.on('submission', function(submission) {
