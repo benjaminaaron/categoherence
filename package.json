@@ -4,7 +4,7 @@
   "description": "",
   "author": "benjaminaaron",
   "license": "MIT",
-    "dependencies": {
+  "dependencies": {
     "http": "*",
     "express": "*",
     "jquery": "*",
