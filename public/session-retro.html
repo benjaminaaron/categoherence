@@ -54,9 +54,9 @@
       let people;
       let selectedPeople = {};
 
-      socket.emit('login-session', sessionId);
+      socket.emit('session-login', sessionId);
 
-      socket.on('session-info', function(sessionInfo) {
+      socket.on('session-login-response', function(sessionInfo) {
         document.getElementById('session-info').innerHTML = '<b>' + sessionInfo.name + '</b><br>';
 
         people = sessionInfo.entities;
@@ -71,6 +71,10 @@
               //
             });
           }
+        }
+
+        for (let submission of sessionInfo.retroSubmissions) {
+          appendSubmissionDiv(submission);
         }
       });
 
@@ -87,9 +91,12 @@
         socket.emit('retro-submission', submission);
       });
 
-      socket.on('broadcast-retro-submission', function(submission) {
-        console.log("via broadcast-retro-submission", submission);
+      function appendSubmissionDiv(submission) {
         let div = createDiv(document.getElementById('submissions'), submission.data.statement, 'submission');
+      }
+
+      socket.on('broadcast-retro-submission', function(submission) {
+        appendSubmissionDiv(submission);
       });
 
       setupNotie(notie, socket);

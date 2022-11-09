@@ -72,7 +72,7 @@
             
             let sessionId = getSessionIdFromURL();
             
-            socket.emit('login-session', sessionId);
+            socket.emit('session-login', sessionId);
             
             $('#arrival-list').sortable({
                 connectWith: '.connectedSortable',

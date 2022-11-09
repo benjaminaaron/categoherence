@@ -15,6 +15,8 @@ const Session = function(data) {
     this.submissions = [];
     
     this.binStringsStock = {};
+
+    this.info.retroSubmissions = [];
     
     //this.showInfo();
 };
@@ -35,7 +37,7 @@ Session.prototype = {
         };
     },
     handleRetroSubmission: function(data) {
-        console.log("data", data);
+        this.info.retroSubmissions.push(data)
     },
     handleSubmission: function(data) {
         this.submissions.push(data);

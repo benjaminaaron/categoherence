@@ -75,18 +75,18 @@ io.on('connection', function(socket) {
         }
     });
    
-    socket.on('login-session', function(sessionId) {
+    socket.on('session-login', function(sessionId) {
         sessionId = utils.formatNameAsId(sessionId);
         if (activeSessions[sessionId]) {
             socket.emit('info', 'welcome to session <b>' + sessionId + '</b>, your id is ' + socket.id);
-            socket.emit('session-info', activeSessions[sessionId].info);
+            socket.emit('session-login-response', activeSessions[sessionId].info);
         }
         else
             socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');
     });
 
     socket.on('retro-submission', function(submission) {
-        activeSessions[submission.sessionId].handleRetroSubmission(submission.data);
+        activeSessions[submission.sessionId].handleRetroSubmission(submission);
         io.emit('broadcast-retro-submission', submission);
     });
     
