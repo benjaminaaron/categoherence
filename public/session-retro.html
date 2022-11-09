@@ -20,6 +20,14 @@
         border-radius: 25px;
         background-color: #f1f1f1;
       }
+      .submission {
+        padding: 0 25px;
+        height: 50px;
+        font-size: 16px;
+        line-height: 50px;
+        border-radius: 25px;
+        background-color: #f1f1f1;
+      }
     </style>
   </head>
   <body>
@@ -34,6 +42,10 @@
     <input type="text" id="subgroup-text" value="placeholder" size="100">
     <br><br>
     <input id="submit-btn" type="submit" value="submit">
+    <br><br>
+    <hr>
+    <br><br>
+    <div id="submissions"></div>
     <script src="lib/notie.js"></script>
     <script>
       let socket = io();
@@ -68,7 +80,7 @@
           'data': {
             'selectedPeople': [],
             'statementType': '',
-            'statement': '',
+            'statement': 'test123',
             'timestamp': getTimestamp(),
           }
         };
@@ -77,6 +89,7 @@
 
       socket.on('broadcast-retro-submission', function(submission) {
         console.log("via broadcast-retro-submission", submission);
+        let div = createDiv(document.getElementById('submissions'), submission.data.statement, 'submission');
       });
 
       setupNotie(notie, socket);
