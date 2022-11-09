@@ -5,10 +5,11 @@
   "author": "benjaminaaron",
   "license": "MIT",
   "dependencies": {
-    "http": "*",
     "express": "*",
+    "http": "*",
     "jquery": "*",
     "latinize": "*",
+    "mongodb": "^4.11.0",
     "notie": "*",
     "socket.io": "*",
     "strinc": "*"

@@ -1,6 +1,14 @@
 const utils = require('./utils.js');
 const Graph = require('./Graph.js');
 const Group = require('./Group.js');
+const MongoClient = require('mongodb').MongoClient;
+const dbClient = new MongoClient('mongodb://localhost:27017');
+
+dbClient.connect().then(() => {
+    const db = dbClient.db('categoherence_db');
+    let sessions = db.collection('sessions');
+    // TODO
+});
 
 const Session = function(data) {
     this.info = data.info;

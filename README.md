@@ -24,6 +24,8 @@ After the analysis, automatic suggestions could then be made for a best-match gr
 As above, here it can also be said, that using algorithms for such a task might make the potentially important social process of assembling groups alienable. Maybe it could be interesting to "charge" submissions with the task of assembling the best possible groups, rather than my personal favorite ones. Or even allow the submission of anti-groups that will yield negative points in the scoring.
 
 ## Setup
+
+Install and start MongoDB following [these](https://www.mongodb.com/docs/manual/administration/install-community/) instructions. Some instructions how to query your local MongoDB [here](https://github.com/FuturICT2/FIN4NotificationServer#mongodb).
 ```
 npm install
 npm start
@@ -34,8 +36,3 @@ npm start
 - thereafter your session is open for submissions at `/session-id`
 - results of a session can be viewed at `/session-id/results`
 - at `/dashboard` all currently active sessions are listed and can be closed individually
-
-## Coming next
-I have some ideas in the pipeline...
-<br>
-And this readme needs to become better at communicating the idea :)
