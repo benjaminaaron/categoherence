@@ -2,10 +2,33 @@ const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
+const MongoClient = require('mongodb').MongoClient;
+const dbClient = new MongoClient('mongodb://localhost:27017');
+
 const utils = require('./modules/utils.js');
 const Session = require('./modules/Session.js');
 const dev = require('./modules/dev.js');
 let activeSessions = {};
+
+let sessionsDb;
+let submissionsDb;
+
+dbClient.connect().then(() => {
+    const db = dbClient.db('db');
+    sessionsDb = db.collection('sessions');
+    submissionsDb = db.collection('submissions');
+    sessionsDb.find().toArray().then(sessions => {
+        for (let sessionData of sessions) {
+            activeSessions[sessionData.id] = new Session(sessionData, submissionsDb);
+            console.log("imported session " + sessionData.id + " from db");
+        }
+        submissionsDb.find().toArray().then(submissions => {
+            for (let submission of submissions) {
+                activeSessions[submission.sessionId].retroSubmissions.push(submission);
+            }
+        });
+    });
+});
 
 const libs = {
     //JS
@@ -64,30 +87,34 @@ io.on('connection', function(socket) {
         dev.makeSubmissions(devSession);
     });
     
-    socket.on('create-session', function(data) {
-        let sessionId = utils.formatNameAsId(data.info.name);
-        if (activeSessions[sessionId])
+    socket.on('create-session', function(sessionData) {
+        sessionData.id = utils.formatNameAsId(sessionData.name);
+        if (activeSessions[sessionData.id])
             socket.emit('err', 'a session with the id ' + sessionId + ' already exists');    
         else {
-            data.info.id = sessionId;
-            activeSessions[sessionId] = new Session(data);
-            socket.emit('success', 'new session has been created: <b><a href="/' + sessionId + '">' + sessionId + '</a></b>');  
+            activeSessions[sessionData.id] = new Session(sessionData);
+            sessionsDb.insertOne(sessionData);
+            console.log("created session and stored in db: " + sessionData.id);
+            socket.emit('success', 'new session has been created: <b><a href="/' + sessionData.id + '">' + sessionData.id + '</a></b>');
         }
     });
    
     socket.on('session-login', function(sessionId) {
-        sessionId = utils.formatNameAsId(sessionId);
         if (activeSessions[sessionId]) {
             socket.emit('info', 'welcome to session <b>' + sessionId + '</b>, your id is ' + socket.id);
-            socket.emit('session-login-response', activeSessions[sessionId].info);
+            socket.emit('session-login-response', {
+                data: activeSessions[sessionId].data,
+                submissions: activeSessions[sessionId].retroSubmissions
+            });
         }
         else
             socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');
     });
 
-    socket.on('retro-submission', function(submission) {
-        activeSessions[submission.sessionId].handleRetroSubmission(submission);
-        io.emit('broadcast-retro-submission', submission);
+    socket.on('retro-submission', function(submissionData) {
+        activeSessions[submissionData.sessionId].handleRetroSubmission(submissionData);
+        submissionsDb.insertOne(submissionData).then(() => console.log('submission stored in db'));
+        io.emit('broadcast-retro-submission', submissionData);
     });
     
     socket.on('submission', function(submission) {
@@ -129,6 +156,6 @@ io.on('connection', function(socket) {
     });
 });
 
-http.listen(3000, function(){
+http.listen(3000, function() {
     console.log('listening on *:3000');
 });

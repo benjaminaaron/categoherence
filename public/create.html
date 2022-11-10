@@ -79,29 +79,31 @@ apple, orange, banana, lemon, cherry, strawberry
                     if (entity.length > 0)
                         set.push(entity);
                 }
+
+                let entities = {};
+                for (let i = 0; i < set.length; i ++)
+                  entities['' + i] = set[i]; // id = i
                 
-                let data = {
-                    'info' : {
-                        'name': $('#session-name').val(),
-                        'timestamp': getTimestamp(),
-                        'options': {
-                            'description': $('#description-textarea').val(),
-                            'anonymous': document.getElementById('anonymous').checked,
-                            'allowNewEntities': document.getElementById('allowNewEntities').checked,
-                            'allowMulInstEntities': document.getElementById('allowMulInstEntities').checked,
-                            'allowAntiGroups': document.getElementById('allowAntiGroups').checked,
-                            'groupLabels': document.getElementById('groupLabels').checked ? $('#groupLabelsChoice').val() : false,
-                            'accessKeys': keys,
-                            'allowMulSubmPerKey': document.getElementById('allowMulSubmPerKey').checked,
-                            'allowPostEditing': document.getElementById('allowPostEditing').checked,
-                            'mustPlaceAllEntities': document.getElementById('mustPlaceAllEntities').checked,
-                            'defaultLayout': $('#defaultLayout').val()
-                        }
-                    },
-                    'set': set
+                let sessionData = {
+                  'name': $('#session-name').val(),
+                  'timestamp': getTimestamp(),
+                  /*'options': {
+                      'description': $('#description-textarea').val(),
+                      'anonymous': document.getElementById('anonymous').checked,
+                      'allowNewEntities': document.getElementById('allowNewEntities').checked,
+                      'allowMulInstEntities': document.getElementById('allowMulInstEntities').checked,
+                      'allowAntiGroups': document.getElementById('allowAntiGroups').checked,
+                      'groupLabels': document.getElementById('groupLabels').checked ? $('#groupLabelsChoice').val() : false,
+                      'accessKeys': keys,
+                      'allowMulSubmPerKey': document.getElementById('allowMulSubmPerKey').checked,
+                      'allowPostEditing': document.getElementById('allowPostEditing').checked,
+                      'mustPlaceAllEntities': document.getElementById('mustPlaceAllEntities').checked,
+                      'defaultLayout': $('#defaultLayout').val()
+                  }*/
+                  'entities': entities
                 };
                 
-                socket.emit('create-session', data);
+                socket.emit('create-session', sessionData);
             });
             
             setupNotie(notie, socket);

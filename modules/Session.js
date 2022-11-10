@@ -1,31 +1,16 @@
 const utils = require('./utils.js');
 const Graph = require('./Graph.js');
 const Group = require('./Group.js');
-const MongoClient = require('mongodb').MongoClient;
-const dbClient = new MongoClient('mongodb://localhost:27017');
 
-dbClient.connect().then(() => {
-    const db = dbClient.db('categoherence_db');
-    let sessions = db.collection('sessions');
-    // TODO
-});
+const Session = function(sessionData) {
+    this.data = sessionData;
 
-const Session = function(data) {
-    this.info = data.info;
-    this.info.entities = {};
-    
     this.groups = {};
-    this.graph = new Graph(); // default size-leaf-graph
-    
-    for (let i = 0; i < data.set.length; i ++)
-        this.info.entities['' + i] = data.set[i]; // id = i
-    
+    // this.graph = new Graph(); // default size-leaf-graph
     this.submissions = [];
-    
     this.binStringsStock = {};
+    this.retroSubmissions = [];
 
-    this.info.retroSubmissions = [];
-    
     //this.showInfo();
 };
 
@@ -37,15 +22,15 @@ Session.prototype = {
     },
     getDashboardEntry: function() {
         return {
-            'id': this.info.id,
-            'name': this.info.name,
-            'timestamp': this.info.timestamp,
-            'entitiesCount': Object.keys(this.info.entities).length,
+            'id': this.data.id,
+            'name': this.data.name,
+            'timestamp': this.data.timestamp,
+            'entitiesCount': Object.keys(this.data.entities).length,
             'submissionsCount': this.submissions.length
         };
     },
-    handleRetroSubmission: function(data) {
-        this.info.retroSubmissions.push(data)
+    handleRetroSubmission: function(submissionData) {
+        this.retroSubmissions.push(submissionData)
     },
     handleSubmission: function(data) {
         this.submissions.push(data);

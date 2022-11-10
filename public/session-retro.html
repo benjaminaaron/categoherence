@@ -56,10 +56,10 @@
 
       socket.emit('session-login', sessionId);
 
-      socket.on('session-login-response', function(sessionInfo) {
-        document.getElementById('session-info').innerHTML = '<b>' + sessionInfo.name + '</b><br>';
+      socket.on('session-login-response', function(session) {
+        document.getElementById('session-info').innerHTML = '<b>' + session.data.name + '</b><br>';
 
-        people = sessionInfo.entities;
+        people = session.data.entities;
         for (let id in people) {
           if (people.hasOwnProperty(id)) {
             let person = people[id];
@@ -73,30 +73,28 @@
           }
         }
 
-        for (let submission of sessionInfo.retroSubmissions) {
+        for (let submission of session.submissions) {
           appendSubmissionDiv(submission);
         }
       });
 
       $('#submit-btn').click(function() {
-        let submission = {
+        let submissionData = {
           'sessionId': sessionId,
-          'data': {
-            'selectedPeople': [],
-            'statementType': '',
-            'statement': 'test123',
-            'timestamp': getTimestamp(),
-          }
+          'timestamp': getTimestamp(),
+          'selectedPeople': [],
+          'statementType': '',
+          'statement': 'test123'
         };
-        socket.emit('retro-submission', submission);
+        socket.emit('retro-submission', submissionData);
       });
 
       function appendSubmissionDiv(submission) {
-        let div = createDiv(document.getElementById('submissions'), submission.data.statement, 'submission');
+        let div = createDiv(document.getElementById('submissions'), submission.statement, 'submission');
       }
 
-      socket.on('broadcast-retro-submission', function(submission) {
-        appendSubmissionDiv(submission);
+      socket.on('broadcast-retro-submission', function(submissionData) {
+        appendSubmissionDiv(submissionData);
       });
 
       setupNotie(notie, socket);
