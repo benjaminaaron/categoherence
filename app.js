@@ -12,11 +12,13 @@ let activeSessions = {};
 
 let sessionsDb;
 let submissionsDb;
+let guestsDb;
 
 dbClient.connect().then(() => {
     const db = dbClient.db('db');
     sessionsDb = db.collection('sessions');
     submissionsDb = db.collection('submissions');
+    guestsDb = db.collection('guests');
     sessionsDb.find().toArray().then(sessions => {
         for (let sessionData of sessions) {
             activeSessions[sessionData.id] = new Session(sessionData, submissionsDb);
@@ -25,6 +27,11 @@ dbClient.connect().then(() => {
         submissionsDb.find().toArray().then(submissions => {
             for (let submission of submissions) {
                 activeSessions[submission.sessionId].retroSubmissions.push(submission);
+            }
+        });
+        guestsDb.find().toArray().then(guests => {
+            for (let guest of guests) {
+                activeSessions[guest.sessionId].addGuest(guest.name);
             }
         });
     });
@@ -104,7 +111,8 @@ io.on('connection', function(socket) {
             socket.emit('info', 'welcome to session <b>' + sessionId + '</b>, your id is ' + socket.id);
             socket.emit('session-login-response', {
                 data: activeSessions[sessionId].data,
-                submissions: activeSessions[sessionId].retroSubmissions
+                submissions: activeSessions[sessionId].retroSubmissions,
+                guests: activeSessions[sessionId].guests
             });
         }
         else
@@ -115,6 +123,12 @@ io.on('connection', function(socket) {
         activeSessions[submissionData.sessionId].handleRetroSubmission(submissionData);
         submissionsDb.insertOne(submissionData).then(() => console.log('submission stored in db'));
         io.emit('broadcast-retro-submission', submissionData);
+    });
+
+    socket.on('add-guest', function(guest) {
+        activeSessions[guest.sessionId].addGuest(guest.name);
+        guestsDb.insertOne(guest).then(() => console.log('guest stored in db'));
+        io.emit('broadcast-new-guest', guest.name);
     });
     
     socket.on('submission', function(submission) {

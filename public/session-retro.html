@@ -20,6 +20,15 @@
         border-radius: 25px;
         background-color: #f1f1f1;
       }
+      .chipGuest {
+        display: inline-block;
+        padding: 0 25px;
+        height: 50px;
+        font-size: 16px;
+        line-height: 50px;
+        border-radius: 25px;
+        background-color: #ffff00;
+      }
       .submission {
         padding: 0 25px;
         height: 50px;
@@ -34,6 +43,7 @@
     <div id="session-info"></div>
     <br><br>
     <div id="people-chips"></div>
+    <input type="button" value="add guest" id="add-guest-btn">
     <br><br>
     <div>Kudos</div>
     <div>Random</div>
@@ -73,6 +83,10 @@
           }
         }
 
+        for (let guestName of session.guests) {
+          appendGuestDiv(guestName)
+        }
+
         for (let submission of session.submissions) {
           appendSubmissionDiv(submission);
         }
@@ -89,12 +103,31 @@
         socket.emit('retro-submission', submissionData);
       });
 
+      $('#add-guest-btn').click(function() {
+        let guestName = prompt("What's their name?", "");
+        if (guestName == null || guestName.trim() === "") {
+          return;
+        }
+        socket.emit('add-guest', {
+          sessionId: sessionId,
+          name: guestName
+        });
+      });
+
       function appendSubmissionDiv(submission) {
         let div = createDiv(document.getElementById('submissions'), submission.statement, 'submission');
       }
 
+      function appendGuestDiv(guestName) {
+        let div = createDiv(document.getElementById('people-chips'), guestName, 'chipGuest');
+      }
+
       socket.on('broadcast-retro-submission', function(submissionData) {
         appendSubmissionDiv(submissionData);
+      });
+
+      socket.on('broadcast-new-guest', function(guestName) {
+        appendGuestDiv(guestName)
       });
 
       setupNotie(notie, socket);

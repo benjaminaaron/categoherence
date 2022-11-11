@@ -10,6 +10,7 @@ const Session = function(sessionData) {
     this.submissions = [];
     this.binStringsStock = {};
     this.retroSubmissions = [];
+    this.guests = [];
 
     //this.showInfo();
 };
@@ -31,6 +32,9 @@ Session.prototype = {
     },
     handleRetroSubmission: function(submissionData) {
         this.retroSubmissions.push(submissionData)
+    },
+    addGuest: function(guestName) {
+      this.guests.push(guestName);
     },
     handleSubmission: function(data) {
         this.submissions.push(data);
