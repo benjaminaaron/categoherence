@@ -47,10 +47,10 @@ function getURLparams(url) {
     return params;
 }
 
-function createDiv(parent, content, className) {
-    let div = document.createElement('div');
-    div.className = className;
-    div.textContent = content;
-    parent.appendChild(div);
-    return div;
+function createElement(type, parent, content, className) {
+    let element = document.createElement(type);
+    element.className = className;
+    element.textContent = content;
+    parent.appendChild(element);
+    return element;
 }

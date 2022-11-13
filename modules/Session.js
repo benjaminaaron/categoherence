@@ -36,6 +36,9 @@ Session.prototype = {
     addGuest: function(guestName) {
       this.guests.push(guestName);
     },
+    addReactionToSubmission: function(submissionId) {
+        this.retroSubmissions[submissionId].reactionCount ++;
+    },
     handleSubmission: function(data) {
         this.submissions.push(data);
         console.log('session [' + this.info.id + '] received submission #' + this.submissions.length + ', containing ' + data.groups.length + ' groups');

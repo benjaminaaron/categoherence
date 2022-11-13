@@ -37,6 +37,9 @@
         border-radius: 25px;
         background-color: #f1f1f1;
       }
+      .reaction {
+        padding-left: 50px;
+      }
     </style>
   </head>
   <body>
@@ -63,6 +66,7 @@
       let sessionId = getSessionIdFromURL();
       let people;
       let selectedPeople = {};
+      let reactionSpans = {}; // submissionId to <span>
 
       socket.emit('session-login', sessionId);
 
@@ -73,7 +77,7 @@
         for (let id in people) {
           if (people.hasOwnProperty(id)) {
             let person = people[id];
-            let div = createDiv(document.getElementById('people-chips'), person, 'chip');
+            let div = createElement('div', document.getElementById('people-chips'), person, 'chip');
             div.addEventListener('click', function () {
               //
             });
@@ -89,6 +93,7 @@
 
         for (let submission of session.submissions) {
           appendSubmissionDiv(submission);
+          reactionSpans[submission.id].innerHTML = "+" + submission.reactionCount;
         }
       });
 
@@ -98,7 +103,8 @@
           'timestamp': getTimestamp(),
           'selectedPeople': [],
           'statementType': '',
-          'statement': 'test123'
+          'statement': 'test123',
+          'reactionCount': 0
         };
         socket.emit('retro-submission', submissionData);
       });
@@ -114,12 +120,20 @@
         });
       });
 
-      function appendSubmissionDiv(submission) {
-        let div = createDiv(document.getElementById('submissions'), submission.statement, 'submission');
+      function appendSubmissionDiv(submissionData) {
+        let submissionDiv = createElement('div', document.getElementById('submissions'), submissionData.statement, 'submission');
+        let reactionSpan = createElement('span', submissionDiv, '+0', 'reaction');
+        reactionSpans[submissionData.id] = reactionSpan;
+        reactionSpan.addEventListener('click', function() {
+          socket.emit('reaction-added', {
+            sessionId: sessionId,
+            submissionId: submissionData.id
+          });
+        });
       }
 
       function appendGuestDiv(guestName) {
-        let div = createDiv(document.getElementById('people-chips'), guestName, 'chipGuest');
+        let div = createElement('div', document.getElementById('people-chips'), guestName, 'chipGuest');
       }
 
       socket.on('broadcast-retro-submission', function(submissionData) {
@@ -128,6 +142,11 @@
 
       socket.on('broadcast-new-guest', function(guestName) {
         appendGuestDiv(guestName)
+      });
+
+      socket.on('broadcast-reaction-added', function(reactionData) {
+        let reactionSpan = reactionSpans[reactionData.submissionId];
+        reactionSpan.innerHTML = "+" + (parseInt(reactionSpan.innerHTML.substring(1)) + 1);
       });
 
       setupNotie(notie, socket);

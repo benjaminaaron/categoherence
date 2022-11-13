@@ -13,12 +13,14 @@ let activeSessions = {};
 let sessionsDb;
 let submissionsDb;
 let guestsDb;
+let reactionsDb;
 
 dbClient.connect().then(() => {
     const db = dbClient.db('db');
     sessionsDb = db.collection('sessions');
     submissionsDb = db.collection('submissions');
     guestsDb = db.collection('guests');
+    reactionsDb = db.collection('reactions');
     sessionsDb.find().toArray().then(sessions => {
         for (let sessionData of sessions) {
             activeSessions[sessionData.id] = new Session(sessionData, submissionsDb);
@@ -28,6 +30,11 @@ dbClient.connect().then(() => {
             for (let submission of submissions) {
                 activeSessions[submission.sessionId].retroSubmissions.push(submission);
             }
+            reactionsDb.find().toArray().then(reactions => {
+                for (let reaction of reactions) {
+                    activeSessions[reaction.sessionId].addReactionToSubmission(reaction.submissionId);
+                }
+            });
         });
         guestsDb.find().toArray().then(guests => {
             for (let guest of guests) {
@@ -120,7 +127,9 @@ io.on('connection', function(socket) {
     });
 
     socket.on('retro-submission', function(submissionData) {
-        activeSessions[submissionData.sessionId].handleRetroSubmission(submissionData);
+        let session = activeSessions[submissionData.sessionId];
+        submissionData.id = session.retroSubmissions.length;
+        session.handleRetroSubmission(submissionData);
         submissionsDb.insertOne(submissionData).then(() => console.log('submission stored in db'));
         io.emit('broadcast-retro-submission', submissionData);
     });
@@ -134,6 +143,12 @@ io.on('connection', function(socket) {
     socket.on('submission', function(submission) {
         activeSessions[submission.sessionId].handleSubmission(submission.data);
         socket.emit('success', 'your submission was received, see the <a href="' + submission.sessionId + '/results">results</a>');
+    });
+
+    socket.on('reaction-added', function(reactionData) {
+        activeSessions[reactionData.sessionId].addReactionToSubmission(reactionData.submissionId);
+        reactionsDb.insertOne(reactionData).then(() => console.log('reaction stored in db'));
+        io.emit('broadcast-reaction-added', reactionData);
     });
     
     socket.on('login-results', function(sessionId) {
