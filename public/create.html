@@ -82,7 +82,12 @@ apple, orange, banana, lemon, cherry, strawberry
 
                 let entities = {};
                 for (let i = 0; i < set.length; i ++)
-                  entities['' + i] = set[i]; // id = i
+                  entities[i] = {
+                    id: i,
+                    name: set[i],
+                    div: null,
+                    selected: false
+                  };
                 
                 let sessionData = {
                   'name': $('#session-name').val(),

@@ -20,6 +20,9 @@
         border-radius: 25px;
         background-color: #f1f1f1;
       }
+      .chip_selected {
+        background-color: #ff0000 !important;
+      }
       .chipGuest {
         display: inline-block;
         padding: 0 25px;
@@ -65,7 +68,6 @@
 
       let sessionId = getSessionIdFromURL();
       let people;
-      let selectedPeople = {};
       let reactionSpans = {}; // submissionId to <span>
 
       socket.emit('session-login', sessionId);
@@ -76,12 +78,18 @@
         people = session.data.entities;
         for (let id in people) {
           if (people.hasOwnProperty(id)) {
-            let person = people[id];
-            let div = createElement('div', document.getElementById('people-chips'), person, 'chip');
-            div.addEventListener('click', function () {
-              //
+            let personName = people[id].name;
+            let div = createElement('div', document.getElementById('people-chips'), personName, 'chip');
+            people[id].div = div;
+            div.addEventListener('click', function() {
+              if (people[id].selected) {
+                div.classList.remove('chip_selected');
+              } else {
+                div.classList.add('chip_selected');
+              }
+              people[id].selected = !people[id].selected;
             });
-            div.addEventListener('mouseover', function () {
+            div.addEventListener('mouseover', function() {
               //
             });
           }
@@ -101,12 +109,16 @@
         let submissionData = {
           'sessionId': sessionId,
           'timestamp': getTimestamp(),
-          'selectedPeople': [],
+          'selectedPeople': Object.values(people).filter(p => p.selected).map(p => p.id),
           'statementType': '',
           'statement': 'test123',
           'reactionCount': 0
         };
         socket.emit('retro-submission', submissionData);
+        Object.values(people).forEach(p => {
+          p.selected = false;
+          p.div.classList.remove('chip_selected');
+        });
       });
 
       $('#add-guest-btn').click(function() {
