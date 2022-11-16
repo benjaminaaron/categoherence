@@ -150,7 +150,13 @@
       });
 
       function appendSubmissionDiv(submissionData) {
-        let submissionDiv = createElement('div', document.getElementById('submissions'), submissionData.statement, 'submission');
+        let text = "";
+        for (id of submissionData.selectedPeople) {
+          text += ", " + people[id].name;
+        }
+        text = "[" + text.substring(2) + "] ";
+        let submissionDiv = createElement('div', document.getElementById('submissions'),
+            text + submissionData.statement, 'submission');
         let reactionSpan = createElement('span', submissionDiv, '+0', 'reaction');
         reactionSpans[submissionData.id] = reactionSpan;
         reactionSpan.addEventListener('click', function() {
