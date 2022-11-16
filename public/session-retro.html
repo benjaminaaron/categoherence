@@ -70,35 +70,33 @@
       let people;
       let reactionSpans = {}; // submissionId to <span>
 
+      function buildPerson(person) {
+        let div = createElement('div', document.getElementById('people-chips'),
+            person.name, person.isGuest ? 'chipGuest' : 'chip');
+        person.div = div;
+        div.addEventListener('click', function() {
+          if (person.selected) {
+            div.classList.remove('chip_selected');
+          } else {
+            div.classList.add('chip_selected');
+          }
+          person.selected = !person.selected;
+        });
+        // div.addEventListener('mouseover', function() {});
+      }
+
       socket.emit('session-login', sessionId);
 
       socket.on('session-login-response', function(session) {
         document.getElementById('session-info').innerHTML = '<b>' + session.data.name + '</b><br>';
-
         people = session.data.entities;
-        for (let id in people) {
-          if (people.hasOwnProperty(id)) {
-            let personName = people[id].name;
-            let div = createElement('div', document.getElementById('people-chips'), personName, 'chip');
-            people[id].div = div;
-            div.addEventListener('click', function() {
-              if (people[id].selected) {
-                div.classList.remove('chip_selected');
-              } else {
-                div.classList.add('chip_selected');
-              }
-              people[id].selected = !people[id].selected;
-            });
-            div.addEventListener('mouseover', function() {
-              //
-            });
-          }
+        for (let id of Object.keys(people)) {
+          buildPerson(people[id])
         }
-
-        for (let guestName of session.guests) {
-          appendGuestDiv(guestName)
+        for (let guest of session.guests) {
+          people[guest.id] = guest;
+          buildPerson(guest);
         }
-
         for (let submission of session.submissions) {
           appendSubmissionDiv(submission);
           reactionSpans[submission.id].innerHTML = "+" + submission.reactionCount;
@@ -128,7 +126,11 @@
         }
         socket.emit('add-guest', {
           sessionId: sessionId,
-          name: guestName
+          id: null,
+          name: guestName,
+          div: null,
+          selected: false,
+          isGuest: true
         });
       });
 
@@ -152,8 +154,9 @@
         appendSubmissionDiv(submissionData);
       });
 
-      socket.on('broadcast-new-guest', function(guestName) {
-        appendGuestDiv(guestName)
+      socket.on('broadcast-new-guest', function(guest) {
+        people[guest.id] = guest;
+        buildPerson(guest);
       });
 
       socket.on('broadcast-reaction-added', function(reactionData) {

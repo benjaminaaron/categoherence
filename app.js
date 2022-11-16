@@ -38,7 +38,7 @@ dbClient.connect().then(() => {
         });
         guestsDb.find().toArray().then(guests => {
             for (let guest of guests) {
-                activeSessions[guest.sessionId].addGuest(guest.name);
+                activeSessions[guest.sessionId].addGuest(guest);
             }
         });
     });
@@ -135,9 +135,11 @@ io.on('connection', function(socket) {
     });
 
     socket.on('add-guest', function(guest) {
-        activeSessions[guest.sessionId].addGuest(guest.name);
+        let session = activeSessions[guest.sessionId];
+        guest.id = Object.keys(session.data.entities).length + session.guests.length;
+        session.addGuest(guest);
         guestsDb.insertOne(guest).then(() => console.log('guest stored in db'));
-        io.emit('broadcast-new-guest', guest.name);
+        io.emit('broadcast-new-guest', guest);
     });
     
     socket.on('submission', function(submission) {

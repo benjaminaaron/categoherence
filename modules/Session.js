@@ -33,8 +33,8 @@ Session.prototype = {
     handleRetroSubmission: function(submissionData) {
         this.retroSubmissions.push(submissionData)
     },
-    addGuest: function(guestName) {
-      this.guests.push(guestName);
+    addGuest: function(guest) {
+      this.guests.push(guest);
     },
     addReactionToSubmission: function(submissionId) {
         this.retroSubmissions[submissionId].reactionCount ++;
