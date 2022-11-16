@@ -112,10 +112,15 @@
           notie.alert({ type: 'error', text: 'No statement entered' })
           return;
         }
+        let selectedPeople = Object.values(people).filter(p => p.selected).map(p => p.id);
+        if (selectedPeople.length === 0) {
+          notie.alert({ type: 'error', text: 'No people selected' })
+          return;
+        }
         let submissionData = {
           'sessionId': sessionId,
           'timestamp': getTimestamp(),
-          'selectedPeople': Object.values(people).filter(p => p.selected).map(p => p.id),
+          'selectedPeople': selectedPeople,
           'statementType': getStatementType(),
           'statement': statement,
           'reactionCount': 0
@@ -131,6 +136,7 @@
       $('#add-guest-btn').click(function() {
         let guestName = prompt("What's their name?", "");
         if (guestName == null || guestName.trim() === "") {
+          notie.alert({ type: 'error', text: 'No name entered' })
           return;
         }
         socket.emit('add-guest', {
