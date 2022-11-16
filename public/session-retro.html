@@ -20,6 +20,9 @@
         border-radius: 25px;
         background-color: #f1f1f1;
       }
+      .whole-team-chip {
+        background-color: #00ff00;
+      }
       .chip_selected {
         background-color: #ff0000 !important;
       }
@@ -48,7 +51,7 @@
   <body>
     <div id="session-info"></div>
     <br><br>
-    <div id="people-chips"></div>
+    <div id="people-chips"><div id="whole-team-btn" class="chip whole-team-chip">whole team</div></div>
     <input type="button" value="add guest" id="add-guest-btn">
     <br><br>
     <input type="radio" id="appreciation" name="statement_types" checked="checked">
@@ -147,6 +150,10 @@
           selected: false,
           isGuest: true
         });
+      });
+
+      $('#whole-team-btn').click(function() {
+        // TODO
       });
 
       function appendSubmissionDiv(submissionData) {
