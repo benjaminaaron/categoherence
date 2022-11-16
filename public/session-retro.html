@@ -51,9 +51,12 @@
     <div id="people-chips"></div>
     <input type="button" value="add guest" id="add-guest-btn">
     <br><br>
-    <div>Kudos</div>
-    <div>Random</div>
-    <div>You'd be amazing at</div>
+    <input type="radio" id="appreciation" name="statement_types" checked="checked">
+    <label for="appreciation">Appreciation</label><br>
+    <input type="radio" id="amazing-at" name="statement_types">
+    <label for="amazing-at">You'd be amazing at</label><br>
+    <input type="radio" id="other" name="statement_types">
+    <label for="other">Other</label><br>
     <br><br>
     <input type="text" id="submission-statement" value="placeholder" size="100">
     <br><br>
@@ -113,7 +116,7 @@
           'sessionId': sessionId,
           'timestamp': getTimestamp(),
           'selectedPeople': Object.values(people).filter(p => p.selected).map(p => p.id),
-          'statementType': '',
+          'statementType': getStatementType(),
           'statement': statement,
           'reactionCount': 0
         };
@@ -152,10 +155,6 @@
         });
       }
 
-      function appendGuestDiv(guestName) {
-        let div = createElement('div', document.getElementById('people-chips'), guestName, 'chipGuest');
-      }
-
       socket.on('broadcast-retro-submission', function(submissionData) {
         appendSubmissionDiv(submissionData);
       });
@@ -170,6 +169,11 @@
         reactionSpan.innerHTML = "+" + (parseInt(reactionSpan.innerHTML.substring(1)) + 1);
       });
 
+      function getStatementType() {
+        if($('#appreciation').is(':checked')) return 'appreciation';
+        if($('#amazing-at').is(':checked')) return 'amazing-at';
+        if($('#other').is(':checked')) return 'other';
+      }
       setupNotie(notie, socket);
     </script>
   </body>
