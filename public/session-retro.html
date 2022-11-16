@@ -55,7 +55,7 @@
     <div>Random</div>
     <div>You'd be amazing at</div>
     <br><br>
-    <input type="text" id="subgroup-text" value="placeholder" size="100">
+    <input type="text" id="submission-statement" value="placeholder" size="100">
     <br><br>
     <input id="submit-btn" type="submit" value="submit">
     <br><br>
@@ -104,12 +104,17 @@
       });
 
       $('#submit-btn').click(function() {
+        let statement = $('#submission-statement').val();
+        if (statement.trim().length === 0) {
+          notie.alert({ type: 'error', text: 'No statement entered' })
+          return;
+        }
         let submissionData = {
           'sessionId': sessionId,
           'timestamp': getTimestamp(),
           'selectedPeople': Object.values(people).filter(p => p.selected).map(p => p.id),
           'statementType': '',
-          'statement': 'test123',
+          'statement': statement,
           'reactionCount': 0
         };
         socket.emit('retro-submission', submissionData);
@@ -117,6 +122,7 @@
           p.selected = false;
           p.div.classList.remove('chip_selected');
         });
+        $('#submission-statement').val('');
       });
 
       $('#add-guest-btn').click(function() {
