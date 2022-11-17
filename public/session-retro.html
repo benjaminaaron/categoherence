@@ -87,6 +87,7 @@
             div.classList.add('chip_selected');
           }
           person.selected = !person.selected;
+          updateWholeTeamButtonStyle();
         });
         // div.addEventListener('mouseover', function() {});
       }
@@ -152,8 +153,38 @@
         });
       });
 
+      function wholeTeamIsSelected() {
+        return Object.values(people).filter(p => !p.isGuest).every(p => p.selected) &&
+            Object.values(people).filter(p => p.isGuest).every(p => !p.selected);
+      }
+
+      function updateWholeTeamButtonStyle() {
+        let wholeTeamBtn = document.getElementById('whole-team-btn');
+        if (wholeTeamIsSelected()) {
+          wholeTeamBtn.classList.add('chip_selected');
+        } else {
+          wholeTeamBtn.classList.remove('chip_selected');
+        }
+      }
+
       $('#whole-team-btn').click(function() {
-        // TODO
+        if (wholeTeamIsSelected()) {
+          Object.values(people).forEach(p => {
+            p.selected = false;
+            p.div.classList.remove('chip_selected');
+          });
+        } else {
+          Object.values(people).forEach(p => {
+            if (p.isGuest) {
+              p.selected = false;
+              p.div.classList.remove('chip_selected');
+            } else {
+              p.selected = true;
+              p.div.classList.add('chip_selected');
+            }
+          });
+        }
+        updateWholeTeamButtonStyle();
       });
 
       function appendSubmissionDiv(submissionData) {
