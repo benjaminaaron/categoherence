@@ -104,7 +104,7 @@ io.on('connection', function(socket) {
     socket.on('create-session', function(sessionData) {
         sessionData.id = utils.formatNameAsId(sessionData.name);
         if (activeSessions[sessionData.id])
-            socket.emit('err', 'a session with the id ' + sessionId + ' already exists');    
+            socket.emit('err', 'a session with the id ' + sessionData.id + ' already exists');
         else {
             activeSessions[sessionData.id] = new Session(sessionData);
             sessionsDb.insertOne(sessionData);
