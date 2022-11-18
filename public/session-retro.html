@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="lib/main.css">
     <style>
       html {
-        padding: 40px;
+        padding-left: 40px;
       }
       .chip {
         display: inline-block;
@@ -22,6 +22,9 @@
       }
       .whole-team-chip {
         background-color: #00ff00;
+      }
+      .add-guest-chip {
+        background-color: #0000ff;
       }
       .chip_selected {
         background-color: #ff0000 !important;
@@ -49,20 +52,20 @@
     </style>
   </head>
   <body>
-    <div id="session-info"></div>
-    <br><br>
-    <div id="people-chips"><div id="whole-team-btn" class="chip whole-team-chip">whole team</div></div>
-    <input type="button" value="add guest" id="add-guest-btn">
-    <br><br>
+    <h1 id="session-info"></h1>
+    <h2 style="color: dimgray">People</h2>
+    <div id="people-chips">
+      <div id="whole-team-btn" class="chip whole-team-chip">select team</div>
+      <div id="add-guest-btn" class="chip add-guest-chip">add guest</div>
+    </div>
+    <h2 style="color: dimgray">Statement</h2>
     <input type="radio" id="appreciation" name="statement_types" checked="checked">
     <label for="appreciation">Appreciation</label><br>
     <input type="radio" id="amazing-at" name="statement_types">
     <label for="amazing-at">You'd be amazing at</label><br>
     <input type="radio" id="other" name="statement_types">
     <label for="other">Other</label><br>
-    <br><br>
     <input type="text" id="submission-statement" value="placeholder" size="100">
-    <br><br>
     <input id="submit-btn" type="submit" value="submit">
     <br><br>
     <hr>
@@ -77,8 +80,10 @@
       let reactionSpans = {}; // submissionId to <span>
 
       function buildPerson(person) {
-        let div = createElement('div', document.getElementById('people-chips'),
-            person.name, person.isGuest ? 'chipGuest' : 'chip');
+        let div = document.createElement('div');
+        div.className = person.isGuest ? 'chipGuest' : 'chip';
+        div.textContent = person.name;
+        document.getElementById('people-chips').insertBefore(div, document.getElementById('add-guest-btn'));
         person.div = div;
         div.addEventListener('click', function() {
           if (person.selected) {
@@ -95,7 +100,7 @@
       socket.emit('session-login', sessionId);
 
       socket.on('session-login-response', function(session) {
-        document.getElementById('session-info').innerHTML = '<b>' + session.data.name + '</b><br>';
+        document.getElementById('session-info').innerHTML = session.data.name;
         people = session.data.entities;
         for (let id of Object.keys(people)) {
           buildPerson(people[id])

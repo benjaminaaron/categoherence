@@ -115,7 +115,7 @@ io.on('connection', function(socket) {
    
     socket.on('session-login', function(sessionId) {
         if (activeSessions[sessionId]) {
-            socket.emit('info', 'welcome to session <b>' + sessionId + '</b>, your id is ' + socket.id);
+            socket.emit('info', 'welcome to session <b>' + sessionId + '</b>'); //, your id is ' + socket.id);
             socket.emit('session-login-response', {
                 data: activeSessions[sessionId].data,
                 submissions: activeSessions[sessionId].retroSubmissions,
