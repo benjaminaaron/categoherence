@@ -67,7 +67,7 @@
     <h1 id="session-info"></h1>
     <h2 style="color: dimgray">People</h2>
     <div id="people-chips">
-      <div id="whole-team-btn" class="chip whole-team-chip">select team</div>
+      <!--<div id="whole-team-btn" class="chip whole-team-chip">select team</div>-->
       <div id="add-guest-btn" class="chip add-guest-chip">add guest</div>
     </div>
     <h2 style="color: dimgray">Statement</h2>
@@ -102,7 +102,7 @@
             div.classList.add('chip_selected');
           }
           person.selected = !person.selected;
-          updateWholeTeamButtonStyle();
+          // updateWholeTeamButtonStyle();
         });
         // div.addEventListener('mouseover', function() {});
       }
@@ -201,7 +201,7 @@
             }
           });
         }
-        updateWholeTeamButtonStyle();
+        // updateWholeTeamButtonStyle();
       });
 
       function appendSubmissionDiv(submissionData) {
