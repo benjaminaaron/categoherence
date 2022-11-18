@@ -11,6 +11,18 @@
       html {
         padding-left: 40px;
       }
+      .statement-type-chip {
+        display: inline-block;
+        padding: 0 15px;
+        height: 30px;
+        font-size: 16px;
+        line-height: 30px;
+        border-radius: 15px;
+        background-color: #ddd;
+      }
+      .statement-type-chip-selected {
+        background-color: #ff0000 !important;
+      }
       .chip {
         display: inline-block;
         padding: 0 25px;
@@ -59,14 +71,11 @@
       <div id="add-guest-btn" class="chip add-guest-chip">add guest</div>
     </div>
     <h2 style="color: dimgray">Statement</h2>
-    <input type="radio" id="appreciation" name="statement_types" checked="checked">
-    <label for="appreciation">Appreciation</label><br>
-    <input type="radio" id="amazing-at" name="statement_types">
-    <label for="amazing-at">You'd be amazing at</label><br>
-    <input type="radio" id="other" name="statement_types">
-    <label for="other">Other</label><br>
-    <input type="text" id="submission-statement" value="placeholder" size="100">
-    <input id="submit-btn" type="submit" value="submit">
+    <div id="appreciation" class="statement-type-chip statement-type-chip-selected" onclick="statementTypeChipClick(event)">Appreciation</div>
+    <div id="amazing-at" class="statement-type-chip" onclick="statementTypeChipClick(event)">You'd be amazing at</div>
+    <div id="other" class="statement-type-chip" onclick="statementTypeChipClick(event)">Other</div>
+    <input style="height:30px" type="text" id="submission-statement" value="placeholder" size="100">
+    <input style="height:30px" id="submit-btn" type="submit" value="Submit">
     <br><br>
     <hr>
     <br><br>
@@ -78,6 +87,7 @@
       let sessionId = getSessionIdFromURL();
       let people;
       let reactionSpans = {}; // submissionId to <span>
+      let selectedStatementType = 'appreciation';
 
       function buildPerson(person) {
         let div = document.createElement('div');
@@ -130,16 +140,18 @@
           'sessionId': sessionId,
           'timestamp': getTimestamp(),
           'selectedPeople': selectedPeople,
-          'statementType': getStatementType(),
+          'statementType': selectedStatementType,
           'statement': statement,
           'reactionCount': 0
         };
         socket.emit('retro-submission', submissionData);
+        console.log("submitted", submissionData);
         Object.values(people).forEach(p => {
           p.selected = false;
           p.div.classList.remove('chip_selected');
         });
-        $('#submission-statement').val('');
+        $('#submission-statement').val("");
+        selectStatementType("appreciation");
       });
 
       $('#add-guest-btn').click(function() {
@@ -224,10 +236,16 @@
         reactionSpan.innerHTML = "+" + (parseInt(reactionSpan.innerHTML.substring(1)) + 1);
       });
 
-      function getStatementType() {
-        if($('#appreciation').is(':checked')) return 'appreciation';
-        if($('#amazing-at').is(':checked')) return 'amazing-at';
-        if($('#other').is(':checked')) return 'other';
+      function statementTypeChipClick(event) {
+        selectStatementType(event.target.id);
+      }
+
+      function selectStatementType(statementType) {
+        selectedStatementType = statementType;
+        $('#appreciation').removeClass('statement-type-chip-selected');
+        $('#amazing-at').removeClass('statement-type-chip-selected');
+        $('#other').removeClass('statement-type-chip-selected');
+        $('#' + selectedStatementType).addClass('statement-type-chip-selected');
       }
       setupNotie(notie, socket);
     </script>
