@@ -65,6 +65,7 @@
   </head>
   <body>
     <h1 id="session-info"></h1>
+    <small><a href="#" id="results-link">Go to results</a></small>
     <h2 style="color: dimgray">People</h2>
     <div id="people-chips">
       <!--<div id="whole-team-btn" class="chip whole-team-chip">select team</div>-->
@@ -85,6 +86,7 @@
       let socket = io();
 
       let sessionId = getSessionIdFromURL();
+      document.getElementById("results-link").href = sessionId + "/results-retro";
       let people;
       let reactionSpans = {}; // submissionId to <span>
       let selectedStatementType = 'appreciation';

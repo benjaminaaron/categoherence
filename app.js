@@ -68,9 +68,6 @@ app.get('/:var', function(req, res) {
         case 'dashboard':
             res.sendFile(__dirname + '/public/dashboard.html');
             break;
-        case 'favicon.ico':
-            //TODO
-            break;
         case 'dev':
             res.sendFile(__dirname + '/public/dev.html');
             break;
@@ -80,6 +77,13 @@ app.get('/:var', function(req, res) {
             else
                 res.sendFile(__dirname + '/public/no-session.html');
     }
+});
+
+app.get('/:var/results-retro', function(req, res) {
+    if (activeSessions[utils.formatNameAsId(req.params.var)])
+        res.sendFile(__dirname + '/public/results-retro.html');
+    else
+        res.sendFile(__dirname + '/public/no-session.html');
 });
 
 app.get('/:var/results', function(req, res) {
@@ -164,6 +168,15 @@ io.on('connection', function(socket) {
         else
             socket.emit('err', 'no session exists with the id <b>' + sessionId + '</b>');
     });
+
+    socket.on('login-retro-results', function(sessionId) {
+        let session = activeSessions[utils.formatNameAsId(sessionId)]
+        if (session) {
+            // TODO
+        }
+        else
+            console.log("no session exists with the id " + sessionId);
+    })
     
     socket.on('get-dashboard', function() {
         let keys = Object.keys(activeSessions);
