@@ -14,7 +14,39 @@
     <script>
       let socket = io();
 
+      let subgroups = {};
+
       socket.emit('login-retro-results', getSessionIdFromURL());
+
+      socket.on('session-results-login-retro-response', function(session) {
+        for (let submission of Object.values(session.submissions)) {
+          let indices = submission.selectedPeople;
+          if (!subgroups[indices]) {
+            subgroups[indices] = {
+              indices: indices,
+              factor: 0,
+              submissions: []
+            };
+          }
+          subgroups[indices].factor += submission.reactionCount;
+          subgroups[indices].submissions.push(submission);
+        }
+
+        for (let subgroup of Object.values(subgroups)) {
+          let avgReactionCount = subgroup.factor / subgroup.submissions.length;
+          subgroup.factor = avgReactionCount* subgroup.indices.length * subgroup.submissions.length;
+        }
+
+        let subgroupsSorted = Object.values(subgroups).sort((a, b) => b.factor - a.factor);
+
+        // TODO
+
+        let teamMembers = Object.values(session.data.entities).filter(e => !e.isGuest).length;
+        let totalSubgroups = 2 ** teamMembers;
+        let percentageSubgroupsUsed = (subgroupsSorted.length / totalSubgroups) * 100;
+
+        console.log("stats", subgroupsSorted.length, totalSubgroups, percentageSubgroupsUsed);
+      });
 
       setupNotie(notie, socket);
     </script>

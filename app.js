@@ -118,12 +118,13 @@ io.on('connection', function(socket) {
     });
    
     socket.on('session-login', function(sessionId) {
-        if (activeSessions[sessionId]) {
+        let session = activeSessions[sessionId];
+        if (session) {
             socket.emit('info', 'welcome to session <b>' + sessionId + '</b>'); //, your id is ' + socket.id);
             socket.emit('session-login-response', {
-                data: activeSessions[sessionId].data,
-                submissions: activeSessions[sessionId].retroSubmissions,
-                guests: activeSessions[sessionId].guests
+                data: session.data,
+                submissions: session.retroSubmissions,
+                guests: session.guests
             });
         }
         else
@@ -170,9 +171,14 @@ io.on('connection', function(socket) {
     });
 
     socket.on('login-retro-results', function(sessionId) {
-        let session = activeSessions[utils.formatNameAsId(sessionId)]
+        let session = activeSessions[sessionId];
         if (session) {
-            // TODO
+            socket.emit('info', 'session results for <b>' + sessionId + '</b>'); //, your id is ' + socket.id);
+            socket.emit('session-results-login-retro-response', {
+                data: session.data,
+                submissions: session.retroSubmissions,
+                guests: session.guests
+            });
         }
         else
             console.log("no session exists with the id " + sessionId);

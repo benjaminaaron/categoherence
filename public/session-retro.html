@@ -86,7 +86,7 @@
       let socket = io();
 
       let sessionId = getSessionIdFromURL();
-      document.getElementById("results-link").href = sessionId + "/results-retro";
+      document.getElementById("results-link").href = "/" + sessionId + "/results-retro";
       let people;
       let reactionSpans = {}; // submissionId to <span>
       let selectedStatementType = 'appreciation';
