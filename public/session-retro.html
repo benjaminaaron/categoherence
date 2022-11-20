@@ -10,33 +10,7 @@
     <style>
       html {
         padding-left: 40px;
-      }
-      .chip {
-        display: inline-block;
-        padding: 0 25px;
-        height: 50px;
-        font-size: 16px;
-        line-height: 50px;
-        border-radius: 25px;
-        background-color: #f1f1f1;
-      }
-      .whole-team-chip {
-        background-color: #00ff00;
-      }
-      .add-guest-chip {
-        background-color: #0000ff;
-      }
-      .chip_selected {
-        background-color: #ff0000 !important;
-      }
-      .chipGuest {
-        display: inline-block;
-        padding: 0 25px;
-        height: 50px;
-        font-size: 16px;
-        line-height: 50px;
-        border-radius: 25px;
-        background-color: #ffff00;
+        text-align: center;
       }
       .submission {
         padding: 0 25px;
@@ -81,15 +55,15 @@
 
       function buildPerson(person) {
         let div = document.createElement('div');
-        div.className = person.isGuest ? 'chipGuest' : 'chip';
+        div.className = person.isGuest ? 'chip chip-guest' : 'chip';
         div.textContent = person.name;
         document.getElementById('people-chips').insertBefore(div, document.getElementById('add-guest-btn'));
         person.div = div;
         div.addEventListener('click', function() {
           if (person.selected) {
-            div.classList.remove('chip_selected');
+            div.classList.remove('chip-selected');
           } else {
-            div.classList.add('chip_selected');
+            div.classList.add('chip-selected');
           }
           person.selected = !person.selected;
           // updateWholeTeamButtonStyle();
@@ -138,7 +112,7 @@
         console.log("submitted", submissionData);
         Object.values(people).forEach(p => {
           p.selected = false;
-          p.div.classList.remove('chip_selected');
+          p.div.classList.remove('chip-selected');
         });
         $('#submission-statement').val("");
         // selectStatementType("appreciation");
@@ -168,9 +142,9 @@
       function updateWholeTeamButtonStyle() {
         let wholeTeamBtn = document.getElementById('whole-team-btn');
         if (wholeTeamIsSelected()) {
-          wholeTeamBtn.classList.add('chip_selected');
+          wholeTeamBtn.classList.add('chip-selected');
         } else {
-          wholeTeamBtn.classList.remove('chip_selected');
+          wholeTeamBtn.classList.remove('chip-selected');
         }
       }
 
@@ -178,16 +152,16 @@
         if (wholeTeamIsSelected()) {
           Object.values(people).forEach(p => {
             p.selected = false;
-            p.div.classList.remove('chip_selected');
+            p.div.classList.remove('chip-selected');
           });
         } else {
           Object.values(people).forEach(p => {
             if (p.isGuest) {
               p.selected = false;
-              p.div.classList.remove('chip_selected');
+              p.div.classList.remove('chip-selected');
             } else {
               p.selected = true;
-              p.div.classList.add('chip_selected');
+              p.div.classList.add('chip-selected');
             }
           });
         }
