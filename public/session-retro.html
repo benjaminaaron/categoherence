@@ -31,7 +31,7 @@
     <h2 style="color: dimgray">People</h2>
     <div id="people-chips">
       <!--<div id="whole-team-btn" class="chip whole-team-chip">select team</div>-->
-      <div id="add-guest-btn" class="chip add-guest-chip">add guest</div>
+      <div id="add-guest-btn" class="chip add-guest-chip">add person</div>
     </div>
     <h2 style="color: dimgray">Statement</h2>
     <!--<div id="appreciation" class="chip chip-selected" onclick="statementTypeChipClick(event)">Appreciation</div>
@@ -103,7 +103,7 @@
         let submissionData = {
           'sessionId': sessionId,
           'timestamp': getTimestamp(),
-          'selectedPeople': selectedPeople,
+          'selectedPeople': selectedPeople, // this is always sorted ascending
           'statementType': null,
           'statement': statement,
           'reactionCount': 0

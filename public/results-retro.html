@@ -25,6 +25,9 @@
       socket.on('session-results-login-retro-response', function(session) {
         for (let submission of Object.values(session.submissions)) {
           let indices = submission.selectedPeople;
+
+          // TODO filter for selected in result chips
+
           if (!subgroups[indices]) {
             subgroups[indices] = {
               indices: indices,
