@@ -11,18 +11,6 @@
       html {
         padding-left: 40px;
       }
-      .statement-type-chip {
-        display: inline-block;
-        padding: 0 15px;
-        height: 30px;
-        font-size: 16px;
-        line-height: 30px;
-        border-radius: 15px;
-        background-color: #ddd;
-      }
-      .statement-type-chip-selected {
-        background-color: #ff0000 !important;
-      }
       .chip {
         display: inline-block;
         padding: 0 25px;
@@ -72,9 +60,9 @@
       <div id="add-guest-btn" class="chip add-guest-chip">add guest</div>
     </div>
     <h2 style="color: dimgray">Statement</h2>
-    <div id="appreciation" class="statement-type-chip statement-type-chip-selected" onclick="statementTypeChipClick(event)">Appreciation</div>
-    <div id="amazing-at" class="statement-type-chip" onclick="statementTypeChipClick(event)">You'd be amazing at</div>
-    <div id="other" class="statement-type-chip" onclick="statementTypeChipClick(event)">Other</div>
+    <!--<div id="appreciation" class="chip chip-selected" onclick="statementTypeChipClick(event)">Appreciation</div>
+    <div id="amazing-at" class="chip" onclick="statementTypeChipClick(event)">You'd be amazing at</div>
+    <div id="other" class="chip" onclick="statementTypeChipClick(event)">Other</div>-->
     <input style="height:30px" type="text" id="submission-statement" value="placeholder" size="100">
     <input style="height:30px" id="submit-btn" type="submit" value="Submit">
     <br><br>
@@ -142,7 +130,7 @@
           'sessionId': sessionId,
           'timestamp': getTimestamp(),
           'selectedPeople': selectedPeople,
-          'statementType': selectedStatementType,
+          'statementType': null,
           'statement': statement,
           'reactionCount': 0
         };
@@ -153,7 +141,7 @@
           p.div.classList.remove('chip_selected');
         });
         $('#submission-statement').val("");
-        selectStatementType("appreciation");
+        // selectStatementType("appreciation");
       });
 
       $('#add-guest-btn').click(function() {
@@ -211,7 +199,7 @@
         for (id of submissionData.selectedPeople) {
           text += ", " + people[id].name;
         }
-        text = "[" + text.substring(2) + "] " + submissionData.statementType + ": ";
+        text = "[" + text.substring(2) + "] ";
         let submissionDiv = createElement('div', document.getElementById('submissions'),
             text + submissionData.statement, 'submission');
         let reactionSpan = createElement('span', submissionDiv, '+0', 'reaction');
@@ -244,10 +232,10 @@
 
       function selectStatementType(statementType) {
         selectedStatementType = statementType;
-        $('#appreciation').removeClass('statement-type-chip-selected');
-        $('#amazing-at').removeClass('statement-type-chip-selected');
-        $('#other').removeClass('statement-type-chip-selected');
-        $('#' + selectedStatementType).addClass('statement-type-chip-selected');
+        $('#appreciation').removeClass('chip-selected');
+        $('#amazing-at').removeClass('chip-selected');
+        $('#other').removeClass('chip-selected');
+        $('#' + selectedStatementType).addClass('chip-selected');
       }
       setupNotie(notie, socket);
     </script>
