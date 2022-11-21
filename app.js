@@ -157,6 +157,12 @@ io.on('connection', function(socket) {
         reactionsDb.insertOne(reactionData).then(() => console.log('reaction stored in db'));
         io.emit('broadcast-reaction-added', reactionData);
     });
+
+    socket.on('command', function(command) {
+        if (command === 'show-results-link') {
+            io.emit('broadcast-show-results-link');
+        }
+    });
     
     socket.on('login-results', function(sessionId) {
         let session = activeSessions[utils.formatNameAsId(sessionId)]

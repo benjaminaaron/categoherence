@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="lib/main.css">
     <style>
       html {
-        padding-left: 40px;
+        padding-top: 40px;
         text-align: center;
       }
       .submission {
@@ -26,22 +26,21 @@
     </style>
   </head>
   <body>
-    <h1 id="session-info"></h1>
-    <small><a href="#" id="results-link">Go to results</a></small>
-    <h2 style="color: dimgray">People</h2>
+    <!--<h1 id="session-info"></h1>
+    <h2 style="color: dimgray">People</h2>-->
+    <a href="#" id="results-link" style="display: none">Go to results</a>
+    <br><br>
     <div id="people-chips">
       <!--<div id="whole-team-btn" class="chip whole-team-chip">select team</div>-->
       <div id="add-guest-btn" class="chip add-guest-chip">add person</div>
     </div>
-    <h2 style="color: dimgray">Statement</h2>
     <!--<div id="appreciation" class="chip chip-selected" onclick="statementTypeChipClick(event)">Appreciation</div>
     <div id="amazing-at" class="chip" onclick="statementTypeChipClick(event)">You'd be amazing at</div>
     <div id="other" class="chip" onclick="statementTypeChipClick(event)">Other</div>-->
-    <input style="height:30px" type="text" id="submission-statement" value="placeholder" size="100">
-    <input style="height:30px" id="submit-btn" type="submit" value="Submit">
     <br><br>
-    <hr>
-    <br><br>
+    <input style="height:30px" type="text" id="submission-statement-input" value="placeholder" size="100">
+    <input style="height:30px; margin-left:5px" id="submit-btn" type="submit" value="Submit">
+    <br><br><br>
     <div id="submissions"></div>
     <script src="lib/notie.js"></script>
     <script>
@@ -74,7 +73,7 @@
       socket.emit('session-login', sessionId);
 
       socket.on('session-login-response', function(session) {
-        document.getElementById('session-info').innerHTML = session.data.name;
+        // document.getElementById('session-info').innerHTML = session.data.name;
         people = session.data.entities;
         for (let id of Object.keys(people)) {
           buildPerson(people[id])
@@ -90,7 +89,19 @@
       });
 
       $('#submit-btn').click(function() {
-        let statement = $('#submission-statement').val();
+        submitStatement();
+      });
+
+      $('#submission-statement-input').keypress(function (e) {
+        if (e.which === 13) submitStatement();
+      });
+
+      function submitStatement() {
+        let statement = $('#submission-statement-input').val();
+        if (statement === 'show results link') {
+          socket.emit("command", "show-results-link");
+          return;
+        }
         if (statement.trim().length === 0) {
           notie.alert({ type: 'error', text: 'No statement entered' })
           return;
@@ -114,9 +125,9 @@
           p.selected = false;
           p.div.classList.remove('chip-selected');
         });
-        $('#submission-statement').val("");
+        $('#submission-statement-input').val("");
         // selectStatementType("appreciation");
-      });
+      }
 
       $('#add-guest-btn').click(function() {
         let guestName = prompt("What's their name?", "");
@@ -198,6 +209,11 @@
       socket.on('broadcast-reaction-added', function(reactionData) {
         let reactionSpan = reactionSpans[reactionData.submissionId];
         reactionSpan.innerHTML = "+" + (parseInt(reactionSpan.innerHTML.substring(1)) + 1);
+      });
+
+      socket.on('broadcast-show-results-link', function() {
+        console.log("showing results link");
+        document.getElementById("results-link").style.display = "block";
       });
 
       function statementTypeChipClick(event) {
