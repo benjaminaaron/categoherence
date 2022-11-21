@@ -96,10 +96,15 @@
         if (e.which === 13) submitStatement();
       });
 
+      function sendCommand(command) {
+        socket.emit("command", command);
+      }
+
       function submitStatement() {
         let statement = $('#submission-statement-input').val();
-        if (statement === 'show results link') {
-          socket.emit("command", "show-results-link");
+        if (statement.startsWith("$")) {
+          sendCommand(statement.substring(1).trim());
+          $('#submission-statement-input').val("");
           return;
         }
         if (statement.trim().length === 0) {
@@ -211,9 +216,16 @@
         reactionSpan.innerHTML = "+" + (parseInt(reactionSpan.innerHTML.substring(1)) + 1);
       });
 
-      socket.on('broadcast-show-results-link', function() {
-        console.log("showing results link");
+      socket.on('disable-session', function() {
         document.getElementById("results-link").style.display = "block";
+        $('#submit-btn').prop("disabled", true);
+        $('#submission-statement-input').prop("disabled", true);
+      });
+
+      socket.on('enable-session', function() {
+        document.getElementById("results-link").style.display = "none";
+        $('#submit-btn').prop("disabled", false);
+        $('#submission-statement-input').prop("disabled", false);
       });
 
       function statementTypeChipClick(event) {

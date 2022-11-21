@@ -159,8 +159,13 @@ io.on('connection', function(socket) {
     });
 
     socket.on('command', function(command) {
-        if (command === 'show-results-link') {
-            io.emit('broadcast-show-results-link');
+        switch (command) {
+            case 'disable':
+                io.emit('disable-session');
+                break;
+            case 'enable':
+                io.emit('enable-session');
+                break;
         }
     });
     
