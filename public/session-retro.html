@@ -216,7 +216,9 @@
         let names = "";
         for (id of submissionData.selectedPeople)
           names += ", " + people[id].name;
-        let submissionDiv = createElement('div', document.getElementById('submissions'), '', 'submission');
+        let submissionDiv = document.createElement("div");
+        submissionDiv.className = "submission";
+        document.getElementById('submissions').prepend(submissionDiv);
         createElement('span', submissionDiv, names.substring(2), 'submission_names');
         createElement('span', submissionDiv, submissionData.statement, 'submission_statement');
         let reactionSpan = createElement('span', submissionDiv, '+0', 'submission_reaction');
