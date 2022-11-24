@@ -2,7 +2,7 @@
 @import url("lib/notie.css");
 
 html * {
-    font-family: Georgia, serif
+    font-family: Arial, serif;
 }
 
 #notie-alert-text a {

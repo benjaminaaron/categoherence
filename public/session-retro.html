@@ -13,15 +13,41 @@
         text-align: center;
       }
       .submission {
-        padding: 0 25px;
-        height: 50px;
-        font-size: 16px;
-        line-height: 50px;
-        border-radius: 25px;
+        margin: 0 20px 10px 20px;
+        height: 75px;
+        border-radius: 15px;
         background-color: #f1f1f1;
       }
-      .reaction {
-        padding-left: 50px;
+      .submission_statement {
+        all: initial;
+        font-family: Arial, serif;
+        padding-left: 20px;
+        padding-top: 10px;
+        clear: both;
+        float: left;
+      }
+      .submission_names {
+        all: initial;
+        font-family: Arial, serif;
+        color: gray;
+        font-size: 12px;
+        text-transform: uppercase;
+        float: left;
+        padding-left: 20px;
+        padding-top: 10px;
+      }
+      .submission_reaction {
+        all: initial;
+        font-family: Arial, serif;
+        color: gray;
+        float: right;
+        margin-right: 20px;
+        background-color: lightcyan;
+        padding: 5px;
+        border-radius: 10px;
+      }
+      .submission_reaction_nonzero {
+        color: blue;
       }
     </style>
   </head>
@@ -85,6 +111,8 @@
         for (let submission of session.submissions) {
           appendSubmissionDiv(submission);
           reactionSpans[submission.id].innerHTML = "+" + submission.reactionCount;
+          if (submission.reactionCount > 0)
+            reactionSpans[submission.id].classList.add('submission_reaction_nonzero');
         }
       });
 
@@ -185,14 +213,13 @@
       });
 
       function appendSubmissionDiv(submissionData) {
-        let text = "";
-        for (id of submissionData.selectedPeople) {
-          text += ", " + people[id].name;
-        }
-        text = "[" + text.substring(2) + "] ";
-        let submissionDiv = createElement('div', document.getElementById('submissions'),
-            text + submissionData.statement, 'submission');
-        let reactionSpan = createElement('span', submissionDiv, '+0', 'reaction');
+        let names = "";
+        for (id of submissionData.selectedPeople)
+          names += ", " + people[id].name;
+        let submissionDiv = createElement('div', document.getElementById('submissions'), '', 'submission');
+        createElement('span', submissionDiv, names.substring(2), 'submission_names');
+        createElement('span', submissionDiv, submissionData.statement, 'submission_statement');
+        let reactionSpan = createElement('span', submissionDiv, '+0', 'submission_reaction');
         reactionSpans[submissionData.id] = reactionSpan;
         reactionSpan.addEventListener('click', function() {
           socket.emit('reaction-added', {
@@ -213,7 +240,10 @@
 
       socket.on('broadcast-reaction-added', function(reactionData) {
         let reactionSpan = reactionSpans[reactionData.submissionId];
-        reactionSpan.innerHTML = "+" + (parseInt(reactionSpan.innerHTML.substring(1)) + 1);
+        let count = parseInt(reactionSpan.innerHTML.substring(1)) + 1;
+        reactionSpan.innerHTML = "+" + count;
+        if (count === 1)
+          reactionSpan.classList.add('submission_reaction_nonzero');
       });
 
       socket.on('disable-session', function() {
