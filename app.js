@@ -79,16 +79,16 @@ app.get('/:var', function(req, res) {
     }
 });
 
-app.get('/:var/results-retro', function(req, res) {
+app.get('/:var/results', function(req, res) {
     if (activeSessions[utils.formatNameAsId(req.params.var)])
-        res.sendFile(__dirname + '/public/results-retro.html');
+        res.sendFile(__dirname + '/public/results.html');
     else
         res.sendFile(__dirname + '/public/no-session.html');
 });
 
-app.get('/:var/results', function(req, res) {
+app.get('/:var/results-old', function(req, res) {
     if (activeSessions[utils.formatNameAsId(req.params.var)])
-        res.sendFile(__dirname + '/public/results.html');
+        res.sendFile(__dirname + '/public/results-old.html');
     else
         res.sendFile(__dirname + '/public/no-session.html');
 });

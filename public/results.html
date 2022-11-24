@@ -1,84 +1,62 @@
 <!doctype html>
 <html>
-    <head>
-        <title>categoherence - results</title>
-        <script src='/socket.io/socket.io.js'></script>
-        <script src="lib/main.js"></script>
-        <link rel="shortcut icon" href="#">
-        <link rel="stylesheet" type="text/css" href="lib/main.css">
-        <style>
-            .main-column { 
-                border-left:2px solid silver; 
-                padding: 0 10px 0 10px;
-            }
-            tr:nth-child(even) {
-                background-color: #f4f4f4;
-            }
-            th {
-                background-color: navy;
-                color: white;
-            }
-            .column-title {
-                text-align: center;
-                color: red;
-            }
-        </style>
-    </head>
-    <body>
-        <div id="session-info"></div>
-        <br>
-        <table id="main-table" border="0">
-            <tr>
-                <td class="main-column">
-                    <div class="column-title"><i>leaderboard</i></div>
-                    <table id="leaderboard-table">
-                        <tr>
-                            <th>score</th>
-                            <th>group</th>
-                            <th>size</th>
-                            <th>counts</th>
-                        </tr>
-                    </table>
-                </td>
-                <td class="main-column">
-                    <div class="column-title"><i>grouping suggestions</i></div>
-                    <!-- TODO -->
-                </td>
-            </tr>
-        </table>
-        
-        <script src="lib/notie.js"></script>
-        <script>
-            let socket = io();
-            
-            socket.emit('login-results', getSessionIdFromURL());
-            
-            socket.on('session-info', function(data) {
-                let infoHTML = 'results for session <b>' + data.info.name + '</b> <small>(' + getFormattedTimestamp(data.info.timestamp) + ')</small><br>';
-                if (data.info.options.description.length > 0)
-                    infoHTML += '<i>' + data.info.options.description + '</i><br>';
-                document.getElementById('session-info').innerHTML = infoHTML;
-            });
-            
-            socket.on('session-leaderboard', function(data) {
-                let table = document.getElementById('leaderboard-table');
-                for (let i = 0; i < data.entries.length; i ++) {
-                    let entry = data.entries[i];
-                    let row = table.insertRow(table.rows.length);
-                    row.insertCell(0).innerHTML = entry.score;
-                    row.insertCell(1).innerHTML = entry.names;
-                    row.insertCell(2).innerHTML = entry.size;
-                    row.insertCell(3).innerHTML = entry.wholeCount + '|' + entry.partCount;
-                }
-                if (!data.isAll)
-                    table.insertRow(table.rows.length).insertCell(0).innerHTML = '...';
-            });
-            
-            socket.on('session-grouping-suggestions', function(data) { 
-            
-            });
-            
-            setupNotie(notie, socket);
-        </script>
-    </body>
+<head>
+  <title>Retro - Results</title>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="lib/main.js"></script>
+  <link rel="shortcut icon" href="#">
+  <link rel="stylesheet" type="text/css" href="lib/main.css">
+  <style>
+    html {
+      padding-left: 40px;
+      text-align: center;
+    }
+  </style>
+</head>
+  <body>
+    <script src="lib/notie.js"></script>
+    <script>
+      let socket = io();
+
+      let subgroups = {};
+
+      socket.emit('login-retro-results', getSessionIdFromURL());
+
+      socket.on('session-results-login-retro-response', function(session) {
+        for (let submission of Object.values(session.submissions)) {
+          let indices = submission.selectedPeople;
+
+          // TODO filter for selected in result chips
+
+          if (!subgroups[indices]) {
+            subgroups[indices] = {
+              indices: indices,
+              factor: 0,
+              submissions: []
+            };
+          }
+          subgroups[indices].factor += submission.reactionCount;
+          subgroups[indices].submissions.push(submission);
+        }
+
+        for (let subgroup of Object.values(subgroups)) {
+          let avgReactionCount = subgroup.factor / subgroup.submissions.length;
+          subgroup.factor = avgReactionCount* subgroup.indices.length * subgroup.submissions.length;
+        }
+
+        let subgroupsSorted = Object.values(subgroups).sort((a, b) => b.factor - a.factor);
+        console.log(subgroupsSorted);
+
+        // TODO
+
+        let teamMembers = Object.values(session.data.entities).filter(e => !e.isGuest).length;
+        let totalSubgroups = 2 ** teamMembers;
+        let percentageSubgroupsUsed = (subgroupsSorted.length / totalSubgroups) * 100;
+
+        console.log("stats", subgroupsSorted.length, totalSubgroups, percentageSubgroupsUsed);
+      });
+
+      setupNotie(notie, socket);
+    </script>
+  </body>
 </html>
