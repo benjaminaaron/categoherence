@@ -1,28 +1,35 @@
 <!doctype html>
 <html>
-<head>
-  <title>Retro - Results</title>
-  <script src='/socket.io/socket.io.js'></script>
-  <script src="lib/main.js"></script>
-  <link rel="shortcut icon" href="#">
-  <link rel="stylesheet" type="text/css" href="lib/main.css">
-  <style>
-    html {
-      padding-left: 40px;
-      text-align: center;
-    }
-  </style>
-</head>
+  <head>
+    <title>Retro - Results</title>
+    <script src='/socket.io/socket.io.js'></script>
+    <script src="lib/main.js"></script>
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" type="text/css" href="lib/main.css">
+    <style>
+      html {
+        padding-left: 40px;
+        text-align: center;
+      }
+    </style>
+  </head>
   <body>
+    <br><br>
+    <div id="subgroups"></div>
     <script src="lib/notie.js"></script>
     <script>
       let socket = io();
 
+      let people;
       let subgroups = {};
 
       socket.emit('login-retro-results', getSessionIdFromURL());
 
       socket.on('session-results-login-retro-response', function(session) {
+        people = session.data.entities;
+        for (let guest of session.guests)
+          people[guest.id] = guest;
+
         for (let submission of Object.values(session.submissions)) {
           let indices = submission.selectedPeople;
 
@@ -45,15 +52,36 @@
         }
 
         let subgroupsSorted = Object.values(subgroups).sort((a, b) => b.factor - a.factor);
-        console.log(subgroupsSorted);
 
-        // TODO
+        for (let subgroup of subgroupsSorted) {
+          let names = "";
+          for (let id of subgroup.indices)
+            names += ", " + session.data.entities[id].name;
+          let reactionCount = 0;
+          for (let submission of subgroup.submissions)
+            reactionCount += submission.reactionCount;
+          let subgroupDiv = document.createElement("div");
+          subgroupDiv.className = "submission";
+          document.getElementById('subgroups').prepend(subgroupDiv);
+          let submissionHeadlineSpan = createElement('span', subgroupDiv, '', '');
+          createElement('span', submissionHeadlineSpan, names.substring(2), 'submission_names');
+          createElement('span', submissionHeadlineSpan, reactionCount, 'submission_reaction');
+
+          for (let submission of subgroup.submissions) {
+            let statementDiv = document.createElement('div');
+            statementDiv.className = 'submission_statement';
+            statementDiv.innerHTML = '<span style="color:silver;">&#9679;</span> ' + submission.statement
+            subgroupDiv.appendChild(statementDiv);
+          }
+        }
 
         let teamMembers = Object.values(session.data.entities).filter(e => !e.isGuest).length;
         let totalSubgroups = 2 ** teamMembers;
         let percentageSubgroupsUsed = (subgroupsSorted.length / totalSubgroups) * 100;
 
-        console.log("stats", subgroupsSorted.length, totalSubgroups, percentageSubgroupsUsed);
+        console.log("stats", subgroupsSorted.length, totalSubgroups, percentageSubgroupsUsed + "%");
+        console.log("session", session);
+        console.log("subgroupsSorted", subgroupsSorted);
       });
 
       setupNotie(notie, socket);
