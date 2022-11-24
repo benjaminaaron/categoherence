@@ -14,7 +14,9 @@
       }
       .submission {
         margin: 0 20px 10px 20px;
-        height: 75px;
+        display: flex;
+        flex-direction: column;
+        min-height: 75px;
         border-radius: 15px;
         background-color: #f1f1f1;
       }
@@ -22,9 +24,9 @@
         all: initial;
         font-family: Arial, serif;
         padding-left: 20px;
-        padding-top: 10px;
         clear: both;
         float: left;
+        margin-bottom: 10px;
       }
       .submission_names {
         all: initial;
@@ -41,10 +43,11 @@
         font-family: Arial, serif;
         color: gray;
         float: right;
-        margin-right: 20px;
+        margin-top: 8px;
+        margin-right: 16px;
         background-color: lightcyan;
-        padding: 5px;
-        border-radius: 10px;
+        padding: 3px;
+        border-radius: 8px;
       }
       .submission_reaction_nonzero {
         color: blue;
@@ -219,9 +222,10 @@
         let submissionDiv = document.createElement("div");
         submissionDiv.className = "submission";
         document.getElementById('submissions').prepend(submissionDiv);
-        createElement('span', submissionDiv, names.substring(2), 'submission_names');
+        let submissionHeadlineSpan = createElement('span', submissionDiv, '', '');
+        createElement('span', submissionHeadlineSpan, names.substring(2), 'submission_names');
+        let reactionSpan = createElement('span', submissionHeadlineSpan, '+0', 'submission_reaction');
         createElement('span', submissionDiv, submissionData.statement, 'submission_statement');
-        let reactionSpan = createElement('span', submissionDiv, '+0', 'submission_reaction');
         reactionSpans[submissionData.id] = reactionSpan;
         reactionSpan.addEventListener('click', function() {
           socket.emit('reaction-added', {
