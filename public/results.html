@@ -8,12 +8,13 @@
     <link rel="stylesheet" type="text/css" href="lib/main.css">
     <style>
       html {
-        padding-left: 40px;
+        padding-top: 40px;
         text-align: center;
       }
     </style>
   </head>
   <body>
+    <small><a href="#" id="session-link" style="color: silver">back to session</a></small>
     <br><br>
     <div id="people-chips"></div>
     <br><br>
@@ -26,7 +27,9 @@
       let subgroups = {};
       let sessionData = [];
 
-      socket.emit('login-retro-results', getSessionIdFromURL());
+      let sessionId = getSessionIdFromURL();
+      socket.emit('login-retro-results', sessionId);
+      document.getElementById("session-link").href = "/" + sessionId
 
       function buildPerson(person) {
         let div = document.createElement('div');
