@@ -15,6 +15,8 @@
   </head>
   <body>
     <br><br>
+    <div id="people-chips"></div>
+    <br><br>
     <div id="subgroups"></div>
     <script src="lib/notie.js"></script>
     <script>
@@ -22,18 +24,48 @@
 
       let people;
       let subgroups = {};
+      let sessionData = [];
 
       socket.emit('login-retro-results', getSessionIdFromURL());
 
+      function buildPerson(person) {
+        let div = document.createElement('div');
+        div.className = person.isGuest ? 'chip chip-guest' : 'chip';
+        div.textContent = person.name;
+        document.getElementById('people-chips').append(div);
+        person.div = div;
+        person.selected = true;
+        div.classList.add('chip-selected');
+        div.addEventListener('click', function() {
+          if (person.selected) {
+            div.classList.remove('chip-selected');
+          } else {
+            div.classList.add('chip-selected');
+          }
+          person.selected = !person.selected;
+          updateSubgroups();
+        });
+      }
+
+      function updateSubgroups() {
+        let selectedPeopleIndices = Object.values(people).filter(p => p.selected).map(p => p.id);
+        console.log("selectedPeopleIndices", selectedPeopleIndices);
+        // TODO
+      }
+
       socket.on('session-results-login-retro-response', function(session) {
+        sessionData = session;
         people = session.data.entities;
         for (let guest of session.guests)
           people[guest.id] = guest;
+        for (let id of Object.keys(people))
+          buildPerson(people[id])
+        console.log("people", people);
+
+        updateSubgroups();
 
         for (let submission of Object.values(session.submissions)) {
           let indices = submission.selectedPeople;
-
-          // TODO filter for selected in result chips
 
           if (!subgroups[indices]) {
             subgroups[indices] = {

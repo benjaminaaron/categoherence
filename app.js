@@ -184,7 +184,7 @@ io.on('connection', function(socket) {
     socket.on('login-retro-results', function(sessionId) {
         let session = activeSessions[sessionId];
         if (session) {
-            socket.emit('info', 'session results for <b>' + sessionId + '</b>'); //, your id is ' + socket.id);
+            socket.emit('info', 'results for session <b>' + sessionId + '</b>'); //, your id is ' + socket.id);
             socket.emit('session-results-login-retro-response', {
                 data: session.data,
                 submissions: session.retroSubmissions,
