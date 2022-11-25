@@ -34,8 +34,6 @@
         div.textContent = person.name;
         document.getElementById('people-chips').append(div);
         person.div = div;
-        person.selected = true;
-        div.classList.add('chip-selected');
         div.addEventListener('click', function() {
           if (person.selected) {
             div.classList.remove('chip-selected');
@@ -47,35 +45,40 @@
         });
       }
 
-      function updateSubgroups() {
-        let selectedPeopleIndices = Object.values(people).filter(p => p.selected).map(p => p.id);
-        console.log("selectedPeopleIndices", selectedPeopleIndices);
-        // TODO
+      function allSelectedByChipsAreOnSubmission(peopleOnSubmission, peopleSelectedByChips) {
+        for (let i = 0; i < peopleSelectedByChips.length; i++) {
+          if (!peopleOnSubmission.includes(peopleSelectedByChips[i])) {
+            return false;
+          }
+        }
+        return true;
       }
 
-      socket.on('session-results-login-retro-response', function(session) {
-        sessionData = session;
-        people = session.data.entities;
-        for (let guest of session.guests)
-          people[guest.id] = guest;
-        for (let id of Object.keys(people))
-          buildPerson(people[id])
-        console.log("people", people);
+      function updateSubgroups() {
+        let subgroupsDiv = document.getElementById("subgroups");
+        // reset
+        while (subgroupsDiv.firstChild)
+          subgroupsDiv.removeChild(subgroupsDiv.firstChild);
+        subgroups = {};
+        // (re)build
+        let peopleSelectedByChips = Object.values(people).filter(p => p.selected).map(p => p.id);
+        console.log("peopleSelectedByChips", peopleSelectedByChips);
 
-        updateSubgroups();
+        for (let submission of Object.values(sessionData.submissions)) {
+          let peopleOnSubmission = submission.selectedPeople;
 
-        for (let submission of Object.values(session.submissions)) {
-          let indices = submission.selectedPeople;
+          if (!allSelectedByChipsAreOnSubmission(peopleOnSubmission, peopleSelectedByChips))
+            continue;
 
-          if (!subgroups[indices]) {
-            subgroups[indices] = {
-              indices: indices,
+          if (!subgroups[peopleOnSubmission]) {
+            subgroups[peopleOnSubmission] = {
+              indices: peopleOnSubmission,
               factor: 0,
               submissions: []
             };
           }
-          subgroups[indices].factor += submission.reactionCount;
-          subgroups[indices].submissions.push(submission);
+          subgroups[peopleOnSubmission].factor += submission.reactionCount;
+          subgroups[peopleOnSubmission].submissions.push(submission);
         }
 
         for (let subgroup of Object.values(subgroups)) {
@@ -88,13 +91,13 @@
         for (let subgroup of subgroupsSorted) {
           let names = "";
           for (let id of subgroup.indices)
-            names += ", " + session.data.entities[id].name;
+            names += ", " + sessionData.data.entities[id].name;
           let reactionCount = 0;
           for (let submission of subgroup.submissions)
             reactionCount += submission.reactionCount;
           let subgroupDiv = document.createElement("div");
           subgroupDiv.className = "submission";
-          document.getElementById('subgroups').prepend(subgroupDiv);
+          subgroupsDiv.prepend(subgroupDiv);
           let submissionHeadlineSpan = createElement('span', subgroupDiv, '', '');
           createElement('span', submissionHeadlineSpan, names.substring(2), 'submission_names');
           createElement('span', submissionHeadlineSpan, reactionCount, 'submission_reaction');
@@ -107,13 +110,25 @@
           }
         }
 
-        let teamMembers = Object.values(session.data.entities).filter(e => !e.isGuest).length;
+        let teamMembers = Object.values(sessionData.data.entities).filter(e => !e.isGuest).length;
         let totalSubgroups = 2 ** teamMembers;
         let percentageSubgroupsUsed = (subgroupsSorted.length / totalSubgroups) * 100;
 
         console.log("stats", subgroupsSorted.length, totalSubgroups, percentageSubgroupsUsed + "%");
-        console.log("session", session);
         console.log("subgroupsSorted", subgroupsSorted);
+      }
+
+      socket.on('session-results-login-retro-response', function(session) {
+        console.log("session", session);
+        sessionData = session;
+        people = session.data.entities;
+        for (let guest of session.guests)
+          people[guest.id] = guest;
+        for (let id of Object.keys(people))
+          buildPerson(people[id])
+        console.log("people", people);
+
+        updateSubgroups();
       });
 
       setupNotie(notie, socket);
