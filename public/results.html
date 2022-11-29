@@ -100,7 +100,7 @@
             reactionCount += submission.reactionCount;
           let subgroupDiv = document.createElement("div");
           subgroupDiv.className = "submission";
-          subgroupsDiv.prepend(subgroupDiv);
+          subgroupsDiv.append(subgroupDiv);
           let submissionHeadlineSpan = createElement('span', subgroupDiv, '', '');
           createElement('span', submissionHeadlineSpan, names.substring(2), 'submission_names');
           createElement('span', submissionHeadlineSpan, reactionCount, 'submission_reaction');
