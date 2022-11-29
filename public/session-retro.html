@@ -40,6 +40,7 @@
       document.getElementById("results-link").href = "/" + sessionId + "/results";
       let people;
       let reactionSpans = {}; // submissionId to <span>
+      let reactionSpansClickedAlready = [];
       let selectedStatementType = 'appreciation';
 
       function buildPerson(person) {
@@ -189,10 +190,15 @@
         createElement('span', submissionDiv, submissionData.statement, 'submission_statement');
         reactionSpans[submissionData.id] = reactionSpan;
         reactionSpan.addEventListener('click', function() {
+          if (reactionSpansClickedAlready.includes(reactionSpan)) {
+            notie.alert({ type: 'error', text: 'Only one reaction per submission' })
+            return;
+          }
           socket.emit('reaction-added', {
             sessionId: sessionId,
             submissionId: submissionData.id
           });
+          reactionSpansClickedAlready.push(reactionSpan);
         });
       }
 
