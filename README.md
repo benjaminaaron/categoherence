@@ -1,3 +1,5 @@
+**_Update_**_: In 2022 I started to build on this code from 2016 to make a shoutout tool to be used in retrospectives at work. This has now (Dec 2, 2022) been migrated over into [a new repository](https://github.com/digitalservicebund/shoutout-tool). Development will continue there :wrench:_
+
 # categoherence
 
 The idea is to quantify *how things stick together* across multiple categorizations.<br>
